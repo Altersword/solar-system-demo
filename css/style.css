@@ -1,0 +1,576 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #02040c;
+    color: #f6f3e8;
+    font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+}
+
+#canvas-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+}
+
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+    padding: 10px 18px;
+    background: linear-gradient(180deg, rgba(3, 7, 18, 0.88), rgba(3, 7, 18, 0.56));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+    backdrop-filter: blur(18px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sun-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: #1f1300;
+    background: radial-gradient(circle at 35% 30%, #fff7bd 0, #ffc85c 38%, #e06d1f 76%);
+    box-shadow: 0 0 28px rgba(255, 176, 61, 0.6);
+    flex: 0 0 auto;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 650;
+}
+
+.logo p {
+    margin: 2px 0 0;
+    color: rgba(246, 243, 232, 0.58);
+    font-size: 11px;
+}
+
+.controls,
+.music-controls,
+.time-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.controls button,
+.music-controls button,
+.time-buttons button,
+.segmented button,
+.playlist-item,
+.moon-item {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.controls button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 7px 11px;
+}
+
+.controls button:hover,
+.music-controls button:hover,
+.time-buttons button:hover,
+.segmented button:hover,
+.playlist-item:hover,
+.moon-item:hover {
+    background: rgba(92, 196, 255, 0.16);
+    border-color: rgba(134, 218, 255, 0.42);
+}
+
+.controls button.active,
+.segmented button.active {
+    background: rgba(92, 196, 255, 0.24);
+    border-color: rgba(134, 218, 255, 0.64);
+}
+
+.icon {
+    min-width: 18px;
+    text-align: center;
+}
+
+#science-panel,
+#info-panel,
+#music-player,
+#time-control {
+    position: fixed;
+    z-index: 18;
+    background: rgba(5, 11, 25, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(18px);
+}
+
+#science-panel {
+    top: 84px;
+    left: 18px;
+    width: 250px;
+    padding: 14px;
+    border-radius: 8px;
+}
+
+.panel-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.panel-row span,
+#time-control label {
+    color: rgba(246, 243, 232, 0.58);
+    font-size: 12px;
+}
+
+.panel-row strong {
+    color: #ffd184;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.segmented button {
+    min-height: 32px;
+    padding: 6px 8px;
+}
+
+#mode-description {
+    margin: 0 0 12px;
+    color: rgba(246, 243, 232, 0.72);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+#time-control {
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: auto minmax(160px, 240px) 88px auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+#time-slider,
+#volume-slider {
+    appearance: none;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+#time-slider::-webkit-slider-thumb,
+#volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #7fd7ff;
+    box-shadow: 0 0 18px rgba(127, 215, 255, 0.58);
+    cursor: pointer;
+}
+
+#time-display {
+    color: #7fd7ff;
+    font-size: 13px;
+    text-align: right;
+}
+
+.time-buttons button {
+    width: 32px;
+    height: 32px;
+}
+
+#info-panel {
+    top: 84px;
+    right: 18px;
+    width: min(360px, calc(100vw - 36px));
+    max-height: calc(100vh - 112px);
+    padding: 18px;
+    border-radius: 8px;
+    overflow-y: auto;
+    transform: translateX(24px);
+    opacity: 0;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+#info-panel.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(246, 243, 232, 0.72);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#planet-name {
+    margin: 0 42px 18px 0;
+    color: #fff8df;
+    font-size: 24px;
+}
+
+.info-section {
+    margin-top: 16px;
+}
+
+.info-section h3 {
+    margin: 0 0 9px;
+    color: #9fe3a5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.info-section p {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 10px;
+    margin: 7px 0;
+    color: rgba(246, 243, 232, 0.82);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.info-section strong {
+    color: rgba(246, 243, 232, 0.62);
+    font-weight: 600;
+}
+
+.moons-section {
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#moons-list {
+    display: grid;
+    gap: 8px;
+}
+
+.moon-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    width: 100%;
+    padding: 9px;
+    text-align: left;
+}
+
+.moon-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    box-shadow: inset -4px -4px 8px rgba(0, 0, 0, 0.45);
+}
+
+.moon-item strong,
+.moon-item small {
+    display: block;
+}
+
+.moon-item small {
+    margin-top: 2px;
+    color: rgba(246, 243, 232, 0.62);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.empty-state {
+    color: rgba(246, 243, 232, 0.5);
+    font-size: 12px;
+}
+
+#music-player {
+    left: 18px;
+    bottom: 18px;
+    width: 292px;
+    padding: 14px;
+    border-radius: 8px;
+}
+
+.music-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 11px;
+}
+
+.music-icon {
+    color: #ffd184;
+    font-size: 19px;
+}
+
+.music-title {
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.music-controls {
+    margin-bottom: 12px;
+}
+
+.music-controls button {
+    min-height: 34px;
+    padding: 6px 9px;
+}
+
+.music-controls button:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+}
+
+#music-track-info {
+    margin-bottom: 8px;
+    color: rgba(246, 243, 232, 0.66);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 5px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    cursor: pointer;
+}
+
+#music-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #7fd7ff, #ffd184);
+}
+
+.time-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    color: rgba(246, 243, 232, 0.48);
+    font-size: 11px;
+}
+
+.music-volume {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+#music-playlist {
+    display: grid;
+    gap: 6px;
+    max-height: 150px;
+    margin-top: 12px;
+    padding-top: 12px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playlist-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 8px;
+    width: 100%;
+    min-height: 31px;
+    padding: 7px 8px;
+    text-align: left;
+}
+
+.playlist-item.active {
+    background: rgba(255, 209, 132, 0.18);
+    border-color: rgba(255, 209, 132, 0.44);
+}
+
+.track-num {
+    color: rgba(246, 243, 232, 0.45);
+}
+
+.track-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.planet-label {
+    position: fixed;
+    z-index: 12;
+    padding: 3px 7px;
+    border-radius: 5px;
+    color: #fff8df;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 12px;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+    transform: translate(-50%, -100%);
+    white-space: nowrap;
+}
+
+#loading {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: #02040c;
+    transition: opacity 300ms ease;
+}
+
+#loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    border: 3px solid rgba(127, 215, 255, 0.18);
+    border-top-color: #7fd7ff;
+    border-radius: 50%;
+    animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-content p {
+    margin: 0;
+    color: rgba(246, 243, 232, 0.68);
+    font-size: 14px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+}
+
+@media (max-width: 860px) {
+    #top-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .controls {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 2px;
+    }
+
+    #science-panel {
+        top: 124px;
+        width: min(250px, calc(100vw - 36px));
+    }
+
+    #music-player {
+        display: none;
+    }
+
+    #time-control {
+        width: calc(100vw - 28px);
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+    }
+
+    #time-display {
+        text-align: left;
+    }
+}
+
+@media (max-width: 620px) {
+    #science-panel {
+        display: none;
+    }
+
+    #info-panel {
+        top: 120px;
+        max-height: calc(100vh - 210px);
+    }
+
+    .controls .text {
+        display: none;
+    }
+}
