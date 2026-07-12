@@ -53,20 +53,20 @@ class SolarSystem {
         this.blackHoleConfig = {
             resourceMode: 'browser-high',
             allowExternalRenderer: false,
-            bloomStrength: 0.78,
-            dopplerIntensity: 0.62,
+            bloomStrength: 1.42,
+            dopplerIntensity: 0.92,
             dopplerTemperature: 0.0,
-            diskTemperature: 8751,
-            logLuminance: 6.83,
-            lensingStrength: 1.0,
-            diskTurbulence: 1.0,
-            exposureCompensation: 0.94,
-            rayBendingStrength: 0.80,
+            diskTemperature: 9200,
+            logLuminance: 7.05,
+            lensingStrength: 1.14,
+            diskTurbulence: 1.18,
+            exposureCompensation: 1.1,
+            rayBendingStrength: 0.90,
             screenDiskOpacity: 0.42,
             unifiedPassOpacity: 0.62,
             focusRenderScale: 2.35,
             maxFocusPixelRatio: 4,
-            renderScale: 0.58
+            renderScale: 0.78
         };
 
         this.raycaster = new THREE.Raycaster();
