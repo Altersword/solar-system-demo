@@ -97,36 +97,26 @@ class SolarSystem {
     }
 
     setupScene() {
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x02040c);
-        this.scene.fog = new THREE.FogExp2(0x02040c, 0.00018);
-
-        this.camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 8000);
-        this.camera.position.fromArray(this.getModeConfig().cameraPosition);
-
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        this.ctx = new AppContext();
+        this.ctx.setup(
+            document.getElementById('canvas-container'),
+            this.getModeConfig().cameraPosition
+        );
+        this.scene = this.ctx.scene;
+        this.camera = this.ctx.camera;
+        this.renderer = this.ctx.renderer;
+        this.clock = this.ctx.clock;
         this.applyRendererQuality(false);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.16;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
-
-        document.getElementById('canvas-container').appendChild(this.renderer.domElement);
     }
 
     getRendererPixelRatio(isHighFidelityFocus = false) {
-        const deviceRatio = window.devicePixelRatio || 1;
-        if (isHighFidelityFocus) {
-            return Math.min(Math.max(deviceRatio * this.blackHoleConfig.focusRenderScale, 2.5), this.blackHoleConfig.maxFocusPixelRatio);
-        }
-        return Math.min(deviceRatio, 2);
+        return this.ctx
+            ? this.ctx.getPixelRatio(isHighFidelityFocus, this.blackHoleConfig)
+            : Math.min(window.devicePixelRatio || 1, 2);
     }
 
     applyRendererQuality(isHighFidelityFocus = false) {
-        if (!this.renderer) return;
-        this.renderer.setPixelRatio(this.getRendererPixelRatio(isHighFidelityFocus));
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.ctx?.applyQuality(isHighFidelityFocus, this.blackHoleConfig);
     }
 
     setupLighting() {
@@ -143,14 +133,9 @@ class SolarSystem {
     }
 
     setupBloom() {
-        const renderPass = new THREE.RenderPass(this.scene, this.camera);
-        this.bloomPass = new THREE.UnrealBloomPass(
-            new THREE.Vector2(window.innerWidth, window.innerHeight),
-            1.2, 0.5, 0.2
-        );
-        this.composer = new THREE.EffectComposer(this.renderer);
-        this.composer.addPass(renderPass);
-        this.composer.addPass(this.bloomPass);
+        this.bloom = new BloomComposer(this.renderer, this.scene, this.camera);
+        this.composer = this.bloom.composer;
+        this.bloomPass = this.bloom.bloomPass;
     }
 
     setupControls() {
@@ -1014,12 +999,9 @@ class SolarSystem {
     onWindowResize() {
         const width = window.innerWidth;
         const height = Math.max(window.innerHeight, 1);
-        this.camera.aspect = width / height;
-        this.camera.updateProjectionMatrix();
+        this.ctx?.resize();
         this.applyRendererQuality(this.focusedCatalogEntry?.effectType === 'black-hole');
-        if (this.composer) {
-            this.composer.setSize(width, height);
-        }
+        this.bloom?.resize(width, height);
         this.focusController?.onResize(width, height);
     }
 
@@ -1257,8 +1239,9 @@ class SolarSystem {
             window.innerWidth / Math.max(window.innerHeight, 1)
         );
         if (!ownsScreen) {
-            if (this.useBloom && this.composer) {
-                this.composer.render();
+            if (this.bloom) {
+                this.bloom.setEnabled(this.useBloom);
+                this.bloom.render();
             } else {
                 this.renderer.render(this.scene, this.camera);
             }
