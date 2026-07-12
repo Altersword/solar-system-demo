@@ -1,5 +1,7 @@
 /**
- * Three.js renderer for a compressed solar-system model plus a nearby-star atlas.
+ * SolarSystem facade: orchestrates AppContext, SolarBodies, StarAtlas, FocusController.
+ * Special near-views go through SpecialBodyFactory (black hole / pulsar / simple).
+ * Shared helpers (materials, labels, dispose) remain here until a later cleanup.
  */
 
 class SolarSystem {
