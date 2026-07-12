@@ -855,28 +855,28 @@ class SolarSystem {
         document.getElementById('btn-close-expanded')?.classList.add('hidden');
         document.getElementById('btn-focus-object')?.classList.add('hidden');
 
-        document.getElementById('planet-name').textContent = parent ? `${data.name} / ${parent.name}å«æ˜Ÿ` : data.name;
-        document.getElementById('label-diameter').textContent = 'ç›´å¾„';
-        document.getElementById('label-mass').textContent = 'è´¨é‡';
-        document.getElementById('label-distance').textContent = parent ? 'è½¨é“åŠé•¿è½´' : 'è½¨é“åŠé•¿è½´';
-        document.getElementById('label-period').textContent = 'è½¨é“å‘¨æœŸ';
-        document.getElementById('label-rotation').textContent = 'è‡ªè½¬å‘¨æœŸ';
-        document.getElementById('label-moons').textContent = 'å«æ˜Ÿæ•°é‡';
-        document.getElementById('related-title').textContent = 'ä¸»è¦å«æ˜Ÿ';
+        document.getElementById('planet-name').textContent = parent ? `${data.name} / ${parent.name}卫星` : data.name;
+        document.getElementById('label-diameter').textContent = '直径';
+        document.getElementById('label-mass').textContent = '质量';
+        document.getElementById('label-distance').textContent = parent ? '轨道半长轴' : '轨道半长轴';
+        document.getElementById('label-period').textContent = '轨道周期';
+        document.getElementById('label-rotation').textContent = '自转周期';
+        document.getElementById('label-moons').textContent = '卫星数量';
+        document.getElementById('related-title').textContent = '主要卫星';
 
         document.getElementById('info-diameter').textContent = `${(data.radiusKm * 2).toLocaleString()} km`;
         document.getElementById('info-mass').textContent = data.massKg ? `${data.massKg.toExponential(3)} kg` : 'N/A';
         document.getElementById('info-distance').textContent = data.orbit?.semiMajorAxisKm
             ? `${(data.orbit.semiMajorAxisKm / (parent ? 1 : AU_KM)).toLocaleString(undefined, { maximumFractionDigits: parent ? 0 : 3 })} ${parent ? 'km' : 'AU'}`
-            : 'ä¸­å¿ƒå¤©ä½“';
+            : '中心天体';
         document.getElementById('info-period').textContent = data.orbit?.orbitalPeriodDays
-            ? `${Math.abs(data.orbit.orbitalPeriodDays).toLocaleString()} å¤©${data.orbit.orbitalPeriodDays < 0 ? 'ï¼ˆé€†è¡Œï¼‰' : ''}`
+            ? `${Math.abs(data.orbit.orbitalPeriodDays).toLocaleString()} 天${data.orbit.orbitalPeriodDays < 0 ? '（逆行）' : ''}`
             : 'N/A';
         document.getElementById('info-rotation').textContent = data.rotationPeriodHours
-            ? `${Math.abs(data.rotationPeriodHours).toLocaleString()} å°æ—¶${data.rotationPeriodHours < 0 ? 'ï¼ˆé€†å‘ï¼‰' : ''}`
+            ? `${Math.abs(data.rotationPeriodHours).toLocaleString()} 小时${data.rotationPeriodHours < 0 ? '（逆向）' : ''}`
             : 'N/A';
-        document.getElementById('info-type').textContent = data.type || 'å«æ˜Ÿ';
-        document.getElementById('info-atmosphere').textContent = data.atmosphere || data.composition || 'æ— æ˜¾è‘—å¤§æ°”';
+        document.getElementById('info-type').textContent = data.type || '卫星';
+        document.getElementById('info-atmosphere').textContent = data.atmosphere || data.composition || '无明显大气';
         document.getElementById('info-temperature').textContent = data.surfaceTemperature || 'N/A';
         document.getElementById('info-moons').textContent = data.moons ? data.moons.length : 0;
         document.getElementById('info-feature').textContent = data.feature || 'N/A';
@@ -906,7 +906,7 @@ class SolarSystem {
                 moonsList.appendChild(moonEl);
             });
         } else {
-            moonsList.innerHTML = '<div class="empty-state">æ— ä¸»è¦å«æ˜Ÿ</div>';
+            moonsList.innerHTML = '<div class="empty-state">无主要卫星</div>';
         }
 
         panel.classList.remove('hidden');
@@ -927,41 +927,41 @@ class SolarSystem {
         focusButton.classList.toggle('hidden', !data.effectType);
 
         document.getElementById('planet-name').textContent = data.name;
-        document.getElementById('label-diameter').textContent = 'è‹±æ–‡å';
-        document.getElementById('label-mass').textContent = 'å…‰è°±/ç±»åˆ«';
-        document.getElementById('label-distance').textContent = 'è·å¤ªé˜³';
-        document.getElementById('label-period').textContent = 'æ˜Ÿå›¾å®šä½';
-        document.getElementById('label-rotation').textContent = 'æ¸©åº¦/è¯´æ˜Ž';
-        document.getElementById('label-moons').textContent = 'å…³è”æ¡ç›®';
-        document.getElementById('related-title').textContent = data.systemLayout ? 'ç³»ç»Ÿç»“æž„ / å…³è”æ¡ç›®' : 'å…³è”æ¡ç›®';
+        document.getElementById('label-diameter').textContent = '英文名';
+        document.getElementById('label-mass').textContent = '光谱/类别';
+        document.getElementById('label-distance').textContent = '距太阳';
+        document.getElementById('label-period').textContent = '星图定位';
+        document.getElementById('label-rotation').textContent = '温度/说明';
+        document.getElementById('label-moons').textContent = '关联条目';
+        document.getElementById('related-title').textContent = data.systemLayout ? '系统结构 / 关联条目' : '关联条目';
 
         document.getElementById('info-diameter').textContent = data.nameEn || 'N/A';
         document.getElementById('info-mass').textContent = data.spectralClass || data.type || 'N/A';
-        document.getElementById('info-distance').textContent = `${data.distanceLy.toLocaleString(undefined, { maximumFractionDigits: 2 })} å…‰å¹´`;
-        document.getElementById('info-period').textContent = `é“¶ç» ${data.galactic.lDeg}Â°ï¼Œé“¶çº¬ ${data.galactic.bDeg}Â°`;
+        document.getElementById('info-distance').textContent = `${data.distanceLy.toLocaleString(undefined, { maximumFractionDigits: 2 })} 光年`;
+        document.getElementById('info-period').textContent = `银经 ${data.galactic.lDeg}°，银纬 ${data.galactic.bDeg}°`;
         document.getElementById('info-rotation').textContent = data.temperature || 'N/A';
         document.getElementById('info-type').textContent = data.type;
         document.getElementById('info-atmosphere').textContent = data.category === 'nearby-star'
-            ? 'æ’æ˜Ÿç³»ç»Ÿ'
+            ? '恒星系统'
                 : data.category === 'galaxy'
-                    ? 'å¤–æ˜Ÿç³»'
+                    ? '外星系'
                     : data.category === 'nebula'
-                        ? 'é“¶æ²³ç³»æ˜Ÿäº‘'
+                        ? '银河系星云'
                         : data.category === 'stellar-object'
-                            ? 'æ’æ˜Ÿç±»åž‹è§‚æµ‹ç›®æ ‡'
+                            ? '恒星类型观测目标'
                             : data.category === 'stellar-remnant'
-                                ? 'æ’æ˜Ÿæ®‹éª¸'
+                                ? '恒星残骸'
                                 : data.category === 'compact-object'
-                                    ? 'ç´§è‡´å¤©ä½“'
+                                    ? '致密天体'
                                     : data.category === 'supernova-remnant'
-                                        ? 'è¶…æ–°æ˜Ÿé—è¿¹'
+                                        ? '超新星遗迹'
                                         : data.category === 'galaxy-group'
-                                            ? 'æ˜Ÿç³»ç¾¤'
+                                            ? '星系群'
                                             : data.category === 'galaxy-cluster'
-                                                ? 'æ˜Ÿç³»å›¢'
+                                                ? '星系团'
                                                 : data.category === 'supercluster'
-                                                    ? 'è¶…æ˜Ÿç³»å›¢æ–¹å‘'
-                                                    : 'æ·±ç©ºæ–¹å‘æ ‡';
+                                                    ? '超星系团方向'
+                                                    : '深空方向标';
         document.getElementById('info-temperature').textContent = data.temperature || 'N/A';
         document.getElementById('info-moons').textContent = data.related?.length || 0;
         document.getElementById('info-feature').textContent = data.feature || 'N/A';
@@ -983,7 +983,7 @@ class SolarSystem {
                 moonsList.appendChild(itemEl);
             });
         } else {
-            moonsList.innerHTML = '<div class="empty-state">æš‚æ— å…³è”æ¡ç›®</div>';
+            moonsList.innerHTML = '<div class="empty-state">暂无关联条目</div>';
         }
 
         panel.classList.remove('hidden');
@@ -1010,7 +1010,7 @@ class SolarSystem {
         layout.bodies.forEach((body) => {
             const node = document.createElement('span');
             node.className = `mini-body ${body.kind}`;
-            node.title = `${body.name}ï¼š${body.detail || ''}`;
+            node.title = `${body.name}：${body.detail || ''}`;
             node.style.background = `#${body.color.toString(16).padStart(6, '0')}`;
             node.style.color = `#${body.color.toString(16).padStart(6, '0')}`;
             node.style.width = `${body.size || 7}px`;
@@ -1044,7 +1044,7 @@ class SolarSystem {
 
         const note = document.createElement('p');
         note.className = 'system-note';
-        note.textContent = layout.note || 'å¾®ç¼©å›¾ä¸ºå¯è¯»æ€§åŽ‹ç¼©ç¤ºæ„ï¼Œä¸ä»£è¡¨çœŸå®žæ¯”ä¾‹ã€‚';
+        note.textContent = layout.note || '微缩图为可读性压缩示意，不代表真实比例。';
 
         wrapper.append(map, legend, note);
         return wrapper;
