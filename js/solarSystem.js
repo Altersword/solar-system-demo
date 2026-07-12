@@ -21,6 +21,7 @@ class SolarSystem {
         this.focusGroup = null;
         this.focusRenderer = null;
         this.focusSpecialRenderer = null;
+        this.focusController = null;
 
         this.planets = new Map();
         this.catalogObjects = new Map();
@@ -90,6 +91,7 @@ class SolarSystem {
         this.rebuildBodies();
         this.setupControls();
         this.setupBloom();
+        this.focusController = new FocusController(this);
         this.setupEventListeners();
         this.animate();
     }
@@ -1018,7 +1020,7 @@ class SolarSystem {
         if (this.composer) {
             this.composer.setSize(width, height);
         }
-        this.focusRenderer?.setSize(width, height);
+        this.focusController?.onResize(width, height);
     }
 
     onMouseClick(event) {
@@ -1244,25 +1246,17 @@ class SolarSystem {
             const plane = this.expandedSystemGroup.getObjectByName('expanded-orbit-plane');
             if (plane) plane.rotation.z += deltaSeconds * 0.045;
         }
-        if (this.focusGroup) {
-            const focusTitle = this.focusGroup.children.find((child) => child.userData?.effectRole === 'focus-title');
-            if (focusTitle) focusTitle.visible = !document.body.classList.contains('ui-hidden');
-            if (!['black-hole', 'pulsar'].includes(this.focusedCatalogEntry?.effectType)) {
-                this.focusGroup.rotation.y += deltaSeconds * 0.08;
-            }
-            this.updateSpecialObjectEffects(this.focusGroup, this.focusedCatalogEntry?.effectType, deltaSeconds, this.clock.elapsedTime, 0.4);
-        }
+        this.focusController?.update(deltaSeconds, this.clock.elapsedTime);
 
         this.updateAtlasAnimations(deltaSeconds);
         this.updateLabels();
-        if (this.focusRenderer) {
-            this.focusRenderer.update(
-                this.camera,
-                this.blackHoleConfig,
-                this.clock.elapsedTime,
-                window.innerWidth / Math.max(window.innerHeight, 1)
-            );
-        } else {
+        const ownsScreen = this.focusController?.renderIfOwning(
+            this.camera,
+            this.blackHoleConfig,
+            this.clock.elapsedTime,
+            window.innerWidth / Math.max(window.innerHeight, 1)
+        );
+        if (!ownsScreen) {
             if (this.useBloom && this.composer) {
                 this.composer.render();
             } else {
@@ -1735,65 +1729,11 @@ class SolarSystem {
     }
 
     focusSelectedSpecialObject() {
-        if (!this.selectedObject?.userData?.data?.effectType) return;
-        this.showFocusView(this.selectedObject.userData.data);
+        this.focusController?.focusSelected();
     }
 
     showFocusView(entry) {
-        this.clearExpandedSystem();
-        this.clearFocusView();
-        this.focusedCatalogEntry = entry;
-
-        const group = new THREE.Group();
-        group.name = `${entry.id}-focus-view`;
-        group.position.set(0, 0, 0);
-        group.userData.focusView = true;
-
-        const created = SpecialBodyFactory.create(this, entry);
-        this.focusSpecialRenderer = created.renderer;
-        this.focusRenderer = created.ownsScreen ? created.renderer : null;
-        group.add(created.object3d);
-
-        const title = this.createTextSprite(`${entry.name} · ${entry.type}`, '#fff1c8');
-        title.userData.effectRole = 'focus-title';
-        title.position.set(0, 95, 0);
-        title.scale.set(120, 30, 1);
-        group.add(title);
-
-        this.scene.add(group);
-        this.focusGroup = group;
-        this.applyRendererQuality(false);
-        this.atlasGroup.visible = false;
-        this.orbitGroups.visible = false;
-        this.bodyGroups.visible = false;
-        if (this.sun) this.sun.visible = false;
-        if (this.sunLight) this.sunLight.visible = false;
-        if (this.starfield) this.starfield.material.opacity = 0.38;
-        if (this.milkyWay) this.milkyWay.visible = false;
-
-        document.getElementById('btn-close-expanded')?.classList.remove('hidden');
-        document.getElementById('btn-close-expanded').textContent = '返回星图';
-        this.controls.minDistance = 5;
-        if (entry.effectType === 'black-hole') {
-            this.controls.maxDistance = 58;
-            // Tilted camera so the disk is visible as an ellipse (not edge-on)
-            this.flyCameraToPos(
-                new THREE.Vector3(30, 25, 30),
-                new THREE.Vector3(0, 0, 0)
-            );
-        } else if (entry.effectType === 'pulsar') {
-            this.controls.maxDistance = 280;
-            this.useBloom = true;
-            this.bloomPass.strength = 0.72;
-            this.bloomPass.radius = 0.42;
-            this.bloomPass.threshold = 0.34;
-            this.flyCameraToPos(
-                new THREE.Vector3(92, 54, 112),
-                new THREE.Vector3(0, 0, 0)
-            );
-        } else {
-            this.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
-        }
+        this.focusController?.show(entry);
     }
 
     getFocusedCoreSize(effectType) {
@@ -1835,35 +1775,7 @@ class SolarSystem {
     }
 
     clearFocusView() {
-        if (!this.focusGroup && !this.focusRenderer && !this.focusSpecialRenderer) return;
-        // Screen-owning BH renderer must dispose its RTs; simple/pulsar only null refs
-        if (this.focusRenderer && this.focusRenderer === this.focusSpecialRenderer) {
-            this.focusRenderer.dispose();
-        } else {
-            this.focusRenderer?.dispose?.();
-            this.focusSpecialRenderer?.dispose?.();
-        }
-        this.focusRenderer = null;
-        this.focusSpecialRenderer = null;
-        if (this.focusGroup) {
-            this.disposeObject3D(this.focusGroup);
-            this.scene.remove(this.focusGroup);
-        }
-        this.focusGroup = null;
-        this.focusedCatalogEntry = null;
-        this.applyRendererQuality(false);
-        this.useBloom = false;
-        this.atlasGroup.visible = this.showAtlas;
-        this.orbitGroups.visible = true;
-        this.bodyGroups.visible = true;
-        if (this.sun) this.sun.visible = true;
-        if (this.sunLight) this.sunLight.visible = true;
-        if (this.starfield) this.starfield.material.opacity = 0.82;
-        if (this.milkyWay) this.milkyWay.visible = this.enhancedEffects;
-        const closeExpanded = document.getElementById('btn-close-expanded');
-        if (closeExpanded) closeExpanded.textContent = '返回星图';
-        this.controls.minDistance = 18;
-        this.controls.maxDistance = this.getModeConfig().maxDistance;
+        this.focusController?.clear();
     }
 
     seededRandom(seed) {
