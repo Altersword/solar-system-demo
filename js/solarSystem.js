@@ -913,28 +913,6 @@ class SolarSystem {
         return group;
     }
 
-    createRelativisticJets(entry) {
-        const group = new THREE.Group();
-        group.name = `${entry.id}-jets`;
-        group.userData.effectRole = 'jets';
-        const length = entry.size * 7.5;
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x92caff,
-            transparent: true,
-            opacity: 0.18,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        });
-        [-1, 1].forEach((direction) => {
-            const jet = new THREE.Mesh(new THREE.ConeGeometry(entry.size * 0.35, length, 28, 1, true), material);
-            jet.position.y = direction * length * 0.5;
-            jet.rotation.x = direction > 0 ? 0 : Math.PI;
-            group.add(jet);
-        });
-        group.rotation.z = THREE.MathUtils.degToRad(8);
-        return group;
-    }
-
     createDistanceShells() {
         [5, 10, 25, 50].forEach((ly) => {
             const mockEntry = { distanceLy: ly, category: 'nearby-star' };
