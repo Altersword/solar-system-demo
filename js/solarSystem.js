@@ -14,8 +14,9 @@ class SolarSystem {
         this.sunLight = null;
         this.starfield = null;
         this.milkyWay = null;
-        this.bodyGroups = new THREE.Group();
-        this.orbitGroups = new THREE.Group();
+        this.solarBodies = new SolarBodies(this);
+        this.bodyGroups = this.solarBodies.bodyGroups;
+        this.orbitGroups = this.solarBodies.orbitGroups;
         this.atlasGroup = new THREE.Group();
         this.expandedSystemGroup = null;
         this.focusGroup = null;
@@ -23,7 +24,7 @@ class SolarSystem {
         this.focusSpecialRenderer = null;
         this.focusController = null;
 
-        this.planets = new Map();
+        this.planets = this.solarBodies.planets;
         this.catalogObjects = new Map();
         this.labels = [];
         this.pickables = [];
@@ -68,7 +69,7 @@ class SolarSystem {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
         this.labelWorldPosition = new THREE.Vector3();
-        this.scaleOrbitDistanceForScene = this.scaleOrbitDistance.bind(this);
+        this.scaleOrbitDistanceForScene = this.solarBodies.scaleOrbitDistanceForScene;
         this.effectAxis = new THREE.Vector3(0, 1, 0);
         this.effectWorldDirection = new THREE.Vector3();
         this.effectToCamera = new THREE.Vector3();
@@ -87,7 +88,8 @@ class SolarSystem {
         this.setupLighting();
         this.createStarfield();
         this.createMilkyWayBand();
-        this.scene.add(this.orbitGroups, this.bodyGroups, this.atlasGroup);
+        this.solarBodies.attach(this.scene);
+        this.scene.add(this.atlasGroup);
         this.rebuildBodies();
         this.setupControls();
         this.setupBloom();
@@ -163,15 +165,11 @@ class SolarSystem {
     }
 
     scaleOrbitDistance(km) {
-        const mode = this.getModeConfig();
-        const au = Math.max(km / AU_KM, 0.001);
-        return mode.orbitBase + Math.pow(au, mode.orbitExponent) * mode.orbitScale;
+        return this.solarBodies.scaleOrbitDistance(km);
     }
 
     scalePlanetRadius(km) {
-        const mode = this.getModeConfig();
-        const earthRatio = Math.max(km / PLANET_DATA.earth.radiusKm, 0.01);
-        return Math.max(mode.minPlanetRadius, Math.pow(earthRatio, mode.radiusExponent) * mode.radiusScale);
+        return this.solarBodies.scalePlanetRadius(km);
     }
 
     scaleMoonDistance(km, parentRadius) {
@@ -180,8 +178,7 @@ class SolarSystem {
     }
 
     scaleMoonRadius(km) {
-        const mode = this.getModeConfig();
-        return Math.max(mode.minMoonRadius, km * mode.moonRadiusScale);
+        return this.solarBodies.scaleMoonRadius(km);
     }
 
     scaleCatalogDistance(entry) {
@@ -215,26 +212,16 @@ class SolarSystem {
 
     rebuildBodies() {
         this.clearBodies();
-        this.createSun();
-        this.createSolarDustBelts();
-        PLANET_ORDER.forEach((id) => this.createPlanet(PLANET_DATA[id]));
+        this.solarBodies.rebuild();
         this.createAtlas();
         this.updateBodyPositions();
     }
 
     clearBodies() {
-        if (this.sun) {
-            this.disposeObject3D(this.sun);
-            this.scene.remove(this.sun);
-            this.sun = null;
-        }
-
-        this.clearGroup(this.bodyGroups);
-        this.clearGroup(this.orbitGroups);
+        this.solarBodies.clear();
         this.clearGroup(this.atlasGroup);
         this.clearExpandedSystem();
         this.clearFocusView();
-        this.planets.clear();
         this.catalogObjects.clear();
         this.pickables = [];
         this.glowUniforms = [];
@@ -275,103 +262,6 @@ class SolarSystem {
         textures.forEach((texture) => texture.dispose());
         materials.forEach((material) => material.dispose());
         geometries.forEach((geometry) => geometry.dispose());
-    }
-
-    createSun() {
-        const mode = this.getModeConfig();
-        const geometry = new THREE.SphereGeometry(mode.sunRadius, 96, 64);
-        const material = new THREE.MeshBasicMaterial({
-            map: this.createSunTexture(),
-            color: PLANET_DATA.sun.visual.color
-        });
-
-        this.sun = new THREE.Mesh(geometry, material);
-        this.sun.name = 'sun';
-        this.sun.userData = { bodyId: 'sun', data: PLANET_DATA.sun, objectKind: 'solar-body' };
-        this.scene.add(this.sun);
-        this.pickables.push(this.sun);
-
-        const glow = this.createGlowMesh(mode.sunRadius * 1.45, 0xffaa2b, 0.58);
-        glow.name = 'sun-glow';
-        this.sun.add(glow);
-        this.createLabel(PLANET_DATA.sun.name, this.sun, 'sun', 'planet');
-    }
-
-    createPlanet(data) {
-        const radius = this.scalePlanetRadius(data.radiusKm);
-        const bodyGroup = new THREE.Group();
-        const axialGroup = new THREE.Group();
-        const moonSystem = new THREE.Group();
-        const geometry = new THREE.SphereGeometry(radius, 80, 56);
-        const material = this.createBodyMaterial(data);
-        const mesh = new THREE.Mesh(geometry, material);
-
-        bodyGroup.name = `${data.id}-body`;
-        axialGroup.rotation.z = THREE.MathUtils.degToRad(data.axialTiltDeg || 0);
-
-        mesh.name = data.id;
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        mesh.userData = { bodyId: data.id, data, radius, isMoon: false, objectKind: 'solar-body' };
-
-        axialGroup.add(mesh);
-        bodyGroup.add(axialGroup);
-        bodyGroup.add(moonSystem);
-        this.bodyGroups.add(bodyGroup);
-        this.pickables.push(mesh);
-
-        const orbitColor = data.comet ? 0x88d9ff : data.type?.includes('çŸ®è¡Œæ˜Ÿ') ? 0x5d6f92 : 0x2b3c56;
-        const orbit = this.createOrbitLine(data.orbit, this.scaleOrbitDistanceForScene, orbitColor, data.comet ? 0.58 : 0.45);
-        orbit.name = `${data.id}-orbit`;
-        this.orbitGroups.add(orbit);
-
-        if (data.atmosphere || data.id === 'earth' || data.id === 'venus') {
-            mesh.add(this.createAtmosphere(data, radius));
-        }
-
-        if (data.rings) {
-            axialGroup.add(this.createRings(data, radius));
-        }
-
-        if (data.comet) {
-            const coma = this.createGlowMesh(radius * 5.5, 0xaedfff, 0.34);
-            coma.name = `${data.id}-coma`;
-            mesh.add(coma);
-        }
-
-        const moonDistanceScale = (km) => this.scaleMoonDistance(km, radius);
-        this.createMoons(data, moonSystem, moonDistanceScale);
-
-        this.planets.set(data.id, { data, bodyGroup, axialGroup, moonSystem, mesh, radius, moonDistanceScale });
-        this.createLabel(data.name, mesh, data.id, data.type?.includes('çŸ®è¡Œæ˜Ÿ') || data.comet ? 'small-body' : 'planet');
-    }
-
-    createMoons(parentData, moonSystem, moonDistanceScale) {
-        parentData.moons.forEach((moon) => {
-            const radius = this.scaleMoonRadius(moon.radiusKm);
-            const geometry = new THREE.SphereGeometry(radius, 36, 24);
-            const material = this.createBodyMaterial(moon, true);
-            const mesh = new THREE.Mesh(geometry, material);
-
-            mesh.name = moon.id;
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            mesh.userData = {
-                bodyId: moon.id,
-                parentId: parentData.id,
-                data: moon,
-                radius,
-                isMoon: true,
-                objectKind: 'moon'
-            };
-
-            moonSystem.add(mesh);
-            this.pickables.push(mesh);
-
-            const orbit = this.createOrbitLine(moon.orbit, moonDistanceScale, 0x405066, 0.26, 128);
-            orbit.name = `${moon.id}-orbit`;
-            moonSystem.add(orbit);
-        });
     }
 
     createAtlas() {
@@ -649,63 +539,6 @@ class SolarSystem {
             shell.userData.atlasMap = 'neighborhood';
             this.atlasGroup.add(shell);
         });
-    }
-
-    createSolarDustBelts() {
-        this.orbitGroups.add(this.createParticleBelt(2.1, 3.3, 1050, 0x8c7b68, 0.36, 3.2, 'asteroid-belt'));
-        this.orbitGroups.add(this.createParticleBelt(38, 53, 1250, 0x6f91bd, 0.28, 11, 'kuiper-belt'));
-    }
-
-    createParticleBelt(innerAu, outerAu, count, color, opacity, ySpread, name) {
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        const colors = [];
-        const base = new THREE.Color(color);
-        const random = this.seededRandom(name);
-
-        for (let i = 0; i < count; i += 1) {
-            const au = innerAu + random() * (outerAu - innerAu);
-            const theta = random() * Math.PI * 2;
-            const radius = this.scaleOrbitDistance(au * AU_KM);
-            const jitter = 0.94 + random() * 0.12;
-            vertices.push(
-                Math.cos(theta) * radius * jitter,
-                (random() - 0.5) * ySpread,
-                Math.sin(theta) * radius * jitter
-            );
-            const shade = 0.65 + random() * 0.35;
-            colors.push(base.r * shade, base.g * shade, base.b * shade);
-        }
-
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: name === 'kuiper-belt' ? 1.1 : 1.35,
-            vertexColors: true,
-            transparent: true,
-            opacity,
-            sizeAttenuation: true,
-            depthWrite: false
-        });
-        const points = new THREE.Points(geometry, material);
-        points.name = name;
-        points.visible = this.showOrbits;
-        return points;
-    }
-
-    createOrbitLine(orbitData, scaleFn, color, opacity, segments = 280) {
-        const points = buildOrbitPoints(orbitData, scaleFn, segments);
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-        const material = new THREE.LineBasicMaterial({
-            color,
-            transparent: true,
-            opacity,
-            depthWrite: false
-        });
-        const line = new THREE.Line(geometry, material);
-        line.visible = this.showOrbits;
-        return line;
     }
 
     createBodyMaterial(data, isMoon = false) {
@@ -1070,26 +903,7 @@ class SolarSystem {
     }
 
     updateBodyPositions() {
-        PLANET_ORDER.forEach((id) => {
-            const record = this.planets.get(id);
-            if (!record) return;
-
-            const position = getOrbitPosition(record.data.orbit, this.elapsedDays, this.scaleOrbitDistanceForScene);
-            record.bodyGroup.position.copy(position);
-            record.moonSystem.position.set(0, 0, 0);
-
-            if (record.data.rotationPeriodHours) {
-                const rotationDirection = record.data.rotationPeriodHours < 0 ? -1 : 1;
-                const daysPerRotation = Math.abs(record.data.rotationPeriodHours) / 24;
-                record.axialGroup.rotation.y += rotationDirection * (Math.PI * 2 / daysPerRotation) * this.lastDeltaDays;
-            }
-
-            record.data.moons.forEach((moon) => {
-                const moonMesh = record.moonSystem.getObjectByName(moon.id);
-                if (!moonMesh) return;
-                moonMesh.position.copy(getOrbitPosition(moon.orbit, this.elapsedDays, record.moonDistanceScale));
-            });
-        });
+        this.solarBodies.updatePositions(this.elapsedDays, this.lastDeltaDays, this.isPaused);
     }
 
     updateAtlasAnimations(deltaSeconds) {
