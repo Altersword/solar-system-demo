@@ -1749,10 +1749,12 @@ class SolarSystem {
         group.position.set(0, 0, 0);
         group.userData.focusView = true;
 
-        const model = this.createFocusedSpecialModel(entry);
-        group.add(model);
+        const created = SpecialBodyFactory.create(this, entry);
+        this.focusSpecialRenderer = created.renderer;
+        this.focusRenderer = created.ownsScreen ? created.renderer : null;
+        group.add(created.object3d);
 
-        const title = this.createTextSprite(`${entry.name} Â· ${entry.type}`, '#fff1c8');
+        const title = this.createTextSprite(`${entry.name} · ${entry.type}`, '#fff1c8');
         title.userData.effectRole = 'focus-title';
         title.position.set(0, 95, 0);
         title.scale.set(120, 30, 1);
@@ -1770,7 +1772,7 @@ class SolarSystem {
         if (this.milkyWay) this.milkyWay.visible = false;
 
         document.getElementById('btn-close-expanded')?.classList.remove('hidden');
-        document.getElementById('btn-close-expanded').textContent = 'è¿”å›žæ˜Ÿå›¾';
+        document.getElementById('btn-close-expanded').textContent = '返回星图';
         this.controls.minDistance = 5;
         if (entry.effectType === 'black-hole') {
             this.controls.maxDistance = 58;
@@ -1793,76 +1795,6 @@ class SolarSystem {
             this.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
     }
-
-    createFocusedSpecialModel(entry) {
-        if (entry.effectType === 'pulsar') {
-            this.focusSpecialRenderer = new PulsarRenderer(this);
-            return this.focusSpecialRenderer.create(entry);
-        }
-
-        const group = new THREE.Group();
-        group.name = `${entry.id}-focused-model`;
-        group.userData.effectType = entry.effectType;
-
-        const coreSize = this.getFocusedCoreSize(entry.effectType);
-        const coreMaterial = new THREE.MeshBasicMaterial({
-            color: entry.effectType === 'black-hole' ? 0x010103 : entry.color,
-            transparent: entry.effectType === 'supernova',
-            opacity: entry.effectType === 'supernova' ? 0.32 : 1
-        });
-        const core = new THREE.Mesh(new THREE.SphereGeometry(coreSize, 96, 64), coreMaterial);
-        core.name = 'focus-core';
-        group.add(core);
-
-        switch (entry.effectType) {
-            case 'red-giant':
-                core.add(this.createGlowMesh(coreSize * 2.1, entry.color, 0.48));
-                group.add(this.createParticleShell(entry, 420, coreSize * 1.8, coreSize * 4.1, 0xff8a50, 0.42));
-                group.add(this.createFocusGranulation(entry.color, coreSize * 2.4));
-                break;
-            case 'red-dwarf':
-                core.add(this.createGlowMesh(coreSize * 2.0, entry.color, 0.38));
-                group.add(this.createFlareSparks({ ...entry, size: coreSize }, this.seededRandom(`${entry.id}-focus-flare`)));
-                group.add(this.createCompactHaloRing({ ...entry, size: coreSize }, 0xffb36f, 2.2));
-                break;
-            case 'white-dwarf':
-                core.add(this.createGlowMesh(coreSize * 3.2, 0xbfe7ff, 0.58));
-                group.add(this.createCompactHaloRing({ ...entry, size: coreSize }, 0xbfe7ff, 2.6));
-                break;
-            case 'black-hole':
-                return this.createFocusedBlackHoleModel(entry);
-            case 'supernova':
-                group.add(this.createParticleShell(entry, 720, coreSize * 1.2, coreSize * 5.6, entry.color, 0.62));
-                group.add(this.createCompactHaloRing({ ...entry, size: coreSize }, entry.color, 4.5));
-                group.add(this.createCompactHaloRing({ ...entry, size: coreSize }, 0x8fd8ff, 6.2));
-                break;
-            default:
-                core.add(this.createGlowMesh(coreSize * 2, entry.color, 0.35));
-                break;
-        }
-
-        return group;
-    }
-
-    createFocusedBlackHoleModel(entry) {
-        const group = new THREE.Group();
-        group.name = `${entry.id}-bh-fullscreen`;
-        group.userData.effectType = entry.effectType;
-
-        // BlackHoleRenderer requires the THREE.WebGLRenderer instance.
-        // solarSystem stores it as this.renderer.
-        this.focusRenderer = new BlackHoleRenderer(this.renderer, this.blackHoleConfig);
-
-        // Set per-object doppler based on entry id
-        if (entry.id === 'sagittarius-a-star') {
-            this.focusRenderer.setDopplerScale(0.78);
-        }
-
-        const mesh = this.focusRenderer.getMesh();
-        group.add(mesh);
-        return group;
-    }
-
 
     getFocusedCoreSize(effectType) {
         switch (effectType) {
@@ -1904,9 +1836,14 @@ class SolarSystem {
 
     clearFocusView() {
         if (!this.focusGroup && !this.focusRenderer && !this.focusSpecialRenderer) return;
-        this.focusRenderer?.dispose();
+        // Screen-owning BH renderer must dispose its RTs; simple/pulsar only null refs
+        if (this.focusRenderer && this.focusRenderer === this.focusSpecialRenderer) {
+            this.focusRenderer.dispose();
+        } else {
+            this.focusRenderer?.dispose?.();
+            this.focusSpecialRenderer?.dispose?.();
+        }
         this.focusRenderer = null;
-        this.focusSpecialRenderer?.dispose?.();
         this.focusSpecialRenderer = null;
         if (this.focusGroup) {
             this.disposeObject3D(this.focusGroup);
