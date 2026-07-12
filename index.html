@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>太阳系天体模型 - Solar System Model</title>
+    <title>太阳系与近邻星图 - Solar Neighborhood Atlas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,8 +13,8 @@
         <div class="logo">
             <span class="sun-icon" aria-hidden="true">☉</span>
             <div>
-                <h1>太阳系天体模型</h1>
-                <p>Keplerian Solar System</p>
+                <h1>太阳系与近邻星图</h1>
+                <p>Solar System · Nearby Stars · Galactic Landmarks</p>
             </div>
         </div>
         <nav class="controls" aria-label="模拟控制">
@@ -23,7 +23,7 @@
                 <span class="text">重置</span>
             </button>
             <button id="btn-pause" title="暂停/播放">
-                <span class="icon">⏸</span>
+                <span class="icon">Ⅱ</span>
                 <span class="text">暂停</span>
             </button>
             <button id="btn-labels" title="显示/隐藏标签">
@@ -34,32 +34,64 @@
                 <span class="icon">◎</span>
                 <span class="text">轨道</span>
             </button>
+            <button id="btn-atlas" title="显示/隐藏近邻星图">
+                <span class="icon">✦</span>
+                <span class="text">星图</span>
+            </button>
+            <button id="btn-effects" title="增强/简化视觉效果">
+                <span class="icon">✺</span>
+                <span class="text">特效</span>
+            </button>
+            <button id="btn-ui" title="隐藏/显示界面">
+                <span class="icon">▣</span>
+                <span class="text">界面</span>
+            </button>
+            <button id="btn-drag-mode" title="切换左键拖拽模式">
+                <span class="icon">↔</span>
+                <span class="text">平移</span>
+            </button>
         </nav>
     </header>
 
     <aside id="science-panel">
         <div class="panel-row">
             <span>模型</span>
-            <strong id="mode-name">观赏比例</strong>
+            <strong id="mode-name">观测比例</strong>
         </div>
         <div class="segmented" role="group" aria-label="比例模式">
-            <button id="mode-balanced" class="active" data-mode="balanced">观赏</button>
+            <button id="mode-balanced" class="active" data-mode="balanced">观测</button>
             <button id="mode-compact" data-mode="compact">距离感</button>
+            <button id="mode-atlas" data-mode="atlas">星图</button>
         </div>
-        <p id="mode-description">距离压缩，半径放大，适合观察整体结构</p>
+        <p id="mode-description">距离压缩、半径放大，适合观察太阳系整体结构。</p>
+        <div class="panel-row">
+            <span>星图层</span>
+            <strong id="atlas-map-name">太阳邻域</strong>
+        </div>
+        <div class="atlas-switch" role="group" aria-label="星图层切换">
+            <button class="active" data-atlas-map="neighborhood">邻域</button>
+            <button data-atlas-map="milky-way">银河</button>
+            <button data-atlas-map="local-group">星系群</button>
+            <button data-atlas-map="cosmic-neighborhood">宇宙近邻</button>
+        </div>
         <div class="panel-row">
             <span>已模拟</span>
             <strong id="elapsed-days">0 天</strong>
         </div>
+        <div class="panel-row">
+            <span>星图范围</span>
+            <strong id="atlas-map-range">约 50 光年</strong>
+        </div>
+        <p class="panel-note">太阳系天体按开普勒近似轨道运动；近邻恒星和深空目标按真实距离与方向做可视化标记，不模拟它们绕太阳运动。</p>
     </aside>
 
     <section id="time-control" aria-label="时间控制">
-        <label for="time-slider">时间倍速</label>
+        <label for="time-slider">时间倍率</label>
         <input type="range" id="time-slider" min="0" max="13" value="4">
         <span id="time-display">1 天/秒</span>
         <div class="time-buttons">
-            <button id="btn-time-slower" title="减速">⏪</button>
-            <button id="btn-time-faster" title="加速">⏩</button>
+            <button id="btn-time-slower" title="减速">−</button>
+            <button id="btn-time-faster" title="加速">+</button>
         </div>
     </section>
 
@@ -67,24 +99,26 @@
         <button id="close-info" class="close-btn" title="关闭">&times;</button>
         <div id="planet-info-content">
             <h2 id="planet-name">地球</h2>
+            <button id="btn-focus-object" class="panel-action hidden" type="button">近景观测</button>
+            <button id="btn-close-expanded" class="panel-action hidden" type="button">返回星图</button>
             <div class="info-section">
                 <h3>基本信息</h3>
-                <p><strong>直径</strong><span id="info-diameter">12,742 km</span></p>
-                <p><strong>质量</strong><span id="info-mass">5.972e+24 kg</span></p>
-                <p><strong>轨道半长轴</strong><span id="info-distance">1 AU</span></p>
-                <p><strong>轨道周期</strong><span id="info-period">365.256 天</span></p>
-                <p><strong>自转周期</strong><span id="info-rotation">23.934 小时</span></p>
+                <p><strong id="label-diameter">直径</strong><span id="info-diameter">12,742 km</span></p>
+                <p><strong id="label-mass">质量</strong><span id="info-mass">5.972e+24 kg</span></p>
+                <p><strong id="label-distance">轨道/距离</strong><span id="info-distance">1 AU</span></p>
+                <p><strong id="label-period">周期</strong><span id="info-period">365.256 天</span></p>
+                <p><strong id="label-rotation">自转周期</strong><span id="info-rotation">23.934 小时</span></p>
             </div>
             <div class="info-section">
-                <h3>物理特性</h3>
+                <h3>物理特征</h3>
                 <p><strong>类型</strong><span id="info-type">类地行星</span></p>
                 <p><strong>组成/大气</strong><span id="info-atmosphere">氮、氧、氩</span></p>
-                <p><strong>温度</strong><span id="info-temperature">表面平均约15°C</span></p>
-                <p><strong>卫星数量</strong><span id="info-moons">1</span></p>
+                <p><strong>温度</strong><span id="info-temperature">表面平均约 15°C</span></p>
+                <p><strong id="label-moons">卫星数量</strong><span id="info-moons">1</span></p>
                 <p><strong>特征</strong><span id="info-feature">液态水海洋</span></p>
             </div>
             <div class="info-section moons-section">
-                <h3>主要卫星</h3>
+                <h3 id="related-title">主要卫星</h3>
                 <div id="moons-list"></div>
             </div>
         </div>
@@ -92,19 +126,19 @@
 
     <aside id="music-player">
         <div class="music-header">
-            <span class="music-icon">♫</span>
+            <span class="music-icon">♪</span>
             <span class="music-title">星际穿越原声带</span>
         </div>
         <div class="music-controls">
             <button id="music-upload" title="上传音乐文件">
-                <span class="icon">📁</span>
+                <span class="icon">⬆</span>
                 <span>上传</span>
             </button>
-            <button id="music-prev" title="上一首" disabled>⏮</button>
+            <button id="music-prev" title="上一首" disabled>‹</button>
             <button id="music-play" title="播放/暂停" disabled>
                 <span class="icon">▶</span>
             </button>
-            <button id="music-next" title="下一首" disabled>⏭</button>
+            <button id="music-next" title="下一首" disabled>›</button>
             <input type="file" id="music-file" accept="audio/*" hidden multiple>
         </div>
         <div class="music-progress">
@@ -118,7 +152,7 @@
             </div>
         </div>
         <div class="music-volume">
-            <span class="volume-icon">🔊</span>
+            <span class="volume-icon">音</span>
             <input type="range" id="volume-slider" min="0" max="100" value="70" aria-label="音量">
         </div>
         <div id="music-playlist" class="hidden"></div>
@@ -127,16 +161,25 @@
     <div id="loading">
         <div class="loading-content">
             <div class="spinner"></div>
-            <p>正在构建太阳系模型...</p>
+            <p>正在构建星图模型...</p>
         </div>
     </div>
 
+    <div id="ui-restore-hint">按 H / Space 恢复界面</div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
     <script src="js/planetData.js"></script>
     <script src="js/orbitalMechanics.js"></script>
     <script src="js/musicPlayer.js"></script>
     <script src="js/specials/blackHoleRenderer.js"></script>
+    <script src="js/specials/pulsarRenderer.js"></script>
     <script src="js/solarSystem.js"></script>
     <script src="js/main.js"></script>
 </body>
