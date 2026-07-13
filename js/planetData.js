@@ -1667,6 +1667,36 @@ const CELESTIAL_CATALOG = [
             { title: '较远卫星', detail: '比大麦哲伦云更远，但仍属本星系群内银河伴星系。' }
         ]
     },
+    {
+        id: 'ic-1613', name: 'IC 1613', nameEn: 'IC 1613', atlasMap: 'local-group', category: 'galaxy',
+        type: '不规则矮星系', distanceLy: 2380000, galactic: { lDeg: 129.7, bDeg: -60.6 }, color: 0x9ec9ff, size: 16,
+        temperature: '由多代恒星与星际介质组成', feature: '本星系群中尘埃较少的不规则矮星系，是造父变星距离标尺的重要校准目标。',
+        related: [{ title: '低尘埃环境', detail: '内部消光较弱，便于研究恒星形成历史和距离标尺。' }, { title: '本星系群成员', detail: '位于银河系和仙女座主要子群之间的较孤立区域。' }]
+    },
+    {
+        id: 'ngc-6822', name: '巴纳德星系', nameEn: "Barnard's Galaxy / NGC 6822", atlasMap: 'local-group', category: 'galaxy',
+        type: '不规则矮星系', distanceLy: 1630000, galactic: { lDeg: 25.3, bDeg: -18.4 }, color: 0xffc58c, size: 17,
+        temperature: '恒星形成区与老年恒星并存', feature: '距离较近的本星系群不规则矮星系，包含活跃恒星形成区和丰富恒星族群。',
+        related: [{ title: '恒星形成', detail: '局部 H II 区显示近期恒星形成活动。' }, { title: '距离研究', detail: '造父变星观测使其成为河外距离尺度研究的经典目标。' }]
+    },
+    {
+        id: 'wolf-lundmark-melotte', name: 'WLM 星系', nameEn: 'Wolf-Lundmark-Melotte / WLM', atlasMap: 'local-group', category: 'galaxy',
+        type: '孤立不规则矮星系', distanceLy: 3040000, galactic: { lDeg: 75.9, bDeg: -73.6 }, color: 0x9fbce8, size: 15,
+        temperature: '低金属丰度恒星系统', feature: '本星系群边缘较孤立的不规则矮星系，适合研究弱环境作用下的星系演化。',
+        related: [{ title: '孤立环境', detail: '与大型星系距离较远，潮汐扰动相对较弱。' }, { title: '低金属丰度', detail: '恒星和气体保留了矮星系化学演化的信息。' }]
+    },
+    {
+        id: 'andromeda-ii', name: '仙女座 II 矮星系', nameEn: 'Andromeda II', atlasMap: 'local-group', category: 'galaxy',
+        type: '球状矮星系', distanceLy: 2220000, galactic: { lDeg: 128.9, bDeg: -29.2 }, color: 0xd0b7e8, size: 14,
+        temperature: '老年恒星族群为主', feature: '仙女座星系的卫星矮星系，内部运动学保留了并合和潮汐演化线索。',
+        related: [{ title: '仙女座卫星', detail: '受 M31 引力环境影响的低亮度卫星星系。' }, { title: '恒星运动', detail: '复杂的恒星运动结构可能记录早期小型并合事件。' }]
+    },
+    {
+        id: 'andromeda-iii', name: '仙女座 III 矮星系', nameEn: 'Andromeda III', atlasMap: 'local-group', category: 'galaxy',
+        type: '球状矮星系', distanceLy: 2450000, galactic: { lDeg: 119.3, bDeg: -26.2 }, color: 0xc5afe0, size: 13,
+        temperature: '低亮度老年恒星系统', feature: '仙女座星系的低亮度卫星矮星系，用于研究大型星系卫星族群和暗物质环境。',
+        related: [{ title: '低表面亮度', detail: '恒星分布稀疏，观测依赖深度巡天。' }, { title: '卫星族群', detail: '与其他 M31 矮卫星共同约束本星系群形成历史。' }]
+    },
 
     // ── Cosmic neighborhood expansions ────────────────────────────────────
     {
@@ -1758,6 +1788,36 @@ const CELESTIAL_CATALOG = [
             { title: '银盘遮挡', detail: '大量尘埃使该方向光学巡天受限。' },
             { title: '流场示意', detail: '这里只标方向与尺度概念，不表示单一天体实体。' }
         ]
+    },
+    {
+        id: 'ngc-253', name: '雕刻室星系 NGC 253', nameEn: 'Sculptor Galaxy / NGC 253', atlasMap: 'cosmic-neighborhood', category: 'galaxy',
+        type: '星暴旋涡星系', distanceLy: 11400000, galactic: { lDeg: 97.4, bDeg: -88.0 }, color: 0xffb57d, size: 25,
+        temperature: '星暴核心含热气体与尘埃', feature: '雕刻室星系群中最明亮的成员之一，核心区域正在经历强烈恒星形成。',
+        related: [{ title: '星暴核心', detail: '高密度恒星形成驱动强烈红外、射电和 X 射线辐射。' }, { title: '雕刻室星系群', detail: '为现有星系群目录提供单星系观测节点。' }]
+    },
+    {
+        id: 'm82-starburst', name: 'M82 星暴星系', nameEn: 'Cigar Galaxy / M82', atlasMap: 'cosmic-neighborhood', category: 'galaxy',
+        type: '星暴星系', distanceLy: 12000000, galactic: { lDeg: 141.4, bDeg: 40.6 }, color: 0xff8b67, size: 24,
+        temperature: '星暴风中的高温气体', feature: 'M81 星系群中的星暴星系，中央恒星形成活动驱动双极超风。',
+        related: [{ title: '潮汐相互作用', detail: '与 M81 的引力相互作用可能触发了强烈星暴。' }, { title: '星系超风', detail: '大量超新星和恒星风将热气体推出星系盘。' }]
+    },
+    {
+        id: 'centaurus-a-galaxy', name: '半人马座 A', nameEn: 'Centaurus A / NGC 5128', atlasMap: 'cosmic-neighborhood', category: 'galaxy',
+        type: '活动椭圆星系', distanceLy: 12000000, galactic: { lDeg: 309.5, bDeg: 19.4 }, color: 0xe0b18b, size: 27,
+        temperature: '活动核、射电喷流与尘埃带', feature: '距离最近的强射电星系之一，显著尘埃带横穿椭圆星系主体。',
+        related: [{ title: '活动星系核', detail: '中心超大质量黑洞驱动大尺度射电喷流和叶状结构。' }, { title: '并合痕迹', detail: '尘埃带可能来自过去吞并的富气体星系。' }]
+    },
+    {
+        id: 'm87-galaxy', name: 'M87 星系', nameEn: 'Messier 87 / Virgo A', atlasMap: 'cosmic-neighborhood', category: 'galaxy',
+        type: '巨型椭圆活动星系', distanceLy: 53500000, galactic: { lDeg: 283.8, bDeg: 74.5 }, color: 0xffd0a0, size: 31,
+        temperature: '热气体晕与相对论喷流', feature: '室女座星系团中心附近的巨型椭圆星系，拥有著名相对论喷流和已成像黑洞。',
+        related: [{ title: 'M87*', detail: '事件视界望远镜首次发布黑洞阴影图像的目标。' }, { title: '室女座星系团', detail: '为现有室女座星系团目录提供中心代表星系节点。' }]
+    },
+    {
+        id: 'local-supercluster-direction', name: '本超星系团方向', nameEn: 'Local Supercluster Direction', atlasMap: 'cosmic-neighborhood', category: 'supercluster',
+        type: '超星系团尺度方向标', distanceLy: 110000000, galactic: { lDeg: 284, bDeg: 74 }, color: 0xaab7ff, size: 45,
+        temperature: '非单一天体', feature: '室女座超星系团/本超星系团的尺度与方向参照，不表示精确实体边界。',
+        related: [{ title: '层级结构', detail: '本星系群位于室女座超星系团的一部分，并嵌入更大的拉尼亚凯亚流域。' }, { title: '显示限制', detail: '这里只表达方向和尺度概念，不绘制固定边界或均匀实体。' }]
     }
 ];
 

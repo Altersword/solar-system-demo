@@ -64,6 +64,24 @@ for (const id of phaseBTargetIds) {
     else if (entry.atlasMap !== 'milky-way') errors.push(`${id}: phase B target is not milky-way`);
 }
 
+const phaseCTargetMaps = {
+    'ic-1613': 'local-group',
+    'ngc-6822': 'local-group',
+    'wolf-lundmark-melotte': 'local-group',
+    'andromeda-ii': 'local-group',
+    'andromeda-iii': 'local-group',
+    'ngc-253': 'cosmic-neighborhood',
+    'm82-starburst': 'cosmic-neighborhood',
+    'centaurus-a-galaxy': 'cosmic-neighborhood',
+    'm87-galaxy': 'cosmic-neighborhood',
+    'local-supercluster-direction': 'cosmic-neighborhood'
+};
+for (const [id, atlasMap] of Object.entries(phaseCTargetMaps)) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing phase C target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;
