@@ -82,6 +82,29 @@ for (const [id, atlasMap] of Object.entries(phaseCTargetMaps)) {
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
 
+const stellarBoostMaps = {
+    'van-maanen-star': 'neighborhood',
+    '40-eridani-b': 'neighborhood',
+    aldebaran: 'milky-way',
+    arcturus: 'milky-way',
+    mira: 'milky-way'
+};
+const stellarBoostEffects = {
+    'van-maanen-star': 'white-dwarf',
+    '40-eridani-b': 'white-dwarf',
+    aldebaran: 'red-giant',
+    arcturus: 'red-giant',
+    mira: 'red-giant'
+};
+for (const [id, atlasMap] of Object.entries(stellarBoostMaps)) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing stellar boost target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+    else if (entry.effectType !== stellarBoostEffects[id]) {
+        errors.push(`${id}: expected effectType ${stellarBoostEffects[id]}, got ${entry.effectType}`);
+    }
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;

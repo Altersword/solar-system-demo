@@ -969,6 +969,46 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'van-maanen-star',
+        name: '范马南星',
+        nameEn: "Van Maanen's Star",
+        atlasMap: 'neighborhood',
+        category: 'stellar-remnant',
+        type: '白矮星',
+        distanceLy: 14.1,
+        galactic: { lDeg: 91.7, bDeg: -56.0 },
+        spectralClass: 'DZ8',
+        color: 0xeef7ff,
+        size: 9,
+        effectType: 'white-dwarf',
+        temperature: '约 6000 K 量级',
+        feature: '距离太阳最近的孤立白矮星之一，是近邻致密残骸的经典样本。',
+        related: [
+            { title: '孤立白矮星', detail: '不在明亮双星系统中，便于单独研究冷却白矮星。' },
+            { title: '近邻残骸', detail: '距离约 14 光年，是太阳邻域中的重要致密天体。' }
+        ]
+    },
+    {
+        id: '40-eridani-b',
+        name: '波江座 40 B',
+        nameEn: '40 Eridani B',
+        atlasMap: 'neighborhood',
+        category: 'stellar-remnant',
+        type: '白矮星',
+        distanceLy: 16.3,
+        galactic: { lDeg: 200.8, bDeg: -38.0 },
+        spectralClass: 'DA4',
+        color: 0xf4f9ff,
+        size: 9,
+        effectType: 'white-dwarf',
+        temperature: '约 17000 K 量级',
+        feature: '波江座 40 三合星系统中的白矮星成员，是历史上最早被确认的白矮星之一。',
+        related: [
+            { title: '三合星系统', detail: '主星是 K 型恒星，另有一颗红矮星伴星。' },
+            { title: '白矮星历史', detail: '对理解恒星晚期演化与电子简并压具有重要意义。' }
+        ]
+    },
+    {
         id: 'vela-pulsar',
         name: '船帆座脉冲星',
         nameEn: 'Vela Pulsar',
@@ -1430,6 +1470,66 @@ const CELESTIAL_CATALOG = [
         related: [
             { title: '红超巨星', detail: '外层膨胀、温度较低，光度极高。' },
             { title: '伴星', detail: '有较热伴星，形成对比鲜明的双星系统。' }
+        ]
+    },
+    {
+        id: 'aldebaran',
+        name: '毕宿五',
+        nameEn: 'Aldebaran / Alpha Tauri',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '橙巨星',
+        distanceLy: 65,
+        galactic: { lDeg: 180.0, bDeg: -20.2 },
+        spectralClass: 'K5III',
+        color: 0xff8a3d,
+        size: 16,
+        effectType: 'red-giant',
+        temperature: '约 3900 K',
+        feature: '金牛座亮星，橙红色巨星，是北天最容易辨认的晚期恒星之一。',
+        related: [
+            { title: '橙巨星', detail: '比红超巨星更常见，外层已明显膨胀、温度下降。' },
+            { title: '毕星团前景', detail: '视觉上靠近毕星团，但并非该星团成员。' }
+        ]
+    },
+    {
+        id: 'arcturus',
+        name: '大角星',
+        nameEn: 'Arcturus / Alpha Boötis',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '橙巨星',
+        distanceLy: 37,
+        galactic: { lDeg: 15.1, bDeg: 69.1 },
+        spectralClass: 'K1.5III',
+        color: 0xff9a45,
+        size: 16,
+        effectType: 'red-giant',
+        temperature: '约 4300 K',
+        feature: '牧夫座主星，北半天球最亮恒星之一，是明亮的 K 型巨星。',
+        related: [
+            { title: '高自行', detail: '在天空中的视运动较快，是近邻明亮巨星的代表。' },
+            { title: '演化阶段', detail: '已离开主序，外层膨胀成橙红色巨星。' }
+        ]
+    },
+    {
+        id: 'mira',
+        name: '米拉',
+        nameEn: 'Mira / Omicron Ceti',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '脉动红巨星',
+        distanceLy: 300,
+        galactic: { lDeg: 168.0, bDeg: -58.0 },
+        spectralClass: 'M5-9IIIe',
+        color: 0xff5f38,
+        size: 17,
+        effectType: 'red-giant',
+        temperature: '约 3000 K 量级，随脉动变化',
+        feature: '经典长周期变星，亮度可在数月尺度上显著变化，外层物质损失明显。',
+        related: [
+            { title: '脉动变星', detail: '外层周期性膨胀收缩，导致亮度和颜色变化。' },
+            { title: '恒星风', detail: '晚期巨星可抛出大量气体和尘埃，形成延伸包层。' }
         ]
     },
     {
