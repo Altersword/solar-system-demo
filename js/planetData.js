@@ -1087,6 +1087,489 @@ const CELESTIAL_CATALOG = [
             { title: '巨引源方向', detail: '拉尼亚凯亚定义与星系运动流场和引力汇聚方向有关。' },
             { title: '显示限制', detail: '该节点是方向与概念标记，不代表一个边界清晰的球状天体。' }
         ]
+    },
+
+    // ── Neighborhood expansions ───────────────────────────────────────────
+    {
+        id: 'lalande-21185',
+        name: '拉兰德 21185',
+        nameEn: 'Lalande 21185',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星',
+        distanceLy: 8.3,
+        galactic: { lDeg: 185.1, bDeg: 65.4 },
+        spectralClass: 'M2V',
+        color: 0xff8a62,
+        size: 3.4,
+        temperature: '约 3500 K',
+        feature: '北天最亮红矮星之一，离太阳很近，历史上多次被作为近邻恒星研究目标。',
+        related: [
+            { title: '近邻红矮星', detail: '质量与亮度都远低于太阳，寿命极长。' },
+            { title: '自行', detail: '在天空中有较大自行，是近邻恒星的典型特征。' }
+        ]
+    },
+    {
+        id: 'wolf-359',
+        name: '沃尔夫 359',
+        nameEn: 'Wolf 359',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星 / 耀星',
+        distanceLy: 7.9,
+        galactic: { lDeg: 244.1, bDeg: 56.1 },
+        spectralClass: 'M6V',
+        color: 0xff6b4a,
+        size: 2.8,
+        temperature: '约 2800 K',
+        feature: '距离太阳最近的恒星之一，极暗、极冷，常作为近邻红矮星样本。',
+        related: [
+            { title: '极低光度', detail: '即便很近，肉眼也完全看不见。' },
+            { title: '磁活动', detail: '可出现耀斑，说明红矮星表面磁活动活跃。' }
+        ]
+    },
+    {
+        id: 'ross-154',
+        name: '罗斯 154',
+        nameEn: 'Ross 154',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星',
+        distanceLy: 9.7,
+        galactic: { lDeg: 11.3, bDeg: -10.3 },
+        spectralClass: 'M3.5V',
+        color: 0xff7f58,
+        size: 3.0,
+        temperature: '约 3200 K',
+        feature: '南天近邻红矮星，属于银河系本地恒星群体中的典型 M 型主序星。',
+        related: [
+            { title: '近邻样本', detail: '常用于研究红矮星活动与本地恒星密度。' }
+        ]
+    },
+    {
+        id: 'gliese-581',
+        name: '格利泽 581',
+        nameEn: 'Gliese 581',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星行星系统',
+        distanceLy: 20.5,
+        galactic: { lDeg: 348.0, bDeg: 48.1 },
+        spectralClass: 'M3V',
+        color: 0xff8860,
+        size: 4.0,
+        temperature: '约 3500 K',
+        feature: '著名近邻红矮星系统，曾推动“红矮星宜居带行星”讨论。',
+        systemLayout: {
+            sceneScale: 1.25,
+            cameraDistance: 160,
+            note: '轨道为示意压缩，不代表真实半长轴比例。',
+            bodies: [
+                { name: 'Gl 581', kind: 'star', color: 0xff8860, size: 12, x: 50, y: 50, detail: 'M3V 红矮星' },
+                { name: 'b', kind: 'planet', color: 0xd6a574, orbit: 16, angleDeg: 40, detail: '热海王星级' },
+                { name: 'c', kind: 'planet', color: 0x84c99f, orbit: 24, angleDeg: 150, detail: '宜居带讨论目标' },
+                { name: 'e', kind: 'planet', color: 0x8fb2ff, orbit: 32, angleDeg: 260, detail: '低质量行星候选/确认研究目标' }
+            ]
+        },
+        related: [
+            { title: '系外行星系统', detail: '多颗低质量行星候选使它成为早期宜居带研究焦点。' },
+            { title: '红矮星宜居性', detail: '近距离轨道、潮汐锁定和耀斑是关键争论点。' }
+        ]
+    },
+    {
+        id: '61-cygni',
+        name: '天鹅座 61',
+        nameEn: '61 Cygni',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '双星系统',
+        distanceLy: 11.4,
+        galactic: { lDeg: 82.3, bDeg: -5.8 },
+        spectralClass: 'K5V + K7V',
+        color: 0xffb478,
+        size: 4.4,
+        temperature: '约 4400 / 4100 K',
+        feature: '历史上首批被精确测量视差的近邻双星之一，常被称为“飞行双星”。',
+        systemLayout: {
+            sceneScale: 1.1,
+            cameraDistance: 150,
+            note: '双星间距被压缩以便同屏观察。',
+            bodies: [
+                { name: '61 Cyg A', kind: 'star', color: 0xffb478, size: 13, x: 44, y: 50, detail: 'K5V' },
+                { name: '61 Cyg B', kind: 'star', color: 0xff9d62, size: 11, x: 58, y: 48, detail: 'K7V' }
+            ]
+        },
+        related: [
+            { title: '历史意义', detail: '视差测量帮助确立恒星距离标尺。' },
+            { title: 'K 型主序星', detail: '比太阳更冷、更暗、寿命更长。' }
+        ]
+    },
+    {
+        id: 'altair',
+        name: '牛郎星',
+        nameEn: 'Altair / Alpha Aquilae',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '快速自转 A 型星',
+        distanceLy: 16.7,
+        galactic: { lDeg: 47.7, bDeg: -8.9 },
+        spectralClass: 'A7V',
+        color: 0xeef6ff,
+        size: 5.6,
+        temperature: '约 7500 K',
+        feature: '夏季大三角成员，快速自转导致赤道显著扁化。',
+        related: [
+            { title: '快速自转', detail: '自转周期约数小时量级，赤道半径明显大于两极。' },
+            { title: '夏季大三角', detail: '与织女星、天津四构成北天著名星群。' }
+        ]
+    },
+
+    // ── Milky Way expansions ──────────────────────────────────────────────
+    {
+        id: 'antares',
+        name: '心宿二',
+        nameEn: 'Antares / Alpha Scorpii',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '红超巨星',
+        distanceLy: 550,
+        galactic: { lDeg: 351.9, bDeg: 15.1 },
+        color: 0xff5a2e,
+        size: 18,
+        effectType: 'red-giant',
+        temperature: '约 3400 K',
+        feature: '天蝎座心脏位置的红超巨星，颜色深橙，是银河平面附近醒目的晚期恒星。',
+        related: [
+            { title: '红超巨星', detail: '外层膨胀、温度较低，光度极高。' },
+            { title: '伴星', detail: '有较热伴星，形成对比鲜明的双星系统。' }
+        ]
+    },
+    {
+        id: 'rigel',
+        name: '参宿七',
+        nameEn: 'Rigel / Beta Orionis',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '蓝超巨星',
+        distanceLy: 860,
+        galactic: { lDeg: 209.2, bDeg: -25.2 },
+        color: 0xb7d8ff,
+        size: 16,
+        temperature: '约 12000 K',
+        feature: '猎户座足部的蓝超巨星，光度极高，是年轻恒星形成区的明亮示踪。',
+        related: [
+            { title: '蓝超巨星', detail: '质量大、演化快、辐射强紫外线。' },
+            { title: '猎户座复合体', detail: '位于银河系本地螺旋臂的重要恒星形成区域附近。' }
+        ]
+    },
+    {
+        id: 'deneb',
+        name: '天津四',
+        nameEn: 'Deneb / Alpha Cygni',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '白超巨星',
+        distanceLy: 2600,
+        galactic: { lDeg: 84.3, bDeg: 2.0 },
+        color: 0xdcecff,
+        size: 17,
+        temperature: '约 8500 K',
+        feature: '夏季大三角最远顶点之一，绝对光度极高的白超巨星。',
+        related: [
+            { title: '距离与光度', detail: '距离远但仍明亮，说明真实光度非常巨大。' },
+            { title: '天鹅座区域', detail: '位于银河带明亮区，附近有丰富星云与年轻星族。' }
+        ]
+    },
+    {
+        id: 'polaris',
+        name: '北极星',
+        nameEn: 'Polaris / Alpha Ursae Minoris',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '造父变星 / 北极指示星',
+        distanceLy: 430,
+        galactic: { lDeg: 123.3, bDeg: 26.5 },
+        color: 0xfff0c8,
+        size: 14,
+        temperature: '约 6000 K',
+        feature: '接近北天极的明亮黄超巨星/造父变星，是导航与天极指示的经典标志。',
+        related: [
+            { title: '造父变星', detail: '亮度周期变化，可用于距离标定。' },
+            { title: '天极指示', detail: '当前靠近北天极，因此成为“北极星”。' }
+        ]
+    },
+    {
+        id: 'omega-centauri',
+        name: '半人马座 ω 球状星团',
+        nameEn: 'Omega Centauri / NGC 5139',
+        atlasMap: 'milky-way',
+        category: 'deep-sky',
+        type: '球状星团',
+        distanceLy: 15800,
+        galactic: { lDeg: 309.1, bDeg: 15.0 },
+        color: 0xffe8b5,
+        size: 28,
+        temperature: '非单一天体',
+        feature: '银河系最亮、最大的球状星团之一，可能是被潮汐剥离的矮星系残骸核心。',
+        related: [
+            { title: '球状星团', detail: '由数十万颗老年恒星组成的致密球状系统。' },
+            { title: '可能的矮星系核心', detail: '化学组成和动力学暗示它不同于普通星团。' }
+        ]
+    },
+    {
+        id: '47-tucanae',
+        name: '杜鹃座 47',
+        nameEn: '47 Tucanae / NGC 104',
+        atlasMap: 'milky-way',
+        category: 'deep-sky',
+        type: '球状星团',
+        distanceLy: 13000,
+        galactic: { lDeg: 305.9, bDeg: -44.9 },
+        color: 0xffd9a0,
+        size: 24,
+        temperature: '非单一天体',
+        feature: '南天最亮球状星团之一，核心致密，常用于研究致密星族与毫秒脉冲星。',
+        related: [
+            { title: '致密核心', detail: '中心恒星密度极高。' },
+            { title: '脉冲星实验室', detail: '星团内发现大量毫秒脉冲星。' }
+        ]
+    },
+    {
+        id: 'hyades',
+        name: '毕星团',
+        nameEn: 'Hyades',
+        atlasMap: 'milky-way',
+        category: 'deep-sky',
+        type: '疏散星团',
+        distanceLy: 153,
+        galactic: { lDeg: 180.1, bDeg: -22.3 },
+        color: 0xffd28a,
+        size: 22,
+        temperature: '非单一天体',
+        feature: '最近的疏散星团之一，是恒星年龄与距离标定的重要基准。',
+        related: [
+            { title: '距离基准', detail: '因距离近、成员多，常用于校准恒星演化模型。' },
+            { title: '金牛座头部', detail: '肉眼可见的 V 字形恒星群与毕宿五相邻。' }
+        ]
+    },
+    {
+        id: 'cassiopeia-a',
+        name: '仙后座 A',
+        nameEn: 'Cassiopeia A',
+        atlasMap: 'milky-way',
+        category: 'supernova-remnant',
+        type: '年轻超新星遗迹',
+        distanceLy: 11000,
+        galactic: { lDeg: 111.7, bDeg: -2.1 },
+        color: 0x9ad0ff,
+        size: 20,
+        effectType: 'supernova',
+        temperature: '激波加热等离子体可达数百万 K',
+        feature: '银河系中最年轻、最强的射电超新星遗迹之一，展示爆炸后的高速膨胀壳。',
+        related: [
+            { title: '年轻 SNR', detail: '爆发时间约在 300 多年前。' },
+            { title: '多波段目标', detail: 'X 射线、射电和光学都显示复杂丝状结构。' }
+        ]
+    },
+    {
+        id: 'eta-carinae',
+        name: '船底座 η',
+        nameEn: 'Eta Carinae',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '高光度蓝变星系统',
+        distanceLy: 7500,
+        galactic: { lDeg: 287.6, bDeg: -0.6 },
+        color: 0xffb07a,
+        size: 19,
+        temperature: '外层喷流与尘埃温度复杂',
+        feature: '极端大质量恒星系统，19 世纪大爆发留下双瓣星云，是恒星演化晚期的关键样本。',
+        related: [
+            { title: '大爆发', detail: '19 世纪曾短暂成为全天最亮恒星之一。' },
+            { title: '双瓣星云', detail: 'Homunculus 星云记录了质量抛射历史。' }
+        ]
+    },
+
+    // ── Local Group expansions ────────────────────────────────────────────
+    {
+        id: 'm32',
+        name: '仙女座伴星系 M32',
+        nameEn: 'M32 / NGC 221',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '致密椭圆矮星系',
+        distanceLy: 2490000,
+        galactic: { lDeg: 121.2, bDeg: -22.0 },
+        color: 0xffd7a8,
+        size: 18,
+        temperature: '非单一天体',
+        feature: '仙女座星系的致密椭圆伴星系，核心密度高，是近邻相互作用的重要样本。',
+        related: [
+            { title: 'M31 伴星系', detail: '与仙女座星系有明显空间关联。' },
+            { title: '致密核心', detail: '中心恒星密度极高，可能含有中等质量黑洞候选。' }
+        ]
+    },
+    {
+        id: 'ngc-205',
+        name: '仙女座伴星系 M110',
+        nameEn: 'M110 / NGC 205',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '矮椭圆星系',
+        distanceLy: 2690000,
+        galactic: { lDeg: 120.7, bDeg: -21.1 },
+        color: 0xffc994,
+        size: 20,
+        temperature: '非单一天体',
+        feature: '仙女座另一主要伴星系，外形比 M32 更延展，内部仍有年轻恒星形成迹象。',
+        related: [
+            { title: '矮椭圆星系', detail: '比巨型椭圆星系更暗、更小，是星系演化研究重点。' }
+        ]
+    },
+    {
+        id: 'ic-10',
+        name: 'IC 10',
+        nameEn: 'IC 10',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '不规则星暴矮星系',
+        distanceLy: 2500000,
+        galactic: { lDeg: 119.0, bDeg: -3.3 },
+        color: 0x9fe0ff,
+        size: 17,
+        temperature: '非单一天体',
+        feature: '本星系群中最近的星暴矮星系之一，富含气体与年轻恒星。',
+        related: [
+            { title: '星暴活动', detail: '当前恒星形成率相对其质量非常高。' },
+            { title: '本星系群成员', detail: '位于银河系附近，是近邻不规则星系样本。' }
+        ]
+    },
+    {
+        id: 'fornax-dwarf',
+        name: '天炉座矮星系',
+        nameEn: 'Fornax Dwarf Spheroidal',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 460000,
+        galactic: { lDeg: 237.1, bDeg: -65.7 },
+        color: 0xffc8a0,
+        size: 16,
+        temperature: '非单一天体',
+        feature: '银河系卫星矮星系，含多个球状星团，是暗物质与矮星系演化研究的经典目标。',
+        related: [
+            { title: '银河卫星', detail: '围绕银河系运动的暗弱伴星系。' },
+            { title: '球状星团宿主', detail: '在矮星系中拥有异常丰富的球状星团系统。' }
+        ]
+    },
+    {
+        id: 'leo-i',
+        name: '狮子座 I 矮星系',
+        nameEn: 'Leo I',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 820000,
+        galactic: { lDeg: 226.0, bDeg: 49.1 },
+        color: 0xffb98a,
+        size: 15,
+        temperature: '非单一天体',
+        feature: '银河系较远的卫星矮星系之一，恒星形成历史较晚结束。',
+        related: [
+            { title: '较远卫星', detail: '比大麦哲伦云更远，但仍属本星系群内银河伴星系。' }
+        ]
+    },
+
+    // ── Cosmic neighborhood expansions ────────────────────────────────────
+    {
+        id: 'fornax-cluster',
+        name: '天炉座星系团',
+        nameEn: 'Fornax Cluster',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy-cluster',
+        type: '近邻星系团',
+        distanceLy: 62000000,
+        galactic: { lDeg: 236.7, bDeg: -53.6 },
+        color: 0xffe0a8,
+        size: 36,
+        temperature: '非单一天体',
+        feature: '南天近邻星系团，比室女座更致密，是近邻宇宙结构研究的重要节点。',
+        related: [
+            { title: 'NGC 1399', detail: '星系团中心巨型椭圆星系。' },
+            { title: '近邻团尺度', detail: '距离约 6200 万光年。' }
+        ]
+    },
+    {
+        id: 'coma-cluster',
+        name: '后发座星系团',
+        nameEn: 'Coma Cluster',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy-cluster',
+        type: '富星系团',
+        distanceLy: 321000000,
+        galactic: { lDeg: 58.1, bDeg: 88.0 },
+        color: 0xffd9a0,
+        size: 44,
+        temperature: '非单一天体',
+        feature: '著名富星系团，历史上帮助确立暗物质存在证据，是大尺度结构研究经典对象。',
+        related: [
+            { title: '暗物质证据', detail: '成员星系速度弥散远超可见物质所能束缚。' },
+            { title: '富团环境', detail: '以椭圆星系和热气体主导的致密环境。' }
+        ]
+    },
+    {
+        id: 'perseus-cluster',
+        name: '英仙座星系团',
+        nameEn: 'Perseus Cluster / Abell 426',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy-cluster',
+        type: 'X 射线亮星系团',
+        distanceLy: 240000000,
+        galactic: { lDeg: 150.6, bDeg: -13.3 },
+        color: 0xb8d8ff,
+        size: 40,
+        temperature: '团内热气体可达数千万 K',
+        feature: '最近、最亮的 X 射线星系团之一，中心有活动星系 NGC 1275。',
+        related: [
+            { title: 'NGC 1275', detail: '中心 cD 星系，伴随复杂射电与丝状气体结构。' },
+            { title: '团内介质', detail: '热气体发出强 X 射线，可研究反馈与冷却流。' }
+        ]
+    },
+    {
+        id: 'hydra-centaurus',
+        name: '长蛇-半人马超星系团方向',
+        nameEn: 'Hydra-Centaurus Supercluster',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'supercluster',
+        type: '超星系团方向标',
+        distanceLy: 190000000,
+        galactic: { lDeg: 302, bDeg: 21 },
+        color: 0xffb28a,
+        size: 46,
+        temperature: '非单一天体',
+        feature: '指向近邻超星系团复合体，与巨引源和拉尼亚凯亚流场研究密切相关。',
+        related: [
+            { title: '大尺度流', detail: '星系 peculiar velocity 在该方向表现出明显汇聚趋势。' },
+            { title: '与拉尼亚凯亚', detail: '属于更大宇宙网节点网络的一部分。' }
+        ]
+    },
+    {
+        id: 'great-attractor',
+        name: '巨引源方向',
+        nameEn: 'Great Attractor',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'supercluster',
+        type: '引力汇聚方向标',
+        distanceLy: 250000000,
+        galactic: { lDeg: 307, bDeg: 9 },
+        color: 0xff8f6a,
+        size: 50,
+        temperature: '非单一天体',
+        feature: '本星系群参与的大尺度运动所指向的引力汇聚方向；因位于银盘遮挡区，观测困难。',
+        related: [
+            { title: '银盘遮挡', detail: '大量尘埃使该方向光学巡天受限。' },
+            { title: '流场示意', detail: '这里只标方向与尺度概念，不表示单一天体实体。' }
+        ]
     }
 ];
 

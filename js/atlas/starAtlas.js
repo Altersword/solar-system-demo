@@ -302,21 +302,52 @@ class StarAtlas {
     }
 
     createDistanceShells() {
-        [5, 10, 25, 50].forEach((ly) => {
-            const mockEntry = { distanceLy: ly, category: 'nearby-star' };
-            const radius = this.host.scaleCatalogDistance(mockEntry);
-            const geometry = new THREE.SphereGeometry(radius, 96, 48);
-            const material = new THREE.MeshBasicMaterial({
-                color: ly <= 10 ? 0x6da5ff : 0x4b6e9c,
-                transparent: true,
-                opacity: ly <= 10 ? 0.055 : 0.035,
-                wireframe: true,
-                depthWrite: false
+        const shellSets = {
+            neighborhood: [
+                { ly: 5, category: 'nearby-star', color: 0x6da5ff, opacity: 0.055 },
+                { ly: 10, category: 'nearby-star', color: 0x5b8fd8, opacity: 0.045 },
+                { ly: 25, category: 'nearby-star', color: 0x4b6e9c, opacity: 0.035 },
+                { ly: 50, category: 'nearby-star', color: 0x3a5678, opacity: 0.028 }
+            ],
+            'milky-way': [
+                { ly: 500, category: 'nebula', color: 0x7aa7d8, opacity: 0.04 },
+                { ly: 1500, category: 'nebula', color: 0x5f86b5, opacity: 0.032 },
+                { ly: 5000, category: 'nebula', color: 0x4a6a90, opacity: 0.026 },
+                { ly: 15000, category: 'nebula', color: 0x385272, opacity: 0.02 }
+            ],
+            'local-group': [
+                { ly: 200000, category: 'galaxy', color: 0x8f7ad8, opacity: 0.035 },
+                { ly: 800000, category: 'galaxy', color: 0x7360b4, opacity: 0.028 },
+                { ly: 2500000, category: 'galaxy', color: 0x5b4a94, opacity: 0.022 }
+            ],
+            'cosmic-neighborhood': [
+                { ly: 12000000, category: 'galaxy-group', color: 0xd89a6a, opacity: 0.03 },
+                { ly: 54000000, category: 'galaxy-cluster', color: 0xb87a52, opacity: 0.024 },
+                { ly: 250000000, category: 'supercluster', color: 0x966040, opacity: 0.018 }
+            ]
+        };
+
+        Object.entries(shellSets).forEach(([atlasMap, shells]) => {
+            shells.forEach((shellDef) => {
+                const mockEntry = {
+                    distanceLy: shellDef.ly,
+                    category: shellDef.category,
+                    atlasMap
+                };
+                const radius = this.host.scaleCatalogDistance(mockEntry);
+                const geometry = new THREE.SphereGeometry(radius, 80, 40);
+                const material = new THREE.MeshBasicMaterial({
+                    color: shellDef.color,
+                    transparent: true,
+                    opacity: shellDef.opacity,
+                    wireframe: true,
+                    depthWrite: false
+                });
+                const shell = new THREE.Mesh(geometry, material);
+                shell.name = `${atlasMap}-${shellDef.ly}ly-shell`;
+                shell.userData.atlasMap = atlasMap;
+                this.atlasGroup.add(shell);
             });
-            const shell = new THREE.Mesh(geometry, material);
-            shell.name = `${ly}ly-shell`;
-            shell.userData.atlasMap = 'neighborhood';
-            this.atlasGroup.add(shell);
         });
     }
 

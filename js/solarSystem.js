@@ -186,20 +186,24 @@ class SolarSystem {
 
     scaleCatalogDistance(entry) {
         const mode = this.getModeConfig();
-        if (entry.category === 'galaxy') {
-            const compressed = Math.log10(Math.max(entry.distanceLy, 1000) / 100000 + 1);
+        const mapId = entry.atlasMap || 'neighborhood';
+        const distanceLy = Math.max(entry.distanceLy || 1, 0.1);
+
+        // Layer-aware compression keeps each atlas map readable without crushing local stars.
+        if (mapId === 'neighborhood' || distanceLy < 80) {
+            return mode.stellarBase + Math.pow(distanceLy, mode.stellarExponent) * mode.stellarScale;
+        }
+        if (mapId === 'milky-way' || distanceLy < 80000) {
+            const capped = Math.min(distanceLy, 30000);
+            return mode.stellarBase + 180 + Math.pow(capped, mode.deepSkyExponent) * mode.deepSkyScale;
+        }
+        if (mapId === 'local-group' || entry.category === 'galaxy') {
+            const compressed = Math.log10(Math.max(distanceLy, 1000) / 100000 + 1);
             return mode.stellarBase + 520 + compressed * mode.deepSkyScale * 4.8;
         }
-        if (entry.category === 'galaxy-group' || entry.category === 'galaxy-cluster' || entry.category === 'supercluster') {
-            const compressed = Math.log10(Math.max(entry.distanceLy, 1000000) / 1000000 + 1);
-            return mode.stellarBase + 900 + compressed * mode.deepSkyScale * 5.6;
-        }
-        const distance = entry.category === 'deep-sky' || entry.category === 'galactic-landmark' || entry.category === 'nebula'
-            ? Math.min(entry.distanceLy, 9000)
-            : entry.distanceLy;
-        const scale = entry.category === 'nearby-star' ? mode.stellarScale : mode.deepSkyScale;
-        const exponent = entry.category === 'nearby-star' ? mode.stellarExponent : mode.deepSkyExponent;
-        return mode.stellarBase + Math.pow(distance, exponent) * scale;
+        // cosmic-neighborhood: groups / clusters / supercluster markers
+        const compressed = Math.log10(Math.max(distanceLy, 1000000) / 1000000 + 1);
+        return mode.stellarBase + 900 + compressed * mode.deepSkyScale * 5.6;
     }
 
     getCatalogPosition(entry) {
