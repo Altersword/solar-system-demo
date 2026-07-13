@@ -1029,6 +1029,66 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'orion-arm-landmark', name: '猎户臂方向', nameEn: 'Orion Arm Direction', atlasMap: 'milky-way', category: 'galactic-landmark',
+        type: '银河旋臂方向标', distanceLy: 26000, galactic: { lDeg: 80, bDeg: 0 }, color: 0x8eb8ff, size: 18,
+        temperature: '银河盘恒星形成区的综合方向', feature: '太阳所在猎户臂（本地臂）的代表性方向标，不是单独的实体天体。',
+        related: [{ title: '本地臂', detail: '太阳位于猎户臂中的本地支臂，夹在主要旋臂之间。' }, { title: '显示方式', detail: '项目用方向和尺度参照表达旋臂位置，不构造旋臂实体模型。' }]
+    },
+    {
+        id: 'scutum-centaurus-arm', name: '盾牌-半人马臂方向', nameEn: 'Scutum-Centaurus Arm Direction', atlasMap: 'milky-way', category: 'galactic-landmark',
+        type: '银河旋臂方向标', distanceLy: 50000, galactic: { lDeg: 30, bDeg: 0 }, color: 0xffb36f, size: 20,
+        temperature: '银河内盘高密度恒星区域的综合方向', feature: '银河系主要旋臂之一的方向标，沿视线可见大量恒星形成和尘埃结构。',
+        related: [{ title: '内盘结构', detail: '盾牌-半人马臂延伸经过银河系内盘，观测距离和形态受尘埃遮挡影响。' }]
+    },
+    {
+        id: 'galactic-bulge-landmark', name: '银河系核球方向', nameEn: 'Galactic Bulge Direction', atlasMap: 'milky-way', category: 'galactic-landmark',
+        type: '银河核球方向标', distanceLy: 26000, galactic: { lDeg: 0, bDeg: 0 }, color: 0xffc27d, size: 22,
+        temperature: '老年恒星密集区域', feature: '银河系中心核球的尺度参照；人马座 A* 位于其核心方向。',
+        related: [{ title: '核球', detail: '由高密度老年恒星组成的中央隆起结构。' }, { title: '尘埃遮挡', detail: '可见光观测受到银河盘尘埃强烈影响，红外观测更适合研究银心。' }]
+    },
+    {
+        id: 'm13-great-cluster', name: '武仙座球状星团 M13', nameEn: 'Hercules Globular Cluster / M13', atlasMap: 'milky-way', category: 'deep-sky',
+        type: '球状星团', distanceLy: 22200, galactic: { lDeg: 59.0, bDeg: 40.9 }, color: 0xffd7a2, size: 19,
+        temperature: '以低金属丰度老年恒星为主', feature: '北天著名球状星团，包含数十万颗受引力束缚的恒星。',
+        related: [{ title: '银河晕', detail: '球状星团主要分布在银河盘外的晕部，是银河系早期演化的遗迹。' }, { title: 'M13', detail: '梅西耶星表第 13 号目标，常用于球状星团观测和恒星演化研究。' }]
+    },
+    {
+        id: 'm3-globular-cluster', name: '猎犬座球状星团 M3', nameEn: 'Globular Cluster M3', atlasMap: 'milky-way', category: 'deep-sky',
+        type: '球状星团', distanceLy: 33900, galactic: { lDeg: 42.2, bDeg: 78.7 }, color: 0xffc790, size: 18,
+        temperature: '老年恒星与变星群', feature: '富含天琴座 RR 型变星的球状星团，是测量银河系尺度的重要目标。',
+        related: [{ title: '变星', detail: '团内 RR Lyrae 变星可作为距离指示器。' }, { title: '银河晕', detail: '高银纬位置使它成为银河晕恒星系统的代表。' }]
+    },
+    {
+        id: 'ngc-604', name: 'NGC 604', nameEn: 'NGC 604', atlasMap: 'milky-way', category: 'nebula',
+        type: '巨型恒星形成区', distanceLy: 2700000, galactic: { lDeg: 133.6, bDeg: -31.0 }, color: 0xff7fb7, size: 23,
+        temperature: '电离气体与年轻大质量恒星', feature: '三角座星系中的大型恒星形成区，用于对照本星系巨型星云的恒星形成活动。',
+        related: [{ title: '恒星形成', detail: '区域内有大量年轻大质量恒星和被电离的氢气。' }, { title: '尺度说明', detail: '虽位于本星系群外部，阶段 B 将其作为银河系观测路线中的深空对照地标。' }]
+    },
+    {
+        id: 'ngc-3603', name: 'NGC 3603', nameEn: 'NGC 3603', atlasMap: 'milky-way', category: 'nebula',
+        type: '银河系恒星形成区', distanceLy: 20000, galactic: { lDeg: 291.6, bDeg: -0.5 }, color: 0xff8ab8, size: 22,
+        temperature: '高温电离气体与年轻星团', feature: '银河系内最明亮、最致密的恒星形成区之一，包含年轻大质量星团。',
+        related: [{ title: '星团核心', detail: '年轻恒星集中在紧凑核心中，适合研究大质量恒星的早期演化。' }, { title: '尘埃环境', detail: '周围分子云和尘埃让可见光图像呈现复杂的层次。' }]
+    },
+    {
+        id: 'wr-104', name: 'WR 104', nameEn: 'WR 104', atlasMap: 'milky-way', category: 'stellar-object',
+        type: 'Wolf-Rayet 双星', distanceLy: 8000, galactic: { lDeg: 10.2, bDeg: -0.4 }, color: 0xbbe8ff, size: 12,
+        temperature: '高温恒星风与电离气体', feature: '拥有尘埃风车结构的 Wolf-Rayet 双星，展示大质量恒星晚期强烈质量损失。',
+        related: [{ title: '尘埃风车', detail: '双星轨道运动和恒星风碰撞可形成螺旋状尘埃结构。' }, { title: '阶段示意', detail: '目录只表达恒星和风结构的观测意义，不模拟真实尘埃螺旋几何。' }]
+    },
+    {
+        id: 'pistol-star', name: '手枪星', nameEn: 'Pistol Star', atlasMap: 'milky-way', category: 'stellar-object',
+        type: '高光度蓝变星候选', distanceLy: 25000, galactic: { lDeg: 0.2, bDeg: -0.1 }, color: 0xafd8ff, size: 15,
+        temperature: '高温蓝色超亮恒星', feature: '银河中心附近的极高光度恒星，周围有显著的喷出物和尘埃环境。',
+        related: [{ title: '高光度', detail: '它的辐射和恒星风对周围气体产生强烈影响。' }, { title: '观测限制', detail: '银心方向尘埃浓厚，距离和演化阶段存在测量不确定性。' }]
+    },
+    {
+        id: 'vela-supernova-remnant', name: '船帆座超新星遗迹', nameEn: 'Vela Supernova Remnant', atlasMap: 'milky-way', category: 'supernova-remnant',
+        type: '超新星遗迹 / 脉冲星风环境', distanceLy: 815, galactic: { lDeg: 263.6, bDeg: -3.0 }, color: 0x8fbaff, size: 25,
+        effectType: 'supernova', temperature: '激波加热的稀薄等离子体', feature: '距离较近的大型超新星遗迹，中心包含船帆座脉冲星。',
+        related: [{ title: '激波壳层', detail: '爆炸抛射物与星际介质相互作用，形成丝状 X 射线和射电结构。' }, { title: '脉冲星', detail: '遗迹中心的船帆座脉冲星是快速自转中子星。' }]
+    },
+    {
         id: 'sn-1987a',
         name: 'SN 1987A',
         nameEn: 'Supernova 1987A',

@@ -53,6 +53,17 @@ for (const id of phaseATargetIds) {
     else if (entry.atlasMap !== 'neighborhood') errors.push(`${id}: phase A target is not neighborhood`);
 }
 
+const phaseBTargetIds = [
+    'orion-arm-landmark', 'scutum-centaurus-arm', 'galactic-bulge-landmark',
+    'm13-great-cluster', 'm3-globular-cluster', 'ngc-604', 'ngc-3603',
+    'wr-104', 'pistol-star', 'vela-supernova-remnant'
+];
+for (const id of phaseBTargetIds) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing phase B target`);
+    else if (entry.atlasMap !== 'milky-way') errors.push(`${id}: phase B target is not milky-way`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;
