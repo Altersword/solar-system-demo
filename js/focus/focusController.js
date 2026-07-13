@@ -46,6 +46,7 @@ class FocusController {
 
         this.host.scene.add(group);
         this.focusGroup = group;
+        this.host.applyFocusTimeScale?.(entry.effectType);
         this.host.applyRendererQuality(false);
         this.host.atlasGroup.visible = false;
         this.host.orbitGroups.visible = false;
@@ -75,6 +76,18 @@ class FocusController {
                 new THREE.Vector3(92, 54, 112),
                 new THREE.Vector3(0, 0, 0)
             );
+        } else if (entry.effectType === 'white-dwarf') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.95;
+            this.host.bloomPass.radius = 0.48;
+            this.host.bloomPass.threshold = 0.28;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 180);
+        } else if (entry.effectType === 'red-giant') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.42;
+            this.host.bloomPass.radius = 0.55;
+            this.host.bloomPass.threshold = 0.42;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 280);
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
@@ -103,6 +116,7 @@ class FocusController {
         }
         this.focusGroup = null;
         this.focusedCatalogEntry = null;
+        this.host.restoreTimeScale?.();
         this.host.applyRendererQuality(false);
         this.host.useBloom = false;
         this.host.atlasGroup.visible = this.host.showAtlas;
@@ -129,7 +143,7 @@ class FocusController {
             this.focusGroup.rotation.y += deltaSeconds * 0.08;
         }
         const effectType = this.focusedCatalogEntry?.effectType;
-        if (['pulsar', 'supernova'].includes(effectType)) {
+        if (['pulsar', 'supernova', 'red-giant', 'white-dwarf'].includes(effectType)) {
             this.focusSpecialRenderer?.update?.(deltaSeconds, time, this.host.camera);
         } else {
             this.host.updateSpecialObjectEffects(

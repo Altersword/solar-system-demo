@@ -82,6 +82,8 @@ class SolarSystem {
         this.useBloom = false;
         this.composer = null;
         this.bloomPass = null;
+        this.savedTimeScale = null;
+        this.focusTimeScaleActive = false;
 
         this.init();
     }
@@ -99,6 +101,7 @@ class SolarSystem {
         this.focusController = new FocusController(this);
         this.setupEventListeners();
         this.animate();
+        if (typeof window.hideLoading === 'function') window.hideLoading();
     }
 
     setupScene() {
@@ -688,7 +691,7 @@ class SolarSystem {
         const height = window.innerHeight;
         const position = this.labelWorldPosition;
 
-        const occupied = [];
+        const candidates = [];
         this.labels.forEach((label) => {
             if (!this.showLabels || !this.isObjectVisible(label.object)) {
                 label.element.style.display = 'none';
@@ -702,22 +705,47 @@ class SolarSystem {
             const x = (position.x * 0.5 + 0.5) * width;
             const y = (position.y * -0.5 + 0.5) * height;
             const visible = position.z > -1 && position.z < 1 && x > 0 && x < width && y > 0 && y < height;
-
-            const labelWidth = Math.min(170, Math.max(70, label.element.offsetWidth || 96));
-            const labelHeight = 24;
-            const overlaps = occupied.some((box) => (
-                Math.abs(box.x - x) < (box.width + labelWidth) * 0.5
-                && Math.abs(box.y - y) < (box.height + labelHeight) * 0.5
-            ));
-            const isSelected = label.object === this.selectedObject;
-            const show = visible && (isSelected || !overlaps);
-            label.element.style.display = show ? 'block' : 'none';
-            if (show) {
-                label.element.style.left = `${x}px`;
-                label.element.style.top = `${y - 18}px`;
-                label.element.style.opacity = String(isSelected ? 1 : THREE.MathUtils.clamp(1.25 - distance / 2600, 0.28, 1));
-                occupied.push({ x, y, width: labelWidth, height: labelHeight });
+            if (!visible) {
+                label.element.style.display = 'none';
+                return;
             }
+
+            candidates.push({
+                label,
+                x,
+                y,
+                distance,
+                isSelected: label.object === this.selectedObject,
+                width: Math.min(170, Math.max(70, label.element.offsetWidth || 96)),
+                height: 24
+            });
+        });
+
+        candidates.sort((a, b) => {
+            if (a.isSelected !== b.isSelected) return a.isSelected ? -1 : 1;
+            return a.distance - b.distance;
+        });
+
+        const occupied = [];
+        const maxNonSelected = this.displayMode === 'atlas' || this.showAtlas ? 18 : 28;
+        let shownNonSelected = 0;
+
+        candidates.forEach((item) => {
+            const overlaps = occupied.some((box) => (
+                Math.abs(box.x - item.x) < (box.width + item.width) * 0.5
+                && Math.abs(box.y - item.y) < (box.height + item.height) * 0.5
+            ));
+            const allow = item.isSelected || (!overlaps && shownNonSelected < maxNonSelected);
+            item.label.element.style.display = allow ? 'block' : 'none';
+            if (!allow) return;
+
+            item.label.element.style.left = `${item.x}px`;
+            item.label.element.style.top = `${item.y - 18}px`;
+            item.label.element.style.opacity = String(
+                item.isSelected ? 1 : THREE.MathUtils.clamp(1.2 - item.distance / 2400, 0.22, 0.92)
+            );
+            occupied.push(item);
+            if (!item.isSelected) shownNonSelected += 1;
         });
     }
 
@@ -1243,6 +1271,52 @@ class SolarSystem {
 
     setTimeScale(scale) {
         this.timeScale = Number(scale) || 0;
+        if (!this.focusTimeScaleActive) this.savedTimeScale = this.timeScale;
+    }
+
+    applyFocusTimeScale(effectType) {
+        if (!this.focusTimeScaleActive) {
+            this.savedTimeScale = this.timeScale;
+            this.focusTimeScaleActive = true;
+        }
+        const focusScales = {
+            'black-hole': 250,
+            pulsar: 100,
+            'white-dwarf': 25,
+            'red-dwarf': 10,
+            'red-giant': 1,
+            supernova: 0.1
+        };
+        this.timeScale = focusScales[effectType] ?? this.savedTimeScale ?? SIMULATION.defaultDaysPerSecond;
+        this.syncTimeControls();
+    }
+
+    restoreTimeScale() {
+        if (!this.focusTimeScaleActive) return;
+        this.timeScale = this.savedTimeScale ?? SIMULATION.defaultDaysPerSecond;
+        this.focusTimeScaleActive = false;
+        this.syncTimeControls();
+    }
+
+    syncTimeControls() {
+        const slider = document.getElementById('time-slider');
+        const display = document.getElementById('time-display');
+        if (!slider || !SIMULATION.timeScales?.length) return;
+        let bestIndex = 0;
+        let bestDelta = Infinity;
+        SIMULATION.timeScales.forEach((value, index) => {
+            const delta = Math.abs(value - this.timeScale);
+            if (delta < bestDelta) {
+                bestDelta = delta;
+                bestIndex = index;
+            }
+        });
+        slider.value = String(bestIndex);
+        if (display) {
+            display.textContent = this.timeScale === 0
+                ? '暂停'
+                : `${this.timeScale.toLocaleString()} 天/秒`;
+        }
     }
 
     setDisplayMode(mode) {
@@ -1323,5 +1397,17 @@ class SolarSystem {
 
 let solarSystem;
 document.addEventListener('DOMContentLoaded', () => {
-    solarSystem = new SolarSystem();
+    try {
+        solarSystem = new SolarSystem();
+    } catch (error) {
+        console.error(error);
+        const loading = document.getElementById('loading');
+        if (loading) {
+            loading.classList.add('hidden');
+            loading.style.display = 'grid';
+            loading.innerHTML = '<div class="loading-content"><p>场景初始化失败，请打开控制台查看错误。</p></div>';
+        }
+    } finally {
+        if (typeof window.hideLoading === 'function') window.hideLoading();
+    }
 });

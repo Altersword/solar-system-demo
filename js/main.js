@@ -4,7 +4,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initUIControls();
-    window.requestAnimationFrame(hideLoading);
+    // Prefer SolarSystem to hide loading after init; keep a hard fallback.
+    window.setTimeout(() => {
+        const loading = document.getElementById('loading');
+        if (loading && loading.style.display !== 'none') hideLoading();
+    }, 2500);
 });
 
 function initUIControls() {
@@ -214,8 +218,12 @@ function initUIControls() {
 
 function hideLoading() {
     const loading = document.getElementById('loading');
+    if (!loading || loading.dataset.hidden === '1') return;
+    loading.dataset.hidden = '1';
     loading.classList.add('hidden');
     window.setTimeout(() => {
         loading.style.display = 'none';
     }, 450);
 }
+
+window.hideLoading = hideLoading;

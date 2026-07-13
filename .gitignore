@@ -2,6 +2,23 @@
 .edge-profile/
 verification.png
 .learnings/
+.claude/
+.superpowers/
+.gstack/
+
+# Local screenshots, videos, and temporary captures
+*.png
+*.mp4
+!docs/**/*.png
+
+# Local reference material and notes that should not ship by default
+Unity参考/
+中科大参考/
+参考项目/
+测试黑洞/
+分析日志.md
+开发杂记.md
+提示词工程.md
 
 # Keep the music folder local by default. Add files manually only if you have rights to publish them.
 music/*.mp3
