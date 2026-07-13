@@ -17,6 +17,9 @@ function initUIControls() {
     const atlasMapRange = document.getElementById('atlas-map-range');
     const scaleButtons = document.querySelectorAll('.segmented button');
     const atlasButtons = document.querySelectorAll('.atlas-switch button');
+    const atlasSearchInput = document.getElementById('atlas-search-input');
+    const atlasTypeFilter = document.getElementById('atlas-type-filter');
+    const atlasSearchResults = document.getElementById('atlas-search-results');
     const timeScales = SIMULATION.timeScales;
     let displayedElapsedDays = null;
 
@@ -124,6 +127,34 @@ function initUIControls() {
             atlasMapRange.textContent = SIMULATION.atlasMaps[mapId].rangeLabel;
         });
     });
+
+    function refreshAtlasSearch() {
+        if (!atlasSearchResults || !solarSystem) return;
+        const query = atlasSearchInput?.value.trim().toLocaleLowerCase() || '';
+        const type = atlasTypeFilter?.value || 'all';
+        const results = solarSystem.searchCatalog(query, type).slice(0, 8);
+        atlasSearchResults.innerHTML = '';
+        if (!query && type === 'all') return;
+        if (!results.length) {
+            atlasSearchResults.innerHTML = '<span class="atlas-search-empty">没有匹配目标</span>';
+            return;
+        }
+        results.forEach((entry) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'atlas-result';
+            button.innerHTML = `<strong>${entry.name}</strong><small>${entry.type} · ${entry.nameEn || ''}</small>`;
+            button.addEventListener('click', () => {
+                solarSystem.selectCatalogEntry(entry.id);
+                atlasSearchInput.value = entry.name;
+                refreshAtlasSearch();
+            });
+            atlasSearchResults.appendChild(button);
+        });
+    }
+
+    atlasSearchInput?.addEventListener('input', refreshAtlasSearch);
+    atlasTypeFilter?.addEventListener('change', refreshAtlasSearch);
 
     document.addEventListener('keydown', (event) => {
         if (event.target?.matches?.('input, textarea, select, [contenteditable="true"]')) return;

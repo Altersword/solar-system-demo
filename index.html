@@ -74,6 +74,23 @@
             <button data-atlas-map="local-group">星系群</button>
             <button data-atlas-map="cosmic-neighborhood">宇宙近邻</button>
         </div>
+        <div class="atlas-search" role="search">
+            <label for="atlas-search-input">查找天体</label>
+            <input id="atlas-search-input" type="search" placeholder="名称 / 类型 / 英文名" autocomplete="off">
+            <select id="atlas-type-filter" aria-label="按类型筛选">
+                <option value="all">全部类型</option>
+                <option value="nearby-star">恒星系统</option>
+                <option value="deep-sky">深空目标</option>
+                <option value="stellar-object">恒星类型</option>
+                <option value="stellar-remnant">恒星残骸</option>
+                <option value="compact-object">致密天体</option>
+                <option value="galaxy">星系</option>
+                <option value="galaxy-group">星系群</option>
+                <option value="galaxy-cluster">星系团</option>
+                <option value="supercluster">大尺度结构</option>
+            </select>
+            <div id="atlas-search-results" class="atlas-search-results" aria-live="polite"></div>
+        </div>
         <div class="panel-row">
             <span>已模拟</span>
             <strong id="elapsed-days">0 天</strong>

@@ -217,6 +217,29 @@ class SolarSystem {
         );
     }
 
+    searchCatalog(query = '', category = 'all') {
+        const normalized = query.toLocaleLowerCase();
+        return CELESTIAL_CATALOG.filter((entry) => {
+            if (category !== 'all' && entry.category !== category) return false;
+            if (!normalized) return true;
+            return [entry.name, entry.nameEn, entry.type, entry.feature]
+                .filter(Boolean)
+                .join(' ')
+                .toLocaleLowerCase()
+                .includes(normalized);
+        });
+    }
+
+    selectCatalogEntry(id) {
+        const record = this.catalogObjects.get(id);
+        if (!record) return false;
+        this.starAtlas.setMap(record.entry.atlasMap || this.selectedAtlasMap);
+        this.selectedObject = record.mesh;
+        this.flyCameraTo(record.group.position, record.entry.systemLayout?.cameraDistance || 180);
+        this.showInfoPanel(record.mesh.userData);
+        return true;
+    }
+
     rebuildBodies() {
         this.clearBodies();
         this.solarBodies.rebuild();
@@ -665,6 +688,7 @@ class SolarSystem {
         const height = window.innerHeight;
         const position = this.labelWorldPosition;
 
+        const occupied = [];
         this.labels.forEach((label) => {
             if (!this.showLabels || !this.isObjectVisible(label.object)) {
                 label.element.style.display = 'none';
@@ -679,11 +703,20 @@ class SolarSystem {
             const y = (position.y * -0.5 + 0.5) * height;
             const visible = position.z > -1 && position.z < 1 && x > 0 && x < width && y > 0 && y < height;
 
-            label.element.style.display = visible ? 'block' : 'none';
-            if (visible) {
+            const labelWidth = Math.min(170, Math.max(70, label.element.offsetWidth || 96));
+            const labelHeight = 24;
+            const overlaps = occupied.some((box) => (
+                Math.abs(box.x - x) < (box.width + labelWidth) * 0.5
+                && Math.abs(box.y - y) < (box.height + labelHeight) * 0.5
+            ));
+            const isSelected = label.object === this.selectedObject;
+            const show = visible && (isSelected || !overlaps);
+            label.element.style.display = show ? 'block' : 'none';
+            if (show) {
                 label.element.style.left = `${x}px`;
                 label.element.style.top = `${y - 18}px`;
-                label.element.style.opacity = String(THREE.MathUtils.clamp(1.25 - distance / 2600, 0.35, 1));
+                label.element.style.opacity = String(isSelected ? 1 : THREE.MathUtils.clamp(1.25 - distance / 2600, 0.28, 1));
+                occupied.push({ x, y, width: labelWidth, height: labelHeight });
             }
         });
     }

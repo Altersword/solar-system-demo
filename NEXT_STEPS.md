@@ -1,11 +1,17 @@
 # 下一轮改进记录
 
-## 状态 · 2026-07-12
+## 状态 · 2026-07-13
 
 **架构拆分（方案 A）已完成**：core / solar / atlas / focus / specials 已抽出，`SolarSystem` 为门面。  
-黑洞近景唯一路径：`js/specials/blackHoleRenderer.js`。
+黑洞近景唯一路径：`js/specials/blackHoleRenderer.js`（电影级 ray-march + bloom；已去掉人工四线弧）。
+**星图扩充已完成**：`CELESTIAL_CATALOG` 现为 **60** 个目标
+（邻域 16 / 银河 24 / 本星系群 10 / 宇宙近邻 10），并按图层提供尺度距离壳。
 
-**下一优先**：黑洞视觉打磨、浏览器回归（Sgr A* / 脉冲星 / 返回星图）、可选 ES Module。
+**下一优先**：
+1. 各图层标签拥挤与相机飞入优化
+2. 脉冲星/红巨星/白矮星近景与黑洞进一步差异化
+3. 可选：星图搜索框、收藏、或按类型筛选
+4. 可选 ES Module / 打包
 
 ---
 
