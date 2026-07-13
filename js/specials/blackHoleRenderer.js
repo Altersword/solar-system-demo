@@ -115,11 +115,14 @@ class BlackHoleRenderer {
             '      float angle=atan(pos.y,pos.x);',
             '      // multi-scale flow / filaments / knots',
             '      float flow=fbm(vec2(angle*2.4-uTime*(.55+radial*.18),radial*7.5+uTime*.06));',
-            '      float filament=.5+.5*sin(angle*12.-radial*38.-uTime*1.4+flow*3.5);',
+            // Long filaments follow orbital shear instead of reading as round noise blobs.
+            '      float shear=angle*11.-radial*52.-uTime*(1.15+radial*.55);',
+            '      float filament=.5+.5*sin(shear+flow*3.5);',
+            '      float filamentFine=.5+.5*sin(shear*2.3+radial*17.+flow*2.);',
             '      float spiral=.5+.5*sin(angle*2.-radial*14.-uTime*.35);',
             '      float knots=h2f(floor(vec2(angle*8.+uTime*.07,radial*28.-uTime*.11)));',
             '      float turb=clamp(uTurbulence,0.,1.5);',
-            '      float structure=mix(.78,.42+flow*.38+filament*.18+spiral*.12+knots*.12,turb);',
+            '      float structure=mix(.78,.38+flow*.34+filament*.22+filamentFine*.1+spiral*.12+knots*.12,turb);',
             '      float density=radialWindow*vertical*structure;',
             '      // far-side contribution slightly boosted for lensed upper/lower arcs',
             '      float behind=smoothstep(.15,.85,dot(normalize(pos),normalize(uCameraPos)));',
@@ -151,6 +154,14 @@ class BlackHoleRenderer {
             // photon ring near r=3
             '  float photon=exp(-pow((minR-3.)/.13,2.))*smoothstep(RS*1.02,RS*1.18,minR);',
             '  col+=vec3(1.,.9,.62)*photon*1.15*(.55+diskAlpha*.45);',
+            // Explicit upper/lower lensed disk echoes keep the cinematic double arc readable.
+            '  float arcX=clamp(abs(sc.x)/max(uAspect,.001),0.,1.);',
+            '  float arcCurve=.13+.22*pow(arcX,1.65);',
+            '  float arcWidth=.014+.018*(1.-arcX);',
+            '  float upperArc=exp(-pow((sc.y-arcCurve)/arcWidth,2.))*smoothstep(.04,.18,arcX);',
+            '  float lowerArc=exp(-pow((sc.y+arcCurve)/arcWidth,2.))*smoothstep(.04,.18,arcX);',
+            '  float arcMask=(upperArc+lowerArc)*uLensing*(1.-diskAlpha*.35);',
+            '  col+=vec3(1.,.52,.14)*arcMask*.24;',
             // soft lens glow halo outside photon sphere
             '  float lensGlow=exp(-pow((minR-3.6)/.7,2.))*smoothstep(RS*1.08,RS*1.4,minR);',
             '  col+=vec3(.55,.22,.04)*lensGlow*.14;',
