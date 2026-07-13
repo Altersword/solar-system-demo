@@ -1009,6 +1009,55 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'kapteyns-star',
+        name: '卡普坦星',
+        nameEn: "Kapteyn's Star",
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '晕族红矮星',
+        distanceLy: 12.8,
+        galactic: { lDeg: 250.5, bDeg: -36.0 },
+        spectralClass: 'sdM1',
+        color: 0xff7a52,
+        size: 3.1,
+        temperature: '约 3500 K',
+        feature: '自行很高的近邻红矮星，属于银河晕古老恒星族，是研究近邻晕星的经典目标。',
+        related: [
+            { title: '高自行', detail: '在天空中的视运动非常快，说明空间速度很高。' },
+            { title: '晕族恒星', detail: '化学丰度和运动学特征更接近银河晕，而非薄盘年轻恒星。' }
+        ]
+    },
+    {
+        id: 'gliese-876',
+        name: '格利泽 876',
+        nameEn: 'Gliese 876',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '多行星红矮星系统',
+        distanceLy: 15.3,
+        galactic: { lDeg: 31.0, bDeg: -51.0 },
+        spectralClass: 'M4V',
+        color: 0xff835c,
+        size: 3.6,
+        temperature: '约 3200 K',
+        feature: '近邻红矮星多行星系统，包含共振轨道中的巨行星和低质量行星。',
+        systemLayout: {
+            sceneScale: 1.18,
+            cameraDistance: 170,
+            note: '轨道间距经过压缩，仅用于表达系统结构。',
+            bodies: [
+                { name: 'Gl 876', kind: 'star', color: 0xff835c, size: 12, x: 50, y: 50, detail: 'M4V 红矮星' },
+                { name: 'd', kind: 'planet', color: 0xb89478, orbit: 15, angleDeg: 30, detail: '内层低质量行星' },
+                { name: 'c', kind: 'planet', color: 0xd2a56d, orbit: 26, angleDeg: 140, detail: '巨行星；共振轨道成员' },
+                { name: 'b', kind: 'planet', color: 0xc8965c, orbit: 36, angleDeg: 250, detail: '外侧巨行星；共振轨道成员' }
+            ]
+        },
+        related: [
+            { title: '轨道共振', detail: '外侧两颗巨行星接近 2:1 共振，是动力学研究的重要样本。' },
+            { title: '红矮星行星系统', detail: '说明即便是低质量恒星也可形成多颗行星。' }
+        ]
+    },
+    {
         id: 'vela-pulsar',
         name: '船帆座脉冲星',
         nameEn: 'Vela Pulsar',
@@ -1533,6 +1582,44 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'capella',
+        name: '五车二',
+        nameEn: 'Capella / Alpha Aurigae',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '四合星系统 / 巨星',
+        distanceLy: 42.9,
+        galactic: { lDeg: 162.6, bDeg: 4.6 },
+        spectralClass: 'G8III + G0III',
+        color: 0xffd28a,
+        size: 15,
+        temperature: '约 4900 到 5700 K',
+        feature: '御夫座主星，由两颗明亮巨星组成的近邻四合星系统，是北天最亮恒星之一。',
+        related: [
+            { title: '双巨星', detail: '主对是两颗黄巨星，轨道周期约 100 天量级。' },
+            { title: '四合星', detail: '外侧还有一对红矮星，共同构成四合系统。' }
+        ]
+    },
+    {
+        id: 'pollux',
+        name: '北河三',
+        nameEn: 'Pollux / Beta Geminorum',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '橙巨星',
+        distanceLy: 33.8,
+        galactic: { lDeg: 192.2, bDeg: 23.4 },
+        spectralClass: 'K0III',
+        color: 0xffa055,
+        size: 15,
+        temperature: '约 4600 K',
+        feature: '双子座最亮恒星，是近邻明亮橙巨星，周围有已确认的巨行星候选。',
+        related: [
+            { title: '橙巨星', detail: '已离开主序，外层膨胀，表面温度低于太阳。' },
+            { title: '行星研究', detail: '北河三 b 是围绕巨星的巨行星研究样本。' }
+        ]
+    },
+    {
         id: 'rigel',
         name: '参宿七',
         nameEn: 'Rigel / Beta Orionis',
@@ -1765,6 +1852,24 @@ const CELESTIAL_CATALOG = [
         feature: '银河系较远的卫星矮星系之一，恒星形成历史较晚结束。',
         related: [
             { title: '较远卫星', detail: '比大麦哲伦云更远，但仍属本星系群内银河伴星系。' }
+        ]
+    },
+    {
+        id: 'sculptor-dwarf',
+        name: '玉夫座矮星系',
+        nameEn: 'Sculptor Dwarf Spheroidal',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 290000,
+        galactic: { lDeg: 287.5, bDeg: -83.2 },
+        color: 0xffc3a0,
+        size: 15,
+        temperature: '非单一天体',
+        feature: '银河系经典卫星矮星系之一，富含老年恒星，是暗物质与矮星系演化研究的重要目标。',
+        related: [
+            { title: '银河卫星', detail: '距离约 29 万光年，属于本星系群内的银河伴星系。' },
+            { title: '老年恒星系统', detail: '几乎没有正在进行的恒星形成，化学演化历史较简单。' }
         ]
     },
     {

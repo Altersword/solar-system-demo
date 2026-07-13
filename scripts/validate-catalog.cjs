@@ -105,6 +105,19 @@ for (const [id, atlasMap] of Object.entries(stellarBoostMaps)) {
     }
 }
 
+const atlasBoostMaps = {
+    'kapteyns-star': 'neighborhood',
+    'gliese-876': 'neighborhood',
+    capella: 'milky-way',
+    pollux: 'milky-way',
+    'sculptor-dwarf': 'local-group'
+};
+for (const [id, atlasMap] of Object.entries(atlasBoostMaps)) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing atlas boost target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;

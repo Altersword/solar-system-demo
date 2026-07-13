@@ -4,8 +4,8 @@
 
 **架构拆分（方案 A）已完成**：core / solar / atlas / focus / specials 已抽出，`SolarSystem` 为门面。  
 黑洞近景唯一路径：`js/specials/blackHoleRenderer.js`（电影级 ray-march + bloom；已去掉人工四线弧）。
-**星图阶段 C 已完成**：`CELESTIAL_CATALOG` 现为 **95** 个目标
-（邻域 28 / 银河 37 / 本星系群 15 / 宇宙近邻 15），并按图层提供尺度距离壳。
+**星图阶段 C 与后续克制扩充已完成**：`CELESTIAL_CATALOG` 现为 **100** 个目标
+（邻域 30 / 银河 39 / 本星系群 16 / 宇宙近邻 15），并按图层提供尺度距离壳。
 
 **最小修复轮已完成**：
 - Loading 在场景初始化后可靠关闭，失败时显示错误而不是永久遮罩。
