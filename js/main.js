@@ -1,12 +1,10 @@
 /**
- * UI 入口。
+ * UI entry point.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.setTimeout(() => {
-        initUIControls();
-        hideLoading();
-    }, 350);
+    initUIControls();
+    window.requestAnimationFrame(hideLoading);
 });
 
 function initUIControls() {
@@ -15,8 +13,12 @@ function initUIControls() {
     const elapsedDays = document.getElementById('elapsed-days');
     const modeName = document.getElementById('mode-name');
     const modeDescription = document.getElementById('mode-description');
+    const atlasMapName = document.getElementById('atlas-map-name');
+    const atlasMapRange = document.getElementById('atlas-map-range');
     const scaleButtons = document.querySelectorAll('.segmented button');
+    const atlasButtons = document.querySelectorAll('.atlas-switch button');
     const timeScales = SIMULATION.timeScales;
+    let displayedElapsedDays = null;
 
     function applyTimeScale() {
         const index = Number(timeSlider.value);
@@ -27,14 +29,18 @@ function initUIControls() {
 
     function refreshElapsedDays() {
         if (!solarSystem) return;
-        elapsedDays.textContent = `${Math.floor(solarSystem.elapsedDays).toLocaleString()} 天`;
-        window.requestAnimationFrame(refreshElapsedDays);
+        const nextElapsedDays = Math.floor(solarSystem.elapsedDays);
+        if (nextElapsedDays === displayedElapsedDays) return;
+        displayedElapsedDays = nextElapsedDays;
+        elapsedDays.textContent = `${nextElapsedDays.toLocaleString()} 天`;
     }
 
     timeSlider.max = String(timeScales.length - 1);
     timeSlider.addEventListener('input', applyTimeScale);
     applyTimeScale();
     refreshElapsedDays();
+    const elapsedTimer = window.setInterval(refreshElapsedDays, 250);
+    window.addEventListener('pagehide', () => window.clearInterval(elapsedTimer), { once: true });
 
     document.getElementById('btn-time-slower').addEventListener('click', () => {
         timeSlider.value = String(Math.max(0, Number(timeSlider.value) - 1));
@@ -48,7 +54,7 @@ function initUIControls() {
 
     document.getElementById('btn-pause').addEventListener('click', function () {
         const isPaused = solarSystem?.togglePause();
-        this.querySelector('.icon').textContent = isPaused ? '▶' : '⏸';
+        this.querySelector('.icon').textContent = isPaused ? '▶' : 'Ⅱ';
         this.querySelector('.text').textContent = isPaused ? '播放' : '暂停';
     });
 
@@ -66,8 +72,37 @@ function initUIControls() {
         this.classList.toggle('active', Boolean(showOrbits));
     });
 
+    document.getElementById('btn-atlas').addEventListener('click', function () {
+        const showAtlas = solarSystem?.toggleAtlas();
+        this.classList.toggle('active', Boolean(showAtlas));
+    });
+
+    document.getElementById('btn-effects').addEventListener('click', function () {
+        const enhanced = solarSystem?.toggleEffects();
+        this.classList.toggle('active', Boolean(enhanced));
+    });
+
+    document.getElementById('btn-ui').addEventListener('click', () => {
+        document.body.classList.toggle('ui-hidden');
+    });
+
+    document.getElementById('btn-drag-mode').addEventListener('click', function () {
+        const panMode = solarSystem?.togglePanDragMode();
+        this.classList.toggle('active', Boolean(panMode));
+        this.querySelector('.text').textContent = panMode ? '平移中' : '平移';
+        this.title = panMode ? '左键拖拽：平移空间位置；右键旋转视角' : '左键拖拽：旋转视角';
+    });
+
     document.getElementById('close-info').addEventListener('click', () => {
         solarSystem?.hideInfoPanel();
+    });
+
+    document.getElementById('btn-close-expanded').addEventListener('click', () => {
+        solarSystem?.closeExpandedSystemView();
+    });
+
+    document.getElementById('btn-focus-object').addEventListener('click', () => {
+        solarSystem?.focusSelectedSpecialObject();
     });
 
     scaleButtons.forEach((button) => {
@@ -80,13 +115,27 @@ function initUIControls() {
         });
     });
 
+    atlasButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const mapId = button.dataset.atlasMap;
+            solarSystem?.setAtlasMap(mapId);
+            atlasButtons.forEach((item) => item.classList.toggle('active', item === button));
+            atlasMapName.textContent = SIMULATION.atlasMaps[mapId].name;
+            atlasMapRange.textContent = SIMULATION.atlasMaps[mapId].rangeLabel;
+        });
+    });
+
     document.addEventListener('keydown', (event) => {
-        if (event.target?.matches?.('input, button')) return;
+        if (event.target?.matches?.('input, textarea, select, [contenteditable="true"]')) return;
 
         switch (event.key.toLowerCase()) {
             case ' ':
                 event.preventDefault();
-                document.getElementById('btn-pause').click();
+                if (document.body.classList.contains('ui-hidden')) {
+                    document.body.classList.remove('ui-hidden');
+                } else {
+                    document.getElementById('btn-pause').click();
+                }
                 break;
             case 'r':
                 document.getElementById('btn-reset').click();
@@ -97,8 +146,24 @@ function initUIControls() {
             case 'o':
                 document.getElementById('btn-orbits').click();
                 break;
+            case 's':
+                document.getElementById('btn-atlas').click();
+                break;
+            case 'e':
+                document.getElementById('btn-effects').click();
+                break;
+            case 'h':
+                document.getElementById('btn-ui').click();
+                break;
+            case 'p':
+                document.getElementById('btn-drag-mode').click();
+                break;
             case 'escape':
-                solarSystem?.hideInfoPanel();
+                if (document.body.classList.contains('ui-hidden')) {
+                    document.body.classList.remove('ui-hidden');
+                } else {
+                    solarSystem?.hideInfoPanel();
+                }
                 break;
             case '+':
             case '=':
@@ -112,6 +177,8 @@ function initUIControls() {
 
     document.getElementById('btn-labels').classList.add('active');
     document.getElementById('btn-orbits').classList.add('active');
+    document.getElementById('btn-atlas').classList.add('active');
+    document.getElementById('btn-effects').classList.add('active');
 }
 
 function hideLoading() {

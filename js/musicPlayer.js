@@ -1,6 +1,6 @@
 /**
- * 本地音乐播放器。
- * 浏览器不能随意读取用户本地文件，所以用上传方式播放用户自己拥有的音频。
+ * Local music player.
+ * Browsers cannot read arbitrary local paths, so the player uses bundled relative files or user upload.
  */
 
 class MusicPlayer {
@@ -9,6 +9,7 @@ class MusicPlayer {
         this.playlist = [];
         this.currentIndex = -1;
         this.isPlaying = false;
+        this.disposed = false;
 
         this.uploadBtn = document.getElementById('music-upload');
         this.playBtn = document.getElementById('music-play');
@@ -49,6 +50,7 @@ class MusicPlayer {
             this.isPlaying = false;
             this.updateButtons();
         });
+        window.addEventListener('pagehide', () => this.dispose(), { once: true });
     }
 
     loadBundledTracks() {
@@ -84,7 +86,9 @@ class MusicPlayer {
 
     handleFiles(files) {
         Array.from(files).forEach((file) => {
-            if (!file.type.startsWith('audio/')) return;
+            const hasAudioType = file.type.startsWith('audio/');
+            const hasAudioExtension = /\.(mp3|m4a|aac|wav|ogg|flac)$/i.test(file.name);
+            if (!hasAudioType && !hasAudioExtension) return;
             this.playlist.push({
                 file,
                 name: file.name.replace(/\.[^/.]+$/, ''),
@@ -105,7 +109,8 @@ class MusicPlayer {
 
         this.currentIndex = index;
         const track = this.playlist[index];
-        if (this.audio.src !== track.url) {
+        const resolvedUrl = new URL(track.url, document.baseURI).href;
+        if (this.audio.src !== resolvedUrl) {
             this.audio.src = track.url;
         }
 
@@ -167,7 +172,7 @@ class MusicPlayer {
         this.playBtn.disabled = !hasTracks;
         this.prevBtn.disabled = !hasTracks;
         this.nextBtn.disabled = !hasTracks;
-        this.playBtn.querySelector('.icon').textContent = this.isPlaying ? '⏸' : '▶';
+        this.playBtn.querySelector('.icon').textContent = this.isPlaying ? 'Ⅱ' : '▶';
     }
 
     updatePlaylistUI() {
@@ -182,9 +187,24 @@ class MusicPlayer {
             const item = document.createElement('button');
             item.type = 'button';
             item.className = `playlist-item ${index === this.currentIndex ? 'active' : ''}`;
-            item.innerHTML = `<span class="track-num">${index + 1}</span><span class="track-name">${track.name}</span>`;
+            const number = document.createElement('span');
+            number.className = 'track-num';
+            number.textContent = String(index + 1);
+            const name = document.createElement('span');
+            name.className = 'track-name';
+            name.textContent = track.name;
+            item.append(number, name);
             item.addEventListener('click', () => this.play(index));
             this.playlistContainer.appendChild(item);
+        });
+    }
+
+    dispose() {
+        if (this.disposed) return;
+        this.disposed = true;
+        this.audio.pause();
+        this.playlist.forEach((track) => {
+            if (track.file) URL.revokeObjectURL(track.url);
         });
     }
 

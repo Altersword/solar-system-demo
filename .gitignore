@@ -1,6 +1,7 @@
 # Local browser profiles and temporary verification output
 .edge-profile/
 verification.png
+.learnings/
 
 # Keep the music folder local by default. Add files manually only if you have rights to publish them.
 music/*.mp3

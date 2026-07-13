@@ -1,6 +1,6 @@
 /**
- * 开普勒轨道计算工具。
- * 输入为真实轨道元素，输出为右手坐标系中的 3D 位置。
+ * Keplerian orbit helpers.
+ * Input values are real orbital elements; output is a right-handed 3D position after visual scaling.
  */
 
 const DEG_TO_RAD = Math.PI / 180;
@@ -37,7 +37,8 @@ function getOrbitPosition(orbit, elapsedDays, distanceScaleFn) {
     const radiusKm = orbit.semiMajorAxisKm * (1 - e * cosE);
     const radius = distanceScaleFn(radiusKm);
 
-    const omega = (orbit.argumentPeriapsisDeg || 0) * DEG_TO_RAD;
+    const relativisticPrecessionDeg = ((orbit.relativisticPrecessionArcsecPerCentury || 0) / 3600) * (elapsedDays / 36525);
+    const omega = ((orbit.argumentPeriapsisDeg || 0) + relativisticPrecessionDeg) * DEG_TO_RAD;
     const node = (orbit.longitudeAscendingNodeDeg || 0) * DEG_TO_RAD;
     const inc = (orbit.inclinationDeg || 0) * DEG_TO_RAD;
     const u = trueAnomaly + omega;
