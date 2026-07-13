@@ -20,8 +20,8 @@ class SimpleSpecialsRenderer {
         const coreSize = this.host.getFocusedCoreSize(entry.effectType);
         const coreMaterial = new THREE.MeshBasicMaterial({
             color: entry.color,
-            transparent: entry.effectType === 'supernova',
-            opacity: entry.effectType === 'supernova' ? 0.32 : 1
+            transparent: false,
+            opacity: 1
         });
         const core = new THREE.Mesh(new THREE.SphereGeometry(coreSize, 96, 64), coreMaterial);
         core.name = 'focus-core';
@@ -41,11 +41,6 @@ class SimpleSpecialsRenderer {
             case 'white-dwarf':
                 core.add(this.host.createGlowMesh(coreSize * 3.2, 0xbfe7ff, 0.58));
                 group.add(this.host.createCompactHaloRing({ ...entry, size: coreSize }, 0xbfe7ff, 2.6));
-                break;
-            case 'supernova':
-                group.add(this.host.createParticleShell(entry, 720, coreSize * 1.2, coreSize * 5.6, entry.color, 0.62));
-                group.add(this.host.createCompactHaloRing({ ...entry, size: coreSize }, entry.color, 4.5));
-                group.add(this.host.createCompactHaloRing({ ...entry, size: coreSize }, 0x8fd8ff, 6.2));
                 break;
             default:
                 core.add(this.host.createGlowMesh(coreSize * 2, entry.color, 0.35));

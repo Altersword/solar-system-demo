@@ -7,6 +7,18 @@ class PulsarRenderer {
     constructor(host) {
         this.host = host;
         this.group = null;
+        this.rotor = null;
+        this.magneticAxis = null;
+        this.coreMaterial = null;
+        this.beamLayers = [];
+        this.hotspots = [];
+        this.wind = null;
+        this.shockArcs = [];
+        this.worldQuaternion = new THREE.Quaternion();
+        this.worldPosition = new THREE.Vector3();
+        this.worldDirection = new THREE.Vector3();
+        this.toCamera = new THREE.Vector3();
+        this.magneticDirection = new THREE.Vector3(0, 1, 0);
     }
 
     create(entry) {
@@ -14,15 +26,13 @@ class PulsarRenderer {
         model.name = `${entry.id}-neutron-star-model`;
         model.userData.effectType = 'pulsar';
 
-        const coreRadius = 10;
+        const coreRadius = 7;
         const rotor = new THREE.Group();
         rotor.name = 'neutron-star-rotor';
         rotor.userData.effectRole = 'neutron-star-rotor';
 
-        const core = new THREE.Mesh(
-            new THREE.SphereGeometry(coreRadius, 128, 96),
-            this.createNeutronStarSurfaceMaterial()
-        );
+        this.coreMaterial = this.createNeutronStarSurfaceMaterial();
+        const core = new THREE.Mesh(new THREE.SphereGeometry(coreRadius, 96, 64), this.coreMaterial);
         core.name = 'neutron-star-core';
         core.userData.effectRole = 'neutron-star-core';
         rotor.add(core);
@@ -48,6 +58,7 @@ class PulsarRenderer {
             hotspot.userData.effectRole = 'magnetic-hotspot';
             hotspot.userData.baseScale = hotspotSize;
             magneticAxis.add(hotspot);
+            this.hotspots.push(hotspot);
         });
 
         rotor.add(magneticAxis);
@@ -55,15 +66,60 @@ class PulsarRenderer {
         model.add(this.createPulsarWindNebula(entry, coreRadius));
         model.add(this.createPulsarShockRings(coreRadius));
 
+        this.rotor = rotor;
+        this.magneticAxis = magneticAxis;
         this.group = model;
         return model;
     }
 
-    update() {}
+    update(deltaSeconds, time, camera) {
+        if (!this.group || !this.rotor) return;
+        this.rotor.rotation.y += deltaSeconds * 5.8;
+
+        let lighthousePulse = 0;
+        if (camera && this.magneticAxis) {
+            this.magneticAxis.getWorldQuaternion(this.worldQuaternion);
+            this.magneticAxis.getWorldPosition(this.worldPosition);
+            this.worldDirection.copy(this.magneticDirection).applyQuaternion(this.worldQuaternion).normalize();
+            this.toCamera.copy(camera.position).sub(this.worldPosition).normalize();
+            const alignment = Math.abs(this.worldDirection.dot(this.toCamera));
+            lighthousePulse = THREE.MathUtils.clamp(Math.pow(alignment, 18) * 2.35, 0, 1);
+        }
+
+        if (this.coreMaterial?.uniforms) {
+            this.coreMaterial.uniforms.uTime.value = time;
+            this.coreMaterial.uniforms.uPulse.value = lighthousePulse;
+        }
+        this.beamLayers.forEach((beam) => {
+            beam.material.opacity = beam.userData.baseOpacity * (0.26 + lighthousePulse * 2.35);
+        });
+        this.hotspots.forEach((hotspot) => {
+            const scale = hotspot.userData.baseScale * (0.8 + lighthousePulse * 0.42);
+            hotspot.scale.set(scale, scale, 1);
+            hotspot.material.opacity = 0.32 + lighthousePulse * 0.65;
+        });
+        if (this.wind) {
+            this.wind.rotation.y += deltaSeconds * 0.52;
+            this.wind.rotation.z += deltaSeconds * 0.018;
+            this.wind.material.opacity = this.wind.userData.baseOpacity * (0.86 + Math.sin(time * 1.2) * 0.14);
+        }
+        this.shockArcs.forEach((arc, index) => {
+            const wave = 1 + Math.sin(time * 0.92 + index * 1.3) * 0.028;
+            arc.scale.setScalar(wave);
+            arc.material.opacity = arc.userData.baseOpacity * (0.72 + Math.sin(time * 1.35 + index) * 0.22);
+        });
+    }
 
     // GPU resources freed by SolarSystem.clearFocusView → disposeObject3D(focusGroup)
     dispose() {
         this.group = null;
+        this.rotor = null;
+        this.magneticAxis = null;
+        this.coreMaterial = null;
+        this.beamLayers = [];
+        this.hotspots = [];
+        this.wind = null;
+        this.shockArcs = [];
     }
 
     createNeutronStarSurfaceMaterial() {
@@ -121,13 +177,12 @@ class PulsarRenderer {
     createPulsarBeamPair(coreRadius) {
         const beams = new THREE.Group();
         beams.name = 'neutron-star-beams';
-        const length = coreRadius * 14;
+        const length = coreRadius * 19;
 
         [-1, 1].forEach((direction) => {
             const layers = [
-                { radius: coreRadius * 0.12, opacity: 0.24, color: 0xe9fcff },
-                { radius: coreRadius * 0.26, opacity: 0.072, color: 0x86dcff },
-                { radius: coreRadius * 0.46, opacity: 0.022, color: 0x4a9dff }
+                { radius: coreRadius * 0.055, opacity: 0.31, color: 0xf2feff },
+                { radius: coreRadius * 0.14, opacity: 0.065, color: 0x8be6ff }
             ];
 
             layers.forEach((layer, index) => {
@@ -140,7 +195,7 @@ class PulsarRenderer {
                     side: THREE.DoubleSide
                 });
                 const cone = new THREE.Mesh(
-                    new THREE.ConeGeometry(layer.radius * (1.8 + index * 0.3), length, 48, 1, true),
+                    new THREE.ConeGeometry(layer.radius * (1.45 + index * 0.35), length, 32, 1, true),
                     material
                 );
                 cone.name = `pulsar-beam-${direction}-${index}`;
@@ -149,6 +204,7 @@ class PulsarRenderer {
                 cone.userData.beamLayer = true;
                 cone.userData.baseOpacity = layer.opacity;
                 beams.add(cone);
+                this.beamLayers.push(cone);
             });
 
             const random = this.host.seededRandom(`pulsar-beam-particles-${direction}`);
@@ -180,6 +236,7 @@ class PulsarRenderer {
             particles.userData.beamLayer = true;
             particles.userData.baseOpacity = 0.28;
             beams.add(particles);
+            this.beamLayers.push(particles);
         });
 
         return beams;
@@ -260,6 +317,9 @@ class PulsarRenderer {
         wind.name = 'pulsar-wind-nebula';
         wind.userData.effectRole = 'neutron-star-wind';
         wind.userData.baseOpacity = 0.38;
+        wind.scale.set(1.18, 0.64, 0.92);
+        wind.position.x = coreRadius * 0.45;
+        this.wind = wind;
         return wind;
     }
 
@@ -268,22 +328,33 @@ class PulsarRenderer {
         group.name = 'pulsar-termination-shocks';
         group.userData.effectRole = 'neutron-star-shocks';
 
-        [3.0, 4.6, 6.4].forEach((multiplier, index) => {
-            const opacity = 0.15 - index * 0.035;
-            const ring = new THREE.Mesh(
-                new THREE.TorusGeometry(coreRadius * multiplier, 0.22 + index * 0.08, 12, 160),
-                new THREE.MeshBasicMaterial({
-                    color: index === 0 ? 0xc7f7ff : 0x4e91ff,
-                    transparent: true,
-                    opacity,
-                    blending: THREE.AdditiveBlending,
-                    depthWrite: false
-                })
-            );
-            ring.rotation.x = Math.PI / 2;
-            ring.userData.baseOpacity = opacity;
-            ring.userData.phase = index * 1.8;
-            group.add(ring);
+        [3.2, 4.5, 5.8, 7.1].forEach((multiplier, index) => {
+            const opacity = 0.18 - index * 0.027;
+            const radius = coreRadius * multiplier;
+            const start = -1.2 + index * 0.58;
+            const span = 1.35 + (index % 2) * 0.42;
+            const points = [];
+            for (let pointIndex = 0; pointIndex <= 30; pointIndex += 1) {
+                const ratio = pointIndex / 30;
+                const angle = start + ratio * span;
+                points.push(new THREE.Vector3(
+                    Math.cos(angle) * radius,
+                    (index - 1.5) * coreRadius * 0.24 + Math.sin(ratio * Math.PI) * coreRadius * 0.35,
+                    Math.sin(angle) * radius * 0.72
+                ));
+            }
+            const curve = new THREE.CatmullRomCurve3(points);
+            const material = new THREE.MeshBasicMaterial({
+                color: index < 2 ? 0xc7f7ff : 0x4e91ff,
+                transparent: true,
+                opacity,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            const arc = new THREE.Mesh(new THREE.TubeGeometry(curve, 36, 0.16 + index * 0.045, 5, false), material);
+            arc.userData.baseOpacity = opacity;
+            group.add(arc);
+            this.shockArcs.push(arc);
         });
         return group;
     }

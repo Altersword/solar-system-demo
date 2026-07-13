@@ -232,12 +232,51 @@ class StarAtlas {
                 break;
             case 'supernova':
                 core.material.opacity = 0.42;
-                group.add(this.host.createParticleShell(entry, 360, entry.size * 1.6, entry.size * 5.2, entry.color, 0.5));
-                group.add(this.host.createCompactHaloRing(entry, entry.color, 3.1));
+                group.add(this.createSupernovaThumbnail(entry));
                 break;
             default:
                 break;
         }
+    }
+
+    createSupernovaThumbnail(entry) {
+        const thumbnail = new THREE.Group();
+        thumbnail.name = `${entry.id}-remnant-thumbnail`;
+        thumbnail.userData.effectRole = 'expanding-shell';
+        const shell = this.host.createParticleShell(entry, 340, entry.size * 1.5, entry.size * 5.4, entry.color, 0.46);
+        shell.userData.effectRole = null;
+        shell.scale.set(1.12, 0.82, 0.96);
+        thumbnail.add(shell);
+
+        const random = this.host.seededRandom(`${entry.id}-thumbnail-arcs`);
+        for (let index = 0; index < 3; index += 1) {
+            const radius = entry.size * (2.7 + index * 0.85);
+            const start = random() * Math.PI * 2;
+            const span = 0.75 + random() * 0.85;
+            const points = [];
+            for (let pointIndex = 0; pointIndex <= 24; pointIndex += 1) {
+                const ratio = pointIndex / 24;
+                const angle = start + span * ratio;
+                points.push(new THREE.Vector3(
+                    Math.cos(angle) * radius,
+                    Math.sin(ratio * Math.PI + index) * entry.size * 0.65,
+                    Math.sin(angle) * radius * 0.78
+                ));
+            }
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(
+                geometry,
+                new THREE.LineBasicMaterial({
+                    color: index === 0 ? 0x8fdfff : 0xff8b67,
+                    transparent: true,
+                    opacity: 0.34 - index * 0.06,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                })
+            );
+            thumbnail.add(line);
+        }
+        return thumbnail;
     }
 
     createPulsarBeams(entry) {

@@ -125,16 +125,21 @@ class FocusController {
         const focusTitle = this.focusGroup.children.find((child) => child.userData?.effectRole === 'focus-title');
         if (focusTitle) focusTitle.visible = !document.body.classList.contains('ui-hidden');
 
-        if (!['black-hole', 'pulsar'].includes(this.focusedCatalogEntry?.effectType)) {
+        if (!['black-hole', 'pulsar', 'supernova'].includes(this.focusedCatalogEntry?.effectType)) {
             this.focusGroup.rotation.y += deltaSeconds * 0.08;
         }
-        this.host.updateSpecialObjectEffects(
-            this.focusGroup,
-            this.focusedCatalogEntry?.effectType,
-            deltaSeconds,
-            time,
-            0.4
-        );
+        const effectType = this.focusedCatalogEntry?.effectType;
+        if (['pulsar', 'supernova'].includes(effectType)) {
+            this.focusSpecialRenderer?.update?.(deltaSeconds, time, this.host.camera);
+        } else {
+            this.host.updateSpecialObjectEffects(
+                this.focusGroup,
+                effectType,
+                deltaSeconds,
+                time,
+                0.4
+            );
+        }
     }
 
     onResize(width, height) {
