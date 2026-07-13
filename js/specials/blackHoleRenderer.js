@@ -154,14 +154,6 @@ class BlackHoleRenderer {
             // photon ring near r=3
             '  float photon=exp(-pow((minR-3.)/.13,2.))*smoothstep(RS*1.02,RS*1.18,minR);',
             '  col+=vec3(1.,.9,.62)*photon*1.15*(.55+diskAlpha*.45);',
-            // Explicit upper/lower lensed disk echoes keep the cinematic double arc readable.
-            '  float arcX=clamp(abs(sc.x)/max(uAspect,.001),0.,1.);',
-            '  float arcCurve=.13+.22*pow(arcX,1.65);',
-            '  float arcWidth=.014+.018*(1.-arcX);',
-            '  float upperArc=exp(-pow((sc.y-arcCurve)/arcWidth,2.))*smoothstep(.04,.18,arcX);',
-            '  float lowerArc=exp(-pow((sc.y+arcCurve)/arcWidth,2.))*smoothstep(.04,.18,arcX);',
-            '  float arcMask=(upperArc+lowerArc)*uLensing*(1.-diskAlpha*.35);',
-            '  col+=vec3(1.,.52,.14)*arcMask*.24;',
             // soft lens glow halo outside photon sphere
             '  float lensGlow=exp(-pow((minR-3.6)/.7,2.))*smoothstep(RS*1.08,RS*1.4,minR);',
             '  col+=vec3(.55,.22,.04)*lensGlow*.14;',
