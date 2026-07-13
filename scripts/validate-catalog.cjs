@@ -43,6 +43,16 @@ for (const entry of CELESTIAL_CATALOG) {
     }
 }
 
+const phaseATargetIds = [
+    'alpha-centauri-b', 'luyten-726-8', 'ross-128', 'teegarden-star', 'gj-667',
+    'kepler-186', 'kepler-452', 'lhs-1140', 'gj-1132', 'hd-219134'
+];
+for (const id of phaseATargetIds) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing phase A target`);
+    else if (entry.atlasMap !== 'neighborhood') errors.push(`${id}: phase A target is not neighborhood`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;

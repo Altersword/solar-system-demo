@@ -117,7 +117,7 @@ After the catalog loop, assert that the ten new IDs exist and belong to `neighbo
 
 ```js
 const phaseATargetIds = [
-    'alpha-centauri-b', 'wolf-359', 'ross-128', 'teegarden-star', 'gj-667',
+    'alpha-centauri-b', 'luyten-726-8', 'ross-128', 'teegarden-star', 'gj-667',
     'kepler-186', 'kepler-452', 'lhs-1140', 'gj-1132', 'hd-219134'
 ];
 for (const id of phaseATargetIds) {

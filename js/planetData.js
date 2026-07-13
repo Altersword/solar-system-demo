@@ -579,6 +579,134 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'alpha-centauri-b',
+        name: '半人马座 α B',
+        nameEn: 'Alpha Centauri B',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: 'K 型伴星',
+        distanceLy: 4.37,
+        galactic: { lDeg: 315.7, bDeg: -0.7 },
+        spectralClass: 'K1V',
+        color: 0xffc278,
+        size: 3.4,
+        temperature: '约 5200 K',
+        feature: '半人马座 α 三合星系统中的 K 型成员。',
+        related: [
+            { title: '双星成员', detail: '与半人马座 α A 绕共同质心运行。' },
+            { title: '近邻系统', detail: '与比邻星共同构成离太阳最近的恒星系统。' }
+        ]
+    },
+    {
+        id: 'luyten-726-8', name: '鲁坦 726-8', nameEn: 'Luyten 726-8', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '双红矮星系统', distanceLy: 8.73, galactic: { lDeg: 5.0, bDeg: -16.0 }, spectralClass: 'M5.5V + M6V', color: 0xff765f, size: 2.8,
+        temperature: '约 2600 到 3000 K', feature: '由两颗红矮星组成的近邻耀星系统，UV Ceti 是其中的耀斑代表。'
+    },
+    {
+        id: 'ross-128', name: '罗斯 128', nameEn: 'Ross 128', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '红矮星', distanceLy: 11.0, galactic: { lDeg: 271.0, bDeg: 48.0 }, spectralClass: 'M4V', color: 0xff896f, size: 2.9,
+        temperature: '约 3200 K', feature: '相对安静的近邻红矮星，拥有已确认系外行星 Ross 128 b。',
+        systemLayout: {
+            sceneScale: 1.12, cameraDistance: 175, note: '行星轨道经过压缩，仅用于表达系统结构。',
+            bodies: [
+                { name: 'Ross 128', kind: 'star', color: 0xff896f, size: 13, x: 50, y: 50, detail: 'M4V 红矮星' },
+                { name: 'Ross 128 b', kind: 'planet', color: 0x83b8d8, orbit: 25, angleDeg: 220, detail: '已确认；约 9.9 天轨道周期' }
+            ]
+        }
+    },
+    {
+        id: 'teegarden-star', name: '蒂加登星', nameEn: "Teegarden's Star", atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '超冷红矮星', distanceLy: 12.5, galactic: { lDeg: 197.0, bDeg: -22.0 }, spectralClass: 'M7V', color: 0xff6d60, size: 2.7,
+        temperature: '约 2700 K', feature: '拥有 Teegarden b、c 等近地球质量行星的近邻红矮星系统。',
+        systemLayout: {
+            sceneScale: 1.16, cameraDistance: 180, note: '两颗行星轨道按可读性拉开。',
+            bodies: [
+                { name: '蒂加登星', kind: 'star', color: 0xff6d60, size: 12, x: 50, y: 50, detail: 'M7V 超冷红矮星' },
+                { name: 'Teegarden b', kind: 'planet', color: 0x75c6a0, orbit: 21, angleDeg: 30, detail: '已确认；约 4.9 天轨道周期' },
+                { name: 'Teegarden c', kind: 'planet', color: 0x76a9d6, orbit: 31, angleDeg: 185, detail: '已确认；约 11.4 天轨道周期' }
+            ]
+        }
+    },
+    {
+        id: 'gj-667', name: '格利泽 667', nameEn: 'Gliese 667', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '三合星系统', distanceLy: 23.6, galactic: { lDeg: 332.0, bDeg: -12.0 }, spectralClass: 'M1.5V + M3V + M3V', color: 0xff946e, size: 3.5,
+        temperature: '多颗红矮星成员', feature: '多星系统；格利泽 667 C 曾被报告拥有多个系外行星候选。',
+        systemLayout: {
+            sceneScale: 1.18, cameraDistance: 185, note: '多星成员和候选行星均为压缩结构示意。',
+            bodies: [
+                { name: 'Gliese 667 C', kind: 'star', color: 0xff946e, size: 13, x: 50, y: 50, detail: 'M3V 红矮星' },
+                { name: 'Gliese 667 A/B', kind: 'star', color: 0xffb184, size: 9, x: 28, y: 40, detail: '远处双星成员' },
+                { name: '候选行星区', kind: 'candidate', color: 0x91b8e9, orbit: 28, angleDeg: 215, detail: '候选/研究目标，参数仍在修正' }
+            ]
+        }
+    },
+    {
+        id: 'kepler-186', name: '开普勒-186', nameEn: 'Kepler-186', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '系外行星系统', distanceLy: 492.0, galactic: { lDeg: 76.0, bDeg: 13.0 }, spectralClass: 'M1V', color: 0xff956f, size: 3.0,
+        temperature: '红矮星', feature: '拥有五颗已确认行星，Kepler-186 f 是早期地球大小宜居带候选代表。',
+        systemLayout: {
+            sceneScale: 1.2, cameraDistance: 195, note: '距离较远但仍归入邻域层，用压缩距离表达系外行星研究路线。',
+            bodies: [
+                { name: 'Kepler-186', kind: 'star', color: 0xff956f, size: 12, x: 50, y: 50, detail: 'M1V 红矮星' },
+                { name: 'Kepler-186 b', kind: 'planet', color: 0xb7a18d, orbit: 14, angleDeg: 15, detail: '已确认行星' },
+                { name: 'Kepler-186 c', kind: 'planet', color: 0x9daabf, orbit: 21, angleDeg: 80, detail: '已确认行星' },
+                { name: 'Kepler-186 d', kind: 'planet', color: 0x9cae9e, orbit: 28, angleDeg: 145, detail: '已确认行星' },
+                { name: 'Kepler-186 e', kind: 'planet', color: 0x87a9c6, orbit: 35, angleDeg: 220, detail: '已确认行星' },
+                { name: 'Kepler-186 f', kind: 'planet', color: 0x78c49c, orbit: 43, angleDeg: 300, detail: '地球大小；宜居带候选代表' }
+            ]
+        }
+    },
+    {
+        id: 'kepler-452', name: '开普勒-452', nameEn: 'Kepler-452', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '太阳相似恒星系统', distanceLy: 1800.0, galactic: { lDeg: 76.0, bDeg: 6.0 }, spectralClass: 'G2V', color: 0xffe1a0, size: 3.2,
+        temperature: '约 5750 K', feature: '拥有位于宜居带附近的 Kepler-452 b，是太阳相似系统研究的代表目标。',
+        systemLayout: {
+            sceneScale: 1.12, cameraDistance: 190, note: 'Kepler-452 b 的性质仍需谨慎表述，轨道为压缩示意。',
+            bodies: [
+                { name: 'Kepler-452', kind: 'star', color: 0xffe1a0, size: 13, x: 50, y: 50, detail: 'G2V 太阳相似恒星' },
+                { name: 'Kepler-452 b', kind: 'candidate', color: 0x76b98e, orbit: 34, angleDeg: 160, detail: '确认状态和物理性质仍需后续观测约束' }
+            ]
+        }
+    },
+    {
+        id: 'lhs-1140', name: 'LHS 1140', nameEn: 'LHS 1140', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '红矮星系统', distanceLy: 49.0, galactic: { lDeg: 204.0, bDeg: -55.0 }, spectralClass: 'M4.5V', color: 0xff806b, size: 2.9,
+        temperature: '约 3130 K', feature: 'LHS 1140 b 是近距离、适合大气研究的岩质行星候选。',
+        systemLayout: {
+            sceneScale: 1.14, cameraDistance: 185, note: '行星轨道和大小不是同一真实比例。',
+            bodies: [
+                { name: 'LHS 1140', kind: 'star', color: 0xff806b, size: 12, x: 50, y: 50, detail: 'M4.5V 红矮星' },
+                { name: 'LHS 1140 b', kind: 'planet', color: 0x7eb5c5, orbit: 29, angleDeg: 250, detail: '岩质行星；宜居带大气研究重点' }
+            ]
+        }
+    },
+    {
+        id: 'gj-1132', name: '格利泽 1132', nameEn: 'GJ 1132', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '红矮星系统', distanceLy: 41.0, galactic: { lDeg: 295.0, bDeg: -59.0 }, spectralClass: 'M4.5V', color: 0xff7c63, size: 2.9,
+        temperature: '约 3270 K', feature: '近邻红矮星系统，GJ 1132 b 是大气观测的重要岩质行星目标。',
+        systemLayout: {
+            sceneScale: 1.1, cameraDistance: 180, note: '只展示代表性行星，轨道为压缩示意。',
+            bodies: [
+                { name: 'GJ 1132', kind: 'star', color: 0xff7c63, size: 12, x: 50, y: 50, detail: 'M4.5V 红矮星' },
+                { name: 'GJ 1132 b', kind: 'planet', color: 0xb27f72, orbit: 23, angleDeg: 55, detail: '岩质行星；大气观测目标' }
+            ]
+        }
+    },
+    {
+        id: 'hd-219134', name: 'HD 219134', nameEn: 'HD 219134', atlasMap: 'neighborhood', category: 'nearby-star',
+        type: '多行星系统', distanceLy: 21.3, galactic: { lDeg: 92.0, bDeg: 2.0 }, spectralClass: 'K3V', color: 0xffc889, size: 3.4,
+        temperature: '约 4690 K', feature: '距离较近的 K 型多行星系统，包含已确认的岩质行星。',
+        systemLayout: {
+            sceneScale: 1.16, cameraDistance: 180, note: '多颗行星轨道按可读性压缩。',
+            bodies: [
+                { name: 'HD 219134', kind: 'star', color: 0xffc889, size: 13, x: 50, y: 50, detail: 'K3V 主序星' },
+                { name: 'b', kind: 'planet', color: 0xb99478, orbit: 15, angleDeg: 10, detail: '已确认岩质行星' },
+                { name: 'c', kind: 'planet', color: 0x8faac1, orbit: 24, angleDeg: 100, detail: '已确认行星' },
+                { name: 'f', kind: 'planet', color: 0x9bc59d, orbit: 35, angleDeg: 215, detail: '已确认行星' }
+            ]
+        }
+    },
+    {
         id: 'pleiades',
         name: '昴星团',
         nameEn: 'Pleiades / M45',
