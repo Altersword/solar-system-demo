@@ -2,7 +2,7 @@
  * Routes catalog effectType to a special-body renderer.
  * Returns { renderer, object3d, ownsScreen }.
  */
-/* global BlackHoleRenderer, PulsarRenderer, SupernovaRemnantRenderer, RedGiantRenderer, WhiteDwarfRenderer, SimpleSpecialsRenderer, THREE */
+/* global BlackHoleRenderer, PulsarRenderer, SupernovaRemnantRenderer, RedGiantRenderer, WhiteDwarfRenderer, SunRenderer, SimpleSpecialsRenderer, THREE */
 class SpecialBodyFactory {
     /**
      * @param {object} host SolarSystem (renderer, blackHoleConfig, helpers)
@@ -43,6 +43,12 @@ class SpecialBodyFactory {
 
         if (type === 'white-dwarf') {
             const renderer = new WhiteDwarfRenderer(host);
+            const object3d = renderer.create(entry);
+            return { renderer, object3d, ownsScreen: false };
+        }
+
+        if (type === 'sun') {
+            const renderer = new SunRenderer(host);
             const object3d = renderer.create(entry);
             return { renderer, object3d, ownsScreen: false };
         }

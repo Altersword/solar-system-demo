@@ -918,7 +918,7 @@ class SolarSystem {
 
         this.starAtlas.clearExpandedSystem();
         document.getElementById('btn-close-expanded')?.classList.add('hidden');
-        document.getElementById('btn-focus-object')?.classList.add('hidden');
+        document.getElementById('btn-focus-object')?.classList.toggle('hidden', !data.effectType);
 
         document.getElementById('planet-name').textContent = parent ? `${data.name} / ${parent.name}卫星` : data.name;
         document.getElementById('label-diameter').textContent = '直径';
@@ -1213,6 +1213,8 @@ class SolarSystem {
 
     getFocusedCoreSize(effectType) {
         switch (effectType) {
+            case 'sun':
+                return 28;
             case 'red-giant':
                 return 36;
             case 'red-dwarf':
@@ -1284,6 +1286,7 @@ class SolarSystem {
             pulsar: 100,
             'white-dwarf': 25,
             'red-dwarf': 10,
+            sun: 5,
             'red-giant': 1,
             supernova: 0.1
         };

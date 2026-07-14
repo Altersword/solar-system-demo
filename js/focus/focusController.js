@@ -88,6 +88,16 @@ class FocusController {
             this.host.bloomPass.radius = 0.62;
             this.host.bloomPass.threshold = 0.5;
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 300);
+        } else if (entry.effectType === 'sun') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.36;
+            this.host.bloomPass.radius = 0.58;
+            this.host.bloomPass.threshold = 0.52;
+            this.host.controls.maxDistance = 280;
+            this.host.flyCameraToPos(
+                new THREE.Vector3(0, 22, 110),
+                new THREE.Vector3(0, 0, 0)
+            );
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
@@ -139,11 +149,11 @@ class FocusController {
         const focusTitle = this.focusGroup.children.find((child) => child.userData?.effectRole === 'focus-title');
         if (focusTitle) focusTitle.visible = !document.body.classList.contains('ui-hidden');
 
-        if (!['black-hole', 'pulsar', 'supernova'].includes(this.focusedCatalogEntry?.effectType)) {
+        if (!['black-hole', 'pulsar', 'supernova', 'sun'].includes(this.focusedCatalogEntry?.effectType)) {
             this.focusGroup.rotation.y += deltaSeconds * 0.08;
         }
         const effectType = this.focusedCatalogEntry?.effectType;
-        if (['pulsar', 'supernova', 'red-giant', 'white-dwarf'].includes(effectType)) {
+        if (['pulsar', 'supernova', 'red-giant', 'white-dwarf', 'sun'].includes(effectType)) {
             this.focusSpecialRenderer?.update?.(deltaSeconds, time, this.host.camera);
         } else {
             this.host.updateSpecialObjectEffects(

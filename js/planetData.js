@@ -111,6 +111,7 @@ const PLANET_DATA = {
         surfaceTemperature: '约 5778 K',
         composition: '氢约 73%，氦约 25%，少量重元素',
         feature: '太阳系中心天体，能量来自核心氢核聚变。',
+        effectType: 'sun',
         visual: { color: 0xffc65a, glow: 0xff9f1c, spectral: 'G' }
     },
     mercury: {
