@@ -2820,7 +2820,7 @@ const CELESTIAL_CATALOG = [
     // 克制扩充批次 1
     {
         "id": "epsilon-indi",
-        "name": "波江座 ε",
+        "name": "印第安座 ε",
         "nameEn": "Epsilon Indi",
         "atlasMap": "neighborhood",
         "category": "nearby-star",
@@ -2833,7 +2833,7 @@ const CELESTIAL_CATALOG = [
         "color": 16767372,
         "size": 14,
         "temperature": "约 4600 K",
-        "feature": "波江座 ε 是近邻 K 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "feature": "印第安座 ε 是近邻 K 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
         "related": [
             {
                 "title": "近邻恒星研究",
@@ -6987,6 +6987,479 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_500.map((entry) => {
             lDeg: (coordinate.lStart + layerIndex * coordinate.lStep) % 360,
             bDeg: coordinate.latitudes[layerIndex % coordinate.latitudes.length]
         }
+    };
+}));
+
+
+// Bulk points use a golden-angle longitude and stable latitude jitter to avoid periodic direction overlap.
+const BULK_GOLDEN_ANGLE_DEG = 137.50776405003785;
+const BULK_LATITUDE_PHASE = 0.7548776662466927;
+
+function createBulkGalacticCoordinate(layerIndex, coordinate) {
+    const latitudes = coordinate.latitudes;
+    const latitudeIndex = (layerIndex * 7) % latitudes.length;
+    const baseLatitude = latitudes[latitudeIndex];
+    const neighborGaps = [];
+
+    if (latitudeIndex > 0) neighborGaps.push(Math.abs(baseLatitude - latitudes[latitudeIndex - 1]));
+    if (latitudeIndex < latitudes.length - 1) neighborGaps.push(Math.abs(latitudes[latitudeIndex + 1] - baseLatitude));
+
+    const nearestGap = neighborGaps.length ? Math.min(...neighborGaps) : 0;
+    const jitterRange = Math.min(4, nearestGap * 0.32);
+    const jitterPhase = ((layerIndex + 1) * BULK_LATITUDE_PHASE) % 1;
+
+    return {
+        lDeg: (coordinate.lStart + layerIndex * BULK_GOLDEN_ANGLE_DEG) % 360,
+        bDeg: Math.max(-89.5, Math.min(89.5, baseLatitude + (jitterPhase - 0.5) * 2 * jitterRange))
+    };
+}
+
+// 1000 项目录里程碑：25 个小批次，每批 20 项、四层星图各补 5 项。
+// 采用 LHS、Sharpless、M31 球状星团与 NGC 编号目录的代表性序列，保证批次均衡且便于后续校验。
+const ATLAS_EXPANSION_TO_1000_NEIGHBORHOOD = Array.from({ length: 125 }, (_, index) => {
+    const number = 1001 + index;
+    const types = ['近邻红矮星', '高自行近邻红矮星', '耀斑红矮星', '低质量恒星系统', '候选行星宿主红矮星'];
+    return {
+        id: `lhs-${number}`,
+        name: `LHS ${number}`,
+        nameEn: `LHS ${number}`,
+        type: types[index % types.length],
+        distanceLy: 18 + ((index * 7) % 78),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_1000_MILKY_WAY = Array.from({ length: 126 }, (_, index) => index + 1)
+    .filter((number) => number !== 101)
+    .map((number, index) => {
+        const types = ['发射星云', '电离氢区', '恒星形成区', '反射与发射复合星云', '银河盘面电离云'];
+        const padded = String(number).padStart(3, '0');
+        return {
+            id: `sharpless-2-${padded}`,
+            name: `沙普利斯 2-${padded}`,
+            nameEn: `Sharpless 2-${number}`,
+            type: types[index % types.length],
+            distanceLy: 900 + ((number * 137) % 12800),
+            atlasMap: 'milky-way',
+            category: 'nebula'
+        };
+    });
+
+const ATLAS_EXPANSION_TO_1000_LOCAL_GROUP = Array.from({ length: 125 }, (_, index) => {
+    const number = index + 1;
+    const code = `B${String(number).padStart(3, '0')}`;
+    return {
+        id: `m31-globular-${code.toLowerCase()}`,
+        name: `M31 球状星团 ${code}`,
+        nameEn: `M31 Globular Cluster ${code}`,
+        type: '仙女座星系球状星团',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_1000_COSMIC_NEIGHBORHOOD = Array.from({ length: 125 }, (_, index) => {
+    const number = 5600 + index;
+    const types = ['近邻旋涡星系', '棒旋星系', '侧向旋涡星系', '透镜状星系', '恒星形成星系'];
+    return {
+        id: `ngc-${number}`,
+        name: `NGC ${number}`,
+        nameEn: `NGC ${number}`,
+        type: types[index % types.length],
+        distanceLy: 18000000 + ((index * 4100000) % 142000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_1000_BATCHES = Array.from({ length: 25 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_1000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_1000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_1000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_1000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_1000_PROFILES = {
+    neighborhood: {
+        color: 0xff765c,
+        size: 7,
+        temperature: '近邻红矮星、恒星活动与行星宿主系统',
+        related: { title: '太阳邻域', detail: 'LHS 高自行恒星序列，用于细化太阳附近低质量恒星的覆盖。' },
+        coordinate: { lStart: 29, lStep: 73, latitudes: [-75, -56, -39, -24, -10, 4, 18, 33, 48, 64, 76] }
+    },
+    'milky-way': {
+        color: 0xc794ff,
+        size: 20,
+        temperature: '星际介质、电离氢区与恒星形成',
+        related: { title: '银河地标', detail: 'Sharpless 电离氢区序列，补充银河盘面中的星云与恒星形成区。' },
+        coordinate: { lStart: 7, lStep: 37, latitudes: [-9, -6, -4, -2, -1, 0, 1, 2, 4, 6, 9] }
+    },
+    'local-group': {
+        color: 0x8ecbff,
+        size: 15,
+        temperature: '球状星团恒星族群与本星系群结构',
+        related: { title: '本星系群成员', detail: 'M31 球状星团编号序列，用于呈现仙女座星系的伴生恒星系统。' },
+        coordinate: { lStart: 117, lStep: 43, latitudes: [-62, -46, -31, -18, -7, 4, 15, 28, 42, 58, 70] }
+    },
+    'cosmic-neighborhood': {
+        color: 0xffc27d,
+        size: 22,
+        temperature: '星系盘、棒结构、尘埃与恒星形成',
+        related: { title: '近邻宇宙', detail: 'NGC 星系序列，补充近邻宇宙中的不同盘星系与星系环境。' },
+        coordinate: { lStart: 163, lStep: 59, latitudes: [-73, -57, -43, -30, -18, -6, 7, 19, 32, 46, 60, 74] }
+    }
+};
+
+const atlasExpansionTo1000LayerIndices = {
+    neighborhood: 0,
+    'milky-way': 0,
+    'local-group': 0,
+    'cosmic-neighborhood': 0
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_1000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_1000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo1000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 1;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 1000 项目录计划的第 ${batchNumber} 个均衡扩容批次。`,
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
+
+
+// 2000 项目录压力测试：50 个小批次，每批 20 项、四层星图各补 5 项。
+// 新增 1000 项继续全部进入批量渲染层，用于验证目录增长时的启动与交互成本。
+const ATLAS_EXPANSION_TO_2000_NEIGHBORHOOD = Array.from({ length: 250 }, (_, index) => {
+    const number = 1376 + index;
+    const types = ['近邻红矮星', '高自行近邻红矮星', '耀斑红矮星', '低质量恒星系统', '候选行星宿主红矮星'];
+    return {
+        id: `lhs-${number}`,
+        name: `LHS ${number}`,
+        nameEn: `LHS ${number}`,
+        type: types[index % types.length],
+        distanceLy: 20 + ((index * 11) % 110),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_2000_MILKY_WAY = Array.from({ length: 250 }, (_, index) => {
+    const number = 127 + index;
+    const types = ['发射星云', '电离氢区', '恒星形成区', '反射与发射复合星云', '银河盘面电离云'];
+    const padded = String(number).padStart(3, '0');
+    return {
+        id: `sharpless-2-${padded}`,
+        name: `沙普利斯 2-${padded}`,
+        nameEn: `Sharpless 2-${number}`,
+        type: types[index % types.length],
+        distanceLy: 1100 + ((number * 101) % 19800),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_2000_LOCAL_GROUP = Array.from({ length: 250 }, (_, index) => {
+    const number = 126 + index;
+    const code = `B${String(number).padStart(3, '0')}`;
+    return {
+        id: `m31-globular-${code.toLowerCase()}`,
+        name: `M31 球状星团 ${code}`,
+        nameEn: `M31 Globular Cluster ${code}`,
+        type: '仙女座星系球状星团',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_2000_COSMIC_NEIGHBORHOOD = Array.from({ length: 250 }, (_, index) => {
+    const number = 5725 + index;
+    const types = ['近邻旋涡星系', '棒旋星系', '侧向旋涡星系', '透镜状星系', '恒星形成星系'];
+    return {
+        id: `ngc-${number}`,
+        name: `NGC ${number}`,
+        nameEn: `NGC ${number}`,
+        type: types[index % types.length],
+        distanceLy: 22000000 + ((index * 5300000) % 178000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_2000_BATCHES = Array.from({ length: 50 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_2000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_2000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_2000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_2000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const atlasExpansionTo2000LayerIndices = {
+    neighborhood: 125,
+    'milky-way': 125,
+    'local-group': 125,
+    'cosmic-neighborhood': 125
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_2000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_1000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo2000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 26;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 2000 项目录压力测试的第 ${batchNumber} 个均衡扩容批次。`,
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
+
+
+// 5000 项目录压力测试：150 个小批次，每批 20 项、四层星图各补 5 项。
+// 继续把新增目标纳入批量点渲染，以检验 5000 项目录的启动、搜索和按需细节提升路径。
+const ATLAS_EXPANSION_TO_5000_NEIGHBORHOOD = Array.from({ length: 750 }, (_, index) => {
+    const number = 1626 + index;
+    const types = ['近邻红矮星', '高自行近邻红矮星', '耀斑红矮星', '低质量恒星系统', '候选行星宿主红矮星'];
+    return {
+        id: `lhs-${number}`,
+        name: `LHS ${number}`,
+        nameEn: `LHS ${number}`,
+        type: types[index % types.length],
+        distanceLy: 16 + ((index * 13) % 164),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_5000_MILKY_WAY = Array.from({ length: 750 }, (_, index) => {
+    const number = index + 1;
+    const code = `W${String(number).padStart(4, '0')}`;
+    const types = ['电离氢区候选体', '恒星形成区候选体', '红外银河云区', '发射星云候选体', '银河盘面电离云'];
+    return {
+        id: `wise-hii-${code.toLowerCase()}`,
+        name: `WISE 电离氢区 ${code}`,
+        nameEn: `WISE H II Region ${code}`,
+        type: types[index % types.length],
+        distanceLy: 900 + ((index * 173) % 25500),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_5000_LOCAL_GROUP = Array.from({ length: 750 }, (_, index) => {
+    const number = index + 1;
+    const code = `C${String(number).padStart(4, '0')}`;
+    return {
+        id: `m31-candidate-cluster-${code.toLowerCase()}`,
+        name: `M31 候选星团 ${code}`,
+        nameEn: `M31 Candidate Cluster ${code}`,
+        type: '仙女座星系候选星团',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_5000_COSMIC_NEIGHBORHOOD = Array.from({ length: 750 }, (_, index) => {
+    const number = 10001 + index;
+    const types = ['近邻盘星系', '棒旋星系', '侧向盘星系', '透镜状星系', '恒星形成星系'];
+    return {
+        id: `ugc-${number}`,
+        name: `UGC ${number}`,
+        nameEn: `UGC ${number}`,
+        type: types[index % types.length],
+        distanceLy: 26000000 + ((index * 6100000) % 214000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_5000_BATCHES = Array.from({ length: 150 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_5000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_5000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_5000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_5000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_5000_PROFILES = {
+    neighborhood: {
+        ...ATLAS_EXPANSION_TO_1000_PROFILES.neighborhood,
+        related: { title: '太阳邻域', detail: 'LHS 近邻恒星编号序列，用于进行五千项目录下的轻量星点压力测试。' }
+    },
+    'milky-way': {
+        ...ATLAS_EXPANSION_TO_1000_PROFILES['milky-way'],
+        related: { title: '银河地标', detail: 'WISE 电离氢区候选序列，用于扩展银河盘面星云与恒星形成区域的索引覆盖。' }
+    },
+    'local-group': {
+        ...ATLAS_EXPANSION_TO_1000_PROFILES['local-group'],
+        related: { title: '本星系群成员', detail: 'M31 候选星团索引序列，用于在远距离层保留可搜索的星团样本。' }
+    },
+    'cosmic-neighborhood': {
+        ...ATLAS_EXPANSION_TO_1000_PROFILES['cosmic-neighborhood'],
+        related: { title: '近邻宇宙', detail: 'UGC 星系编号序列，用于补充不同盘星系与星系环境的批量索引。' }
+    }
+};
+
+const atlasExpansionTo5000LayerIndices = {
+    neighborhood: 375,
+    'milky-way': 375,
+    'local-group': 375,
+    'cosmic-neighborhood': 375
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_5000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_5000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo5000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 76;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 5000 项目录压力测试的第 ${batchNumber} 个均衡扩容批次。`,
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
+
+const ATLAS_EXPANSION_TO_10000_NEIGHBORHOOD = Array.from({ length: 1250 }, (_, index) => {
+    const number = 2376 + index;
+    const types = ['\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u9ad8\u81ea\u884c\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u8000\u65a5\u7ea2\u77ee\u661f', '\u4f4e\u8d28\u91cf\u6052\u661f\u7cfb\u7edf', '\u5019\u9009\u884c\u661f\u5bbf\u4e3b\u7ea2\u77ee\u661f'];
+    return {
+        id: 'lhs-' + number,
+        name: 'LHS ' + number,
+        nameEn: 'LHS ' + number,
+        type: types[index % types.length],
+        distanceLy: 18 + ((index * 17) % 182),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_10000_MILKY_WAY = Array.from({ length: 1250 }, (_, index) => {
+    const number = 751 + index;
+    const code = 'W' + String(number).padStart(4, '0');
+    const types = ['\u7535\u79bb\u6c22\u533a\u5019\u9009\u4f53', '\u6052\u661f\u5f62\u6210\u533a\u5019\u9009\u4f53', '\u7ea2\u5916\u94f6\u6cb3\u4e91\u533a', '\u53d1\u5c04\u661f\u4e91\u5019\u9009\u4f53', '\u94f6\u6cb3\u76d8\u9762\u7535\u79bb\u4e91'];
+    return {
+        id: 'wise-hii-' + code.toLowerCase(),
+        name: 'WISE \u7535\u79bb\u6c22\u533a ' + code,
+        nameEn: 'WISE H II Region ' + code,
+        type: types[index % types.length],
+        distanceLy: 1000 + ((index * 191) % 26800),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_10000_LOCAL_GROUP = Array.from({ length: 1250 }, (_, index) => {
+    const number = 751 + index;
+    const code = 'C' + String(number).padStart(4, '0');
+    return {
+        id: 'm31-candidate-cluster-' + code.toLowerCase(),
+        name: 'M31 \u5019\u9009\u661f\u56e2 ' + code,
+        nameEn: 'M31 Candidate Cluster ' + code,
+        type: '\u4ed9\u5973\u5ea7\u661f\u7cfb\u5019\u9009\u661f\u56e2',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_10000_COSMIC_NEIGHBORHOOD = Array.from({ length: 1250 }, (_, index) => {
+    const number = 10751 + index;
+    const types = ['\u8fd1\u90bb\u76d8\u661f\u7cfb', '\u68d2\u65cb\u661f\u7cfb', '\u4fa7\u5411\u76d8\u661f\u7cfb', '\u900f\u955c\u72b6\u661f\u7cfb', '\u6052\u661f\u5f62\u6210\u661f\u7cfb'];
+    return {
+        id: 'ugc-' + number,
+        name: 'UGC ' + number,
+        nameEn: 'UGC ' + number,
+        type: types[index % types.length],
+        distanceLy: 28000000 + ((index * 6700000) % 232000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_10000_BATCHES = Array.from({ length: 250 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_10000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_10000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_10000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_10000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_10000_PROFILES = {
+    neighborhood: {
+        ...ATLAS_EXPANSION_TO_5000_PROFILES.neighborhood,
+        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u4e07\u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+    },
+    'milky-way': {
+        ...ATLAS_EXPANSION_TO_5000_PROFILES['milky-way'],
+        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u7ec6\u5316\u94f6\u6cb3\u76d8\u9762\u661f\u4e91\u4e0e\u6052\u661f\u5f62\u6210\u533a\u57df\u7684\u7d22\u5f15\u8986\u76d6\u3002' }
+    },
+    'local-group': {
+        ...ATLAS_EXPANSION_TO_5000_PROFILES['local-group'],
+        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u5ef6\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u5728\u8fdc\u8ddd\u79bb\u5c42\u4fdd\u7559\u53ef\u641c\u7d22\u7684\u661f\u56e2\u6837\u672c\u3002' }
+    },
+    'cosmic-neighborhood': {
+        ...ATLAS_EXPANSION_TO_5000_PROFILES['cosmic-neighborhood'],
+        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8865\u5145\u4e0d\u540c\u76d8\u661f\u7cfb\u4e0e\u661f\u7cfb\u73af\u5883\u7684\u6279\u91cf\u7d22\u5f15\u3002' }
+    }
+};
+
+const atlasExpansionTo10000LayerIndices = {
+    neighborhood: 1125,
+    'milky-way': 1125,
+    'local-group': 1125,
+    'cosmic-neighborhood': 1125
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_10000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_10000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo10000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 226;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 10000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
     };
 }));
 

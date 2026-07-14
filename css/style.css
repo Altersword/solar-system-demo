@@ -139,6 +139,7 @@ button {
 }
 
 #science-panel {
+    z-index: 20;
     top: 84px;
     left: 18px;
     width: 250px;
@@ -274,6 +275,19 @@ button {
     font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.atlas-data-badge {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 1px 4px;
+    border: 1px solid rgba(255, 193, 105, 0.35);
+    border-radius: 999px;
+    color: #ffd184;
+    background: rgba(255, 178, 77, 0.1);
+    font-size: 9px;
+    line-height: 1.2;
+    vertical-align: 1px;
 }
 
 .atlas-result small,
@@ -714,6 +728,8 @@ button {
 
 .planet-label {
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 12;
     padding: 3px 7px;
     border-radius: 5px;
@@ -723,7 +739,8 @@ button {
     font-size: 12px;
     pointer-events: none;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
-    transform: translate(-50%, -100%);
+    transform: translate3d(0, 0, 0) translate(-50%, -100%);
+    will-change: transform, opacity;
     white-space: nowrap;
 }
 

@@ -20,20 +20,57 @@ const validCategories = new Set([
 
 const errors = [];
 const ids = new Set();
+const catalogById = new Map();
+const names = new Map();
+const englishNames = new Map();
+const bulkDirectionsByMap = new Map();
 
 for (const entry of CELESTIAL_CATALOG) {
     if (ids.has(entry.id)) errors.push(`${entry.id}: duplicate id`);
     ids.add(entry.id);
+    catalogById.set(entry.id, entry);
 
     if (!entry.name || !entry.nameEn) errors.push(`${entry.id}: missing name/nameEn`);
+
+    const normalizedName = entry.name?.trim().toLocaleLowerCase();
+    const normalizedEnglishName = entry.nameEn?.trim().toLocaleLowerCase();
+    if (normalizedName) {
+        const existingId = names.get(normalizedName);
+        if (existingId) errors.push(`${entry.id}: duplicate name with ${existingId}: ${entry.name}`);
+        else names.set(normalizedName, entry.id);
+    }
+    if (normalizedEnglishName) {
+        const existingId = englishNames.get(normalizedEnglishName);
+        if (existingId) errors.push(`${entry.id}: duplicate nameEn with ${existingId}: ${entry.nameEn}`);
+        else englishNames.set(normalizedEnglishName, entry.id);
+    }
     if (!SIMULATION.atlasMaps[entry.atlasMap]) errors.push(`${entry.id}: invalid atlasMap`);
     if (!validCategories.has(entry.category)) errors.push(`${entry.id}: invalid category`);
     if (!Number.isFinite(entry.distanceLy) || entry.distanceLy <= 0) errors.push(`${entry.id}: invalid distanceLy`);
     if (!Number.isFinite(entry.galactic?.lDeg) || !Number.isFinite(entry.galactic?.bDeg)) {
         errors.push(`${entry.id}: invalid galactic coordinates`);
+    } else {
+        if (entry.galactic.lDeg < 0 || entry.galactic.lDeg >= 360 || entry.galactic.bDeg < -90 || entry.galactic.bDeg > 90) {
+            errors.push(`${entry.id}: galactic coordinates out of range`);
+        }
+        if (entry.renderTier === 'bulk') {
+            const directions = bulkDirectionsByMap.get(entry.atlasMap) || new Map();
+            const directionKey = `${entry.galactic.lDeg.toFixed(6)}:${entry.galactic.bDeg.toFixed(6)}`;
+            const existingId = directions.get(directionKey);
+            if (existingId) errors.push(`${entry.id}: duplicate bulk direction with ${existingId}`);
+            else directions.set(directionKey, entry.id);
+            bulkDirectionsByMap.set(entry.atlasMap, directions);
+        }
     }
     if (!Number.isFinite(entry.color) || !Number.isFinite(entry.size) || entry.size <= 0) {
         errors.push(`${entry.id}: invalid color/size`);
+    }
+    if (entry.renderTier && entry.renderTier !== 'bulk') {
+        errors.push(`${entry.id}: unknown renderTier ${entry.renderTier}`);
+    }
+    if (entry.renderTier === 'bulk') {
+        if (entry.dataQuality !== 'synthetic') errors.push(`${entry.id}: bulk entry must declare synthetic dataQuality`);
+        if (entry.source !== 'generated-stress-test') errors.push(`${entry.id}: bulk entry has invalid source`);
     }
     if (entry.effectType && !['red-giant', 'red-dwarf', 'white-dwarf', 'pulsar', 'black-hole', 'supernova'].includes(entry.effectType)) {
         errors.push(`${entry.id}: unknown effectType ${entry.effectType}`);
@@ -48,7 +85,7 @@ const phaseATargetIds = [
     'kepler-186', 'kepler-452', 'lhs-1140', 'gj-1132', 'hd-219134'
 ];
 for (const id of phaseATargetIds) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing phase A target`);
     else if (entry.atlasMap !== 'neighborhood') errors.push(`${id}: phase A target is not neighborhood`);
 }
@@ -59,7 +96,7 @@ const phaseBTargetIds = [
     'wr-104', 'pistol-star', 'vela-supernova-remnant'
 ];
 for (const id of phaseBTargetIds) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing phase B target`);
     else if (entry.atlasMap !== 'milky-way') errors.push(`${id}: phase B target is not milky-way`);
 }
@@ -77,7 +114,7 @@ const phaseCTargetMaps = {
     'local-supercluster-direction': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(phaseCTargetMaps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing phase C target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -97,7 +134,7 @@ const stellarBoostEffects = {
     mira: 'red-giant'
 };
 for (const [id, atlasMap] of Object.entries(stellarBoostMaps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing stellar boost target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
     else if (entry.effectType !== stellarBoostEffects[id]) {
@@ -113,7 +150,7 @@ const atlasBoostMaps = {
     'sculptor-dwarf': 'local-group'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoostMaps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing atlas boost target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -129,7 +166,7 @@ const atlasBoost2Maps = {
     'm51-whirlpool': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoost2Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing atlas boost-2 target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -145,7 +182,7 @@ const atlasBoost3Maps = {
     'm101-pinwheel': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoost3Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing atlas boost-3 target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -161,7 +198,7 @@ const atlasBoost4Maps = {
     'ngc-2403': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoost4Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing atlas boost-4 target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -177,23 +214,34 @@ const atlasBoost5Maps = {
     'm94-canes-venatici': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoost5Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing atlas boost-5 target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
 
 const expectedLayerCounts = {
-    neighborhood: 130,
-    'milky-way': 143,
-    'local-group': 115,
-    'cosmic-neighborhood': 112
+    neighborhood: 2505,
+    'milky-way': 2518,
+    'local-group': 2490,
+    'cosmic-neighborhood': 2487
 };
-if (CELESTIAL_CATALOG.length !== 500) {
-    errors.push(`expected 500 catalog entries, got ${CELESTIAL_CATALOG.length}`);
+if (CELESTIAL_CATALOG.length !== 10000) {
+    errors.push(`expected 10000 catalog entries, got ${CELESTIAL_CATALOG.length}`);
 }
 for (const [atlasMap, expectedCount] of Object.entries(expectedLayerCounts)) {
     const actualCount = CELESTIAL_CATALOG.filter((entry) => entry.atlasMap === atlasMap).length;
     if (actualCount !== expectedCount) errors.push(`${atlasMap}: expected ${expectedCount}, got ${actualCount}`);
+}
+
+const expectedBulkRenderCounts = {
+    neighborhood: 2375,
+    'milky-way': 2375,
+    'local-group': 2375,
+    'cosmic-neighborhood': 2375
+};
+for (const [atlasMap, expectedCount] of Object.entries(expectedBulkRenderCounts)) {
+    const actualCount = CELESTIAL_CATALOG.filter((entry) => entry.atlasMap === atlasMap && entry.renderTier === 'bulk').length;
+    if (actualCount !== expectedCount) errors.push(`${atlasMap}: expected ${expectedCount} bulk-render entries, got ${actualCount}`);
 }
 
 const atlasBoostTo200Maps = {
@@ -267,7 +315,7 @@ const atlasBoostTo200Maps = {
     'ngc-7331': 'cosmic-neighborhood'
 };
 for (const [id, atlasMap] of Object.entries(atlasBoostTo200Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing 200-item expansion target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -375,7 +423,7 @@ const atlasBoostTo300Maps = {
     "ngc-5238": "cosmic-neighborhood"
 };
 for (const [id, atlasMap] of Object.entries(atlasBoostTo300Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing 300-item expansion target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
@@ -583,9 +631,88 @@ const atlasBoostTo500Maps = {
     "ngc-4559": "cosmic-neighborhood"
 };
 for (const [id, atlasMap] of Object.entries(atlasBoostTo500Maps)) {
-    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    const entry = catalogById.get(id);
     if (!entry) errors.push(`${id}: missing 500-item expansion target`);
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
+const atlasBoostTo1000Maps = Object.fromEntries([
+    ...Array.from({ length: 125 }, (_, index) => [`lhs-${1001 + index}`, 'neighborhood']),
+    ...Array.from({ length: 126 }, (_, index) => index + 1)
+        .filter((number) => number !== 101)
+        .map((number) => [`sharpless-2-${String(number).padStart(3, '0')}`, 'milky-way']),
+    ...Array.from({ length: 125 }, (_, index) => [
+        `m31-globular-b${String(index + 1).padStart(3, '0')}`,
+        'local-group'
+    ]),
+    ...Array.from({ length: 125 }, (_, index) => [`ngc-${5600 + index}`, 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo1000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(`${id}: missing 1000-item expansion target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
+
+
+const atlasBoostTo2000Maps = Object.fromEntries([
+    ...Array.from({ length: 250 }, (_, index) => [`lhs-${1376 + index}`, 'neighborhood']),
+    ...Array.from({ length: 250 }, (_, index) => [
+        `sharpless-2-${String(127 + index).padStart(3, '0')}`,
+        'milky-way'
+    ]),
+    ...Array.from({ length: 250 }, (_, index) => [
+        `m31-globular-b${String(126 + index).padStart(3, '0')}`,
+        'local-group'
+    ]),
+    ...Array.from({ length: 250 }, (_, index) => [`ngc-${5725 + index}`, 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo2000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(`${id}: missing 2000-item expansion target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+    else if (entry.renderTier !== 'bulk') errors.push(`${id}: expected bulk render tier, got ${entry.renderTier || 'default'}`);
+}
+
+
+
+const atlasBoostTo5000Maps = Object.fromEntries([
+    ...Array.from({ length: 750 }, (_, index) => [`lhs-${1626 + index}`, 'neighborhood']),
+    ...Array.from({ length: 750 }, (_, index) => [
+        `wise-hii-w${String(index + 1).padStart(4, '0')}`,
+        'milky-way'
+    ]),
+    ...Array.from({ length: 750 }, (_, index) => [
+        `m31-candidate-cluster-c${String(index + 1).padStart(4, '0')}`,
+        'local-group'
+    ]),
+    ...Array.from({ length: 750 }, (_, index) => [`ugc-${10001 + index}`, 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo5000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(`${id}: missing 5000-item expansion target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+    else if (entry.renderTier !== 'bulk') errors.push(`${id}: expected bulk render tier, got ${entry.renderTier || 'default'}`);
+}
+
+
+const atlasBoostTo10000Maps = Object.fromEntries([
+    ...Array.from({ length: 1250 }, (_, index) => ['lhs-' + (2376 + index), 'neighborhood']),
+    ...Array.from({ length: 1250 }, (_, index) => [
+        'wise-hii-w' + String(751 + index).padStart(4, '0'),
+        'milky-way'
+    ]),
+    ...Array.from({ length: 1250 }, (_, index) => [
+        'm31-candidate-cluster-c' + String(751 + index).padStart(4, '0'),
+        'local-group'
+    ]),
+    ...Array.from({ length: 1250 }, (_, index) => ['ugc-' + (10751 + index), 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo10000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(id + ': missing 10000-item expansion target');
+    else if (entry.atlasMap !== atlasMap) errors.push(id + ': expected ' + atlasMap + ', got ' + entry.atlasMap);
+    else if (entry.renderTier !== 'bulk') errors.push(id + ': expected bulk render tier, got ' + (entry.renderTier || 'default'));
 }
 
 if (errors.length) {

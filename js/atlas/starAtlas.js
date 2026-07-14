@@ -9,6 +9,9 @@ globalThis.StarAtlas = class StarAtlas {
         this.host = host;
         this.atlasGroup = new THREE.Group();
         this.catalogObjects = new Map();
+        this.catalogEntries = new Map();
+        this.bulkLayerGroups = new Map();
+        this.selectedBulkDetailId = null;
         this.expandedSystemGroup = null;
         this.animatedAtlasObjects = [];
         this.selectedAtlasMap = 'neighborhood';
@@ -24,24 +27,21 @@ globalThis.StarAtlas = class StarAtlas {
         this.atlasGroup.visible = this.showAtlas;
         this.createDistanceShells();
 
+        this.catalogEntries = new Map(CELESTIAL_CATALOG.map((entry) => [entry.id, entry]));
+        const bulkEntriesByMap = new Map();
+
         CELESTIAL_CATALOG.forEach((entry) => {
-            if (
-                entry.category === 'deep-sky'
-                || entry.category === 'galactic-landmark'
-                || entry.category === 'nebula'
-                || entry.category === 'stellar-object'
-                || entry.category === 'stellar-remnant'
-                || entry.category === 'compact-object'
-                || entry.category === 'supernova-remnant'
-                || entry.category === 'galaxy'
-                || entry.category === 'galaxy-group'
-                || entry.category === 'galaxy-cluster'
-                || entry.category === 'supercluster'
-            ) {
-                this.createDeepSkyObject(entry);
-            } else {
-                this.createStarMarker(entry);
+            if (this.isBulkEntry(entry)) {
+                const entries = bulkEntriesByMap.get(entry.atlasMap) || [];
+                entries.push(entry);
+                bulkEntriesByMap.set(entry.atlasMap, entries);
+                return;
             }
+            this.createCatalogObject(entry);
+        });
+
+        bulkEntriesByMap.forEach((entries, mapId) => {
+            this.createBulkCatalogLayer(mapId, entries);
         });
 
         this.updateVisibility();
@@ -52,6 +52,9 @@ globalThis.StarAtlas = class StarAtlas {
         this.host.clearGroup(this.atlasGroup);
         this.clearExpandedSystem();
         this.catalogObjects.clear();
+        this.catalogEntries.clear();
+        this.bulkLayerGroups.clear();
+        this.selectedBulkDetailId = null;
         this.animatedAtlasObjects = [];
         this.syncHost();
     }
@@ -68,6 +71,9 @@ globalThis.StarAtlas = class StarAtlas {
     setMap(mapId) {
         if (!SIMULATION.atlasMaps[mapId] || mapId === this.selectedAtlasMap) return;
         this.selectedAtlasMap = mapId;
+        if (this.selectedBulkDetailId && this.catalogEntries.get(this.selectedBulkDetailId)?.atlasMap !== mapId) {
+            this.clearMaterializedBulkEntry();
+        }
         this.clearExpandedSystem();
         this.updateVisibility();
         this.syncHost();
@@ -115,7 +121,116 @@ globalThis.StarAtlas = class StarAtlas {
         }
     }
 
-    createStarMarker(entry) {
+    isBulkEntry(entry) {
+        return entry.renderTier === 'bulk';
+    }
+
+    isDeepSkyEntry(entry) {
+        return [
+            'deep-sky',
+            'galactic-landmark',
+            'nebula',
+            'stellar-object',
+            'stellar-remnant',
+            'compact-object',
+            'supernova-remnant',
+            'galaxy',
+            'galaxy-group',
+            'galaxy-cluster',
+            'supercluster'
+        ].includes(entry.category);
+    }
+
+    createCatalogObject(entry, options) {
+        return this.isDeepSkyEntry(entry)
+            ? this.createDeepSkyObject(entry, options)
+            : this.createStarMarker(entry, options);
+    }
+
+    createBulkCatalogLayer(mapId, entries) {
+        if (!entries.length) return;
+
+        const positions = new Float32Array(entries.length * 3);
+        const colors = new Float32Array(entries.length * 3);
+        const color = new THREE.Color();
+
+        entries.forEach((entry, index) => {
+            const position = this.host.getCatalogPosition(entry);
+            positions.set([position.x, position.y, position.z], index * 3);
+            color.setHex(entry.color);
+            colors.set([color.r, color.g, color.b], index * 3);
+        });
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.computeBoundingSphere();
+
+        const pointSize = mapId === 'neighborhood' ? 7 : mapId === 'milky-way' ? 9 : 11;
+        const points = new THREE.Points(
+            geometry,
+            new THREE.PointsMaterial({
+                size: pointSize,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.92,
+                sizeAttenuation: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            })
+        );
+        points.name = mapId + '-bulk-catalog-points';
+        points.userData = {
+            atlasMap: mapId,
+            objectKind: 'catalog-batch',
+            catalogEntries: entries
+        };
+
+        const group = new THREE.Group();
+        group.name = mapId + '-bulk-catalog-layer';
+        group.userData.atlasMap = mapId;
+        group.add(points);
+        this.atlasGroup.add(group);
+        this.host.pickables.push(points);
+        this.bulkLayerGroups.set(mapId, group);
+    }
+
+    getCatalogEntry(id) {
+        return this.catalogEntries.get(id) || null;
+    }
+
+    ensureCatalogObject(id) {
+        const entry = this.getCatalogEntry(id);
+        if (!entry) return null;
+
+        const existing = this.catalogObjects.get(id);
+        if (existing) return existing;
+        if (!this.isBulkEntry(entry)) return null;
+
+        this.clearMaterializedBulkEntry();
+        const record = this.createCatalogObject(entry, { bulkDetail: true });
+        this.selectedBulkDetailId = id;
+        return record;
+    }
+
+    clearMaterializedBulkEntry() {
+        const id = this.selectedBulkDetailId;
+        if (!id) return;
+
+        const record = this.catalogObjects.get(id);
+        if (record?.bulkDetail) {
+            this.host.pickables = this.host.pickables.filter((object) => object !== record.mesh);
+            this.animatedAtlasObjects = this.animatedAtlasObjects.filter((item) => item.mesh !== record.mesh);
+            this.host.removeLabelsForBody(id);
+            this.host.disposeObject3D(record.group);
+            this.atlasGroup.remove(record.group);
+            this.catalogObjects.delete(id);
+        }
+        this.selectedBulkDetailId = null;
+        this.syncHost();
+    }
+
+    createStarMarker(entry, { bulkDetail = false } = {}) {
         const position = this.host.getCatalogPosition(entry);
         const radius = entry.size;
         const group = new THREE.Group();
@@ -143,7 +258,7 @@ globalThis.StarAtlas = class StarAtlas {
 
         this.atlasGroup.add(group);
         this.host.pickables.push(mesh);
-        this.catalogObjects.set(entry.id, { entry, group, mesh });
+        this.catalogObjects.set(entry.id, { entry, group, mesh, bulkDetail });
         this.animatedAtlasObjects.push({
             group,
             mesh,
@@ -152,9 +267,10 @@ globalThis.StarAtlas = class StarAtlas {
             baseSize: radius
         });
         this.host.createLabel(entry.name, mesh, entry.id, 'stellar');
+        return this.catalogObjects.get(entry.id);
     }
 
-    createDeepSkyObject(entry) {
+    createDeepSkyObject(entry, { bulkDetail = false } = {}) {
         const position = this.host.getCatalogPosition(entry);
         const group = new THREE.Group();
         group.position.copy(position);
@@ -191,7 +307,7 @@ globalThis.StarAtlas = class StarAtlas {
 
         this.atlasGroup.add(group);
         this.host.pickables.push(core);
-        this.catalogObjects.set(entry.id, { entry, group, mesh: core });
+        this.catalogObjects.set(entry.id, { entry, group, mesh: core, bulkDetail });
         this.animatedAtlasObjects.push({
             group,
             mesh: core,
@@ -205,6 +321,7 @@ globalThis.StarAtlas = class StarAtlas {
                 ? 'galaxy'
                 : 'deep-sky';
         this.host.createLabel(entry.name, core, entry.id, labelKind);
+        return this.catalogObjects.get(entry.id);
     }
 
     decorateSpecialObject(group, entry, core, random) {

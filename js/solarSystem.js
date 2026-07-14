@@ -41,6 +41,15 @@ class SolarSystem {
         this.glowUniforms = [];
         this.animatedAtlasObjects = this.starAtlas.animatedAtlasObjects;
         this.radialTextureCache = new Map();
+        this.catalogSearchIndex = CELESTIAL_CATALOG.map((entry) => ({
+            entry,
+            text: [entry.name, entry.nameEn, entry.type, entry.feature]
+                .filter(Boolean)
+                .join(' ')
+                .toLocaleLowerCase()
+        }));
+        this.lastLabelUpdateMs = -Infinity;
+        this.labelUpdateIntervalMs = 40;
 
         this.displayMode = 'balanced';
         this.elapsedDays = 0;
@@ -77,6 +86,7 @@ class SolarSystem {
         };
 
         this.raycaster = new THREE.Raycaster();
+        this.raycaster.params.Points.threshold = 12;
         this.mouse = new THREE.Vector2();
         this.labelWorldPosition = new THREE.Vector3();
         this.scaleOrbitDistanceForScene = this.solarBodies.scaleOrbitDistanceForScene;
@@ -227,25 +237,36 @@ class SolarSystem {
         );
     }
 
-    searchCatalog(query = '', category = 'all') {
-        const normalized = query.toLocaleLowerCase();
-        return CELESTIAL_CATALOG.filter((entry) => {
-            if (category !== 'all' && entry.category !== category) return false;
-            if (!normalized) return true;
-            return [entry.name, entry.nameEn, entry.type, entry.feature]
-                .filter(Boolean)
-                .join(' ')
-                .toLocaleLowerCase()
-                .includes(normalized);
-        });
+    searchCatalog(query = '', category = 'all', limit = Infinity) {
+        const normalized = query.trim().toLocaleLowerCase();
+        const maxResults = Number.isFinite(limit) ? Math.max(0, limit) : Infinity;
+        const results = [];
+        if (maxResults === 0) return results;
+
+        for (const indexed of this.catalogSearchIndex) {
+            const entry = indexed.entry;
+            if (category !== 'all' && entry.category !== category) continue;
+            if (normalized && !indexed.text.includes(normalized)) continue;
+            results.push(entry);
+            if (results.length >= maxResults) break;
+        }
+
+        return results;
     }
 
     selectCatalogEntry(id) {
-        const record = this.catalogObjects.get(id);
+        const entry = this.starAtlas.getCatalogEntry(id);
+        if (!entry) return false;
+
+        if (this.starAtlas.selectedBulkDetailId && this.starAtlas.selectedBulkDetailId !== id) {
+            this.starAtlas.clearMaterializedBulkEntry();
+        }
+        this.starAtlas.setMap(entry.atlasMap || this.selectedAtlasMap);
+        const record = this.starAtlas.ensureCatalogObject(id);
         if (!record) return false;
-        this.starAtlas.setMap(record.entry.atlasMap || this.selectedAtlasMap);
+
         this.selectedObject = record.mesh;
-        this.flyCameraTo(record.group.position, record.entry.systemLayout?.cameraDistance || 180);
+        this.flyCameraTo(record.group.position, entry.systemLayout?.cameraDistance || 180);
         this.showInfoPanel(record.mesh.userData);
         return true;
     }
@@ -680,7 +701,15 @@ class SolarSystem {
             return;
         }
 
-        this.selectedObject = hits[0].object;
+        const hit = hits[0];
+        const batchEntries = hit.object.userData?.catalogEntries;
+        if (batchEntries && Number.isInteger(hit.index)) {
+            const entry = batchEntries[hit.index];
+            if (entry) this.selectCatalogEntry(entry.id);
+            return;
+        }
+
+        this.selectedObject = hit.object;
         this.showInfoPanel(this.selectedObject.userData);
     }
 
@@ -690,10 +719,23 @@ class SolarSystem {
         label.textContent = text;
         label.dataset.body = id;
         document.body.appendChild(label);
-        this.labels.push({ element: label, object, kind });
+        const measuredWidth = Math.min(170, Math.max(70, label.offsetWidth || 96));
+        this.labels.push({ element: label, object, kind, width: measuredWidth });
     }
 
-    updateLabels() {
+    removeLabelsForBody(id) {
+        this.labels = this.labels.filter((label) => {
+            if (label.element.dataset.body !== id) return true;
+            label.element.remove();
+            return false;
+        });
+    }
+
+    updateLabels(force = false) {
+        const now = performance.now();
+        if (!force && now - this.lastLabelUpdateMs < this.labelUpdateIntervalMs) return;
+        this.lastLabelUpdateMs = now;
+
         const width = window.innerWidth;
         const height = window.innerHeight;
         const position = this.labelWorldPosition;
@@ -723,7 +765,7 @@ class SolarSystem {
                 y,
                 distance,
                 isSelected: label.object === this.selectedObject,
-                width: Math.min(170, Math.max(70, label.element.offsetWidth || 96)),
+                width: label.width,
                 height: 24
             });
         });
@@ -746,8 +788,7 @@ class SolarSystem {
             item.label.element.style.display = allow ? 'block' : 'none';
             if (!allow) return;
 
-            item.label.element.style.left = `${item.x}px`;
-            item.label.element.style.top = `${item.y - 18}px`;
+            item.label.element.style.transform = `translate3d(${item.x}px, ${item.y - 18}px, 0) translate(-50%, -100%)`;
             item.label.element.style.opacity = String(
                 item.isSelected ? 1 : THREE.MathUtils.clamp(1.2 - item.distance / 2400, 0.22, 0.92)
             );
@@ -1036,7 +1077,8 @@ class SolarSystem {
                                                     : '深空方向标';
         document.getElementById('info-temperature').textContent = data.temperature || 'N/A';
         document.getElementById('info-moons').textContent = data.related?.length || 0;
-        document.getElementById('info-feature').textContent = data.feature || 'N/A';
+        const dataQualityPrefix = data.dataQuality === 'synthetic' ? '\u3010\u6a21\u62df\u538b\u529b\u6d4b\u8bd5\u6570\u636e\u3011' : '';
+        document.getElementById('info-feature').textContent = `${dataQualityPrefix}${data.feature || 'N/A'}`;
 
         const moonsList = document.getElementById('moons-list');
         moonsList.innerHTML = '';
@@ -1357,6 +1399,9 @@ class SolarSystem {
 
     toggleLabels() {
         this.showLabels = !this.showLabels;
+        this.lastLabelUpdateMs = -Infinity;
+        if (this.showLabels) this.updateLabels(true);
+        else this.labels.forEach((label) => { label.element.style.display = 'none'; });
         return this.showLabels;
     }
 

@@ -132,32 +132,52 @@ function initUIControls() {
         });
     });
 
+    let atlasSearchTimer = null;
+
     function refreshAtlasSearch() {
         if (!atlasSearchResults || !solarSystem) return;
-        const query = atlasSearchInput?.value.trim().toLocaleLowerCase() || '';
+        const query = atlasSearchInput?.value.trim() || '';
         const type = atlasTypeFilter?.value || 'all';
-        const results = solarSystem.searchCatalog(query, type).slice(0, 8);
-        atlasSearchResults.innerHTML = '';
+        const results = solarSystem.searchCatalog(query, type, 8);
+        atlasSearchResults.replaceChildren();
         if (!query && type === 'all') return;
         if (!results.length) {
-            atlasSearchResults.innerHTML = '<span class="atlas-search-empty">没有匹配目标</span>';
+            const emptyState = document.createElement('span');
+            emptyState.className = 'atlas-search-empty';
+            emptyState.textContent = '\u6ca1\u6709\u5339\u914d\u76ee\u6807';
+            atlasSearchResults.appendChild(emptyState);
             return;
         }
         results.forEach((entry) => {
             const button = document.createElement('button');
+            const title = document.createElement('strong');
+            const meta = document.createElement('small');
             button.type = 'button';
             button.className = 'atlas-result';
-            button.innerHTML = `<strong>${entry.name}</strong><small>${entry.type} · ${entry.nameEn || ''}</small>`;
+            title.textContent = entry.name;
+            meta.textContent = `${entry.type} \u00b7 ${entry.nameEn || ''}`;
+            if (entry.dataQuality === 'synthetic') {
+                const badge = document.createElement('span');
+                badge.className = 'atlas-data-badge';
+                badge.textContent = '\u6a21\u62df';
+                meta.prepend(badge);
+            }
+            button.append(title, meta);
             button.addEventListener('click', () => {
-                solarSystem.selectCatalogEntry(entry.id);
+                if (!solarSystem.selectCatalogEntry(entry.id)) return;
                 atlasSearchInput.value = entry.name;
-                refreshAtlasSearch();
+                atlasSearchResults.replaceChildren();
             });
             atlasSearchResults.appendChild(button);
         });
     }
 
-    atlasSearchInput?.addEventListener('input', refreshAtlasSearch);
+    function scheduleAtlasSearch() {
+        window.clearTimeout(atlasSearchTimer);
+        atlasSearchTimer = window.setTimeout(refreshAtlasSearch, 120);
+    }
+
+    atlasSearchInput?.addEventListener('input', scheduleAtlasSearch);
     atlasTypeFilter?.addEventListener('change', refreshAtlasSearch);
 
     document.addEventListener('keydown', (event) => {
