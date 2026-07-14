@@ -1106,6 +1106,44 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'ross-248',
+        name: '罗斯 248',
+        nameEn: 'Ross 248',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星 / 耀星',
+        distanceLy: 10.3,
+        galactic: { lDeg: 110.0, bDeg: -16.9 },
+        spectralClass: 'M6V',
+        color: 0xff6f55,
+        size: 2.9,
+        temperature: '约 2800 K',
+        feature: '距离太阳很近的红矮星，磁活动活跃，是太阳邻域低质量恒星的经典样本。',
+        related: [
+            { title: '近邻红矮星', detail: '距离约 10 光年，属于最近恒星之列。' },
+            { title: '耀星活动', detail: '表面磁活动可产生耀斑，改变近距空间环境。' }
+        ]
+    },
+    {
+        id: 'lacaille-9352',
+        name: '拉卡伊 9352',
+        nameEn: 'Lacaille 9352',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星',
+        distanceLy: 10.7,
+        galactic: { lDeg: 5.1, bDeg: -48.0 },
+        spectralClass: 'M2V',
+        color: 0xff835c,
+        size: 3.1,
+        temperature: '约 3600 K',
+        feature: '南天近邻红矮星，自行较大，周围有已确认的超级地球级行星系统。',
+        related: [
+            { title: '高自行', detail: '在天空中的视运动较快，是近邻恒星的典型特征。' },
+            { title: '行星系统', detail: '已知多颗低质量行星，是红矮星宜居带研究样本。' }
+        ]
+    },
+    {
         id: 'vela-pulsar',
         name: '船帆座脉冲星',
         nameEn: 'Vela Pulsar',
@@ -1762,6 +1800,62 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'fomalhaut',
+        name: '北落师门',
+        nameEn: 'Fomalhaut / Alpha Piscis Austrini',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: 'A 型主序星 / 碎屑盘系统',
+        distanceLy: 25,
+        galactic: { lDeg: 20.5, bDeg: -64.9 },
+        spectralClass: 'A3V',
+        color: 0xeaf4ff,
+        size: 13,
+        temperature: '约 8600 K',
+        feature: '南鱼座主星，拥有显著碎屑盘，是近邻行星形成与尘埃盘研究的重要目标。',
+        related: [
+            { title: '碎屑盘', detail: '红外观测显示外围存在冷尘埃结构。' },
+            { title: '行星候选', detail: '历史上曾报告过盘内行星信号，后续研究持续修正。' }
+        ]
+    },
+    {
+        id: 'albireo',
+        name: '辇道增七',
+        nameEn: 'Albireo / Beta Cygni',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '双星系统',
+        distanceLy: 430,
+        galactic: { lDeg: 62.1, bDeg: 4.6 },
+        spectralClass: 'K3II + B8V',
+        color: 0xffc878,
+        size: 14,
+        temperature: '橙巨星 + 蓝白伴星',
+        feature: '天鹅座著名双星，橙金与蓝白对比强烈，是目视双星观测的经典对象。',
+        related: [
+            { title: '颜色对比', detail: '主星偏橙、伴星偏蓝，小望远镜中极为醒目。' },
+            { title: '多重系统', detail: '系统结构比肉眼所见更复杂，包含更近的子双星。' }
+        ]
+    },
+    {
+        id: 'dumbbell-nebula',
+        name: '哑铃星云',
+        nameEn: 'Dumbbell Nebula / M27',
+        atlasMap: 'milky-way',
+        category: 'nebula',
+        type: '行星状星云',
+        distanceLy: 1360,
+        galactic: { lDeg: 60.8, bDeg: -3.7 },
+        color: 0x8dffc2,
+        size: 18,
+        temperature: '中心白矮星高温，气壳被电离',
+        feature: '狐狸座著名行星状星云，是小望远镜中最容易观测的行星状星云之一。',
+        related: [
+            { title: '行星状星云', detail: '中低质量恒星晚期抛出的电离气壳。' },
+            { title: '中心白矮星', detail: '气壳中心残留高温致密核心。' }
+        ]
+    },
+    {
         id: 'deneb',
         name: '天津四',
         nameEn: 'Deneb / Alpha Cygni',
@@ -2015,6 +2109,42 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'leo-ii',
+        name: '狮子座 II 矮星系',
+        nameEn: 'Leo II',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 690000,
+        galactic: { lDeg: 220.2, bDeg: 67.2 },
+        color: 0xffc29a,
+        size: 14,
+        temperature: '非单一天体',
+        feature: '银河系卫星矮星系，以老年恒星为主，是研究银河晕卫星族群的样本。',
+        related: [
+            { title: '银河卫星', detail: '距离约 69 万光年，比大麦哲伦云更远。' },
+            { title: '老年恒星', detail: '几乎没有正在进行的恒星形成。' }
+        ]
+    },
+    {
+        id: 'ursa-minor-dwarf',
+        name: '小熊座矮星系',
+        nameEn: 'Ursa Minor Dwarf',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 225000,
+        galactic: { lDeg: 105.0, bDeg: 44.8 },
+        color: 0xffd0aa,
+        size: 14,
+        temperature: '非单一天体',
+        feature: '银河系近距卫星矮星系，暗物质主导，是极暗星系与晕卫星研究的经典目标。',
+        related: [
+            { title: '极暗星系', detail: '恒星含量很低，动力学却显示有大量不可见质量。' },
+            { title: '近距卫星', detail: '距离约 22.5 万光年，属于银河伴星系系统。' }
+        ]
+    },
+    {
         id: 'ic-1613', name: 'IC 1613', nameEn: 'IC 1613', atlasMap: 'local-group', category: 'galaxy',
         type: '不规则矮星系', distanceLy: 2380000, galactic: { lDeg: 129.7, bDeg: -60.6 }, color: 0x9ec9ff, size: 16,
         temperature: '由多代恒星与星际介质组成', feature: '本星系群中尘埃较少的不规则矮星系，是造父变星距离标尺的重要校准目标。',
@@ -2182,6 +2312,24 @@ const CELESTIAL_CATALOG = [
         related: [
             { title: '旋臂结构', detail: '清晰的旋臂使它成为星系结构教学与成像的标准对象。' },
             { title: '潮汐相互作用', detail: '伴星系扰动激发了恒星形成并扭曲了外盘。' }
+        ]
+    },
+    {
+        id: 'm101-pinwheel',
+        name: '风车星系 M101',
+        nameEn: 'Pinwheel Galaxy / M101',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy',
+        type: '巨型旋涡星系',
+        distanceLy: 21000000,
+        galactic: { lDeg: 102.0, bDeg: 59.8 },
+        color: 0xffe0b0,
+        size: 30,
+        temperature: '非单一天体',
+        feature: '大熊座方向著名的面对面旋涡星系，旋臂宽阔，富含恒星形成区。',
+        related: [
+            { title: '旋臂与 H II 区', detail: '外盘分布大量明亮恒星形成复合体。' },
+            { title: '近邻宇宙', detail: '是本超星系团范围内最常被成像的旋涡星系之一。' }
         ]
     }
 ];

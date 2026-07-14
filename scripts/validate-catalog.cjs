@@ -134,6 +134,22 @@ for (const [id, atlasMap] of Object.entries(atlasBoost2Maps)) {
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
 
+const atlasBoost3Maps = {
+    'ross-248': 'neighborhood',
+    'lacaille-9352': 'neighborhood',
+    fomalhaut: 'milky-way',
+    albireo: 'milky-way',
+    'dumbbell-nebula': 'milky-way',
+    'leo-ii': 'local-group',
+    'ursa-minor-dwarf': 'local-group',
+    'm101-pinwheel': 'cosmic-neighborhood'
+};
+for (const [id, atlasMap] of Object.entries(atlasBoost3Maps)) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing atlas boost-3 target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;
