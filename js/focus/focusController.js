@@ -78,16 +78,16 @@ class FocusController {
             );
         } else if (entry.effectType === 'white-dwarf') {
             this.host.useBloom = true;
-            this.host.bloomPass.strength = 0.95;
-            this.host.bloomPass.radius = 0.48;
-            this.host.bloomPass.threshold = 0.28;
-            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 180);
+            this.host.bloomPass.strength = 0.68;
+            this.host.bloomPass.radius = 0.4;
+            this.host.bloomPass.threshold = 0.4;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 210);
         } else if (entry.effectType === 'red-giant') {
             this.host.useBloom = true;
-            this.host.bloomPass.strength = 0.42;
-            this.host.bloomPass.radius = 0.55;
-            this.host.bloomPass.threshold = 0.42;
-            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 280);
+            this.host.bloomPass.strength = 0.3;
+            this.host.bloomPass.radius = 0.62;
+            this.host.bloomPass.threshold = 0.5;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 300);
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
