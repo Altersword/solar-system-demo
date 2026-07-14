@@ -33,9 +33,9 @@ class SolarSystemFocusRenderer {
         const coreSize = this.profile.coreSize;
         const material = new THREE.MeshBasicMaterial({
             map: this.createFocusTexture(entry),
-            color: entry.visual?.color || 0xffffff
+            color: 0xffffff
         });
-        const core = new THREE.Mesh(new THREE.SphereGeometry(coreSize, 128, 96), material);
+        const core = new THREE.Mesh(new THREE.SphereGeometry(coreSize, 160, 120), material);
         core.name = `${entry.id}-focus-core`;
         if (entry.id === 'uranus') {
             core.rotation.z = THREE.MathUtils.degToRad(90);
@@ -55,15 +55,22 @@ class SolarSystemFocusRenderer {
         }
 
         if (this.profile.clouds) {
-            const clouds = this.host.createGlowMesh(
-                coreSize * this.profile.clouds.scale,
-                this.profile.clouds.color,
-                this.profile.clouds.opacity
-            );
-            clouds.name = `${entry.id}-focus-clouds`;
-            clouds.userData.baseOpacity = this.profile.clouds.opacity;
-            core.add(clouds);
-            this.clouds = clouds;
+            // Gas giants get textured cloud shells; rocky worlds keep soft glow clouds.
+            if (entry.effectType === 'planet-gas' || entry.effectType === 'planet-ice') {
+                const cloudShell = this.createTexturedCloudShell(entry, coreSize);
+                core.add(cloudShell);
+                this.clouds = cloudShell;
+            } else {
+                const clouds = this.host.createGlowMesh(
+                    coreSize * this.profile.clouds.scale,
+                    this.profile.clouds.color,
+                    this.profile.clouds.opacity
+                );
+                clouds.name = `${entry.id}-focus-clouds`;
+                clouds.userData.baseOpacity = this.profile.clouds.opacity;
+                core.add(clouds);
+                this.clouds = clouds;
+            }
         }
 
         if (entry.rings || this.profile.forceRings) {
@@ -197,35 +204,295 @@ class SolarSystemFocusRenderer {
     }
 
     createFocusTexture(entry) {
-        // Reuse host procedural texture, then enrich key bodies.
-        if (typeof this.host.createProceduralTexture === 'function') {
-            const texture = this.host.createProceduralTexture(entry.visual || { color: 0x888888 }, `${entry.id}-focus-v2`);
-            return texture;
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+        const random = this.host.seededRandom(`${entry.id}-focus-tex-v3`);
+        const base = new THREE.Color(entry.visual?.color || 0x888888);
+        const secondary = new THREE.Color(entry.visual?.secondaryColor || entry.visual?.color || 0x666666);
+        const cloud = new THREE.Color(entry.visual?.cloudColor || 0xffffff);
+        const id = entry.id;
+        const pattern = entry.visual?.pattern;
+
+        const fillBase = () => {
+            ctx.fillStyle = `#${base.getHexString()}`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        };
+
+        const drawCrater = (x, y, r, depth = 0.55) => {
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+            g.addColorStop(0, `rgba(20,18,16,${0.35 * depth})`);
+            g.addColorStop(0.45, `rgba(40,36,32,${0.28 * depth})`);
+            g.addColorStop(0.72, `rgba(180,175,165,${0.22 * depth})`);
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = `rgba(230,225,210,${0.18 * depth})`;
+            ctx.lineWidth = Math.max(1, r * 0.08);
+            ctx.beginPath();
+            ctx.arc(x, y, r * 0.92, 0, Math.PI * 2);
+            ctx.stroke();
+        };
+
+        if (pattern === 'jupiter' || pattern === 'saturn' || entry.effectType === 'planet-gas') {
+            for (let y = 0; y < canvas.height; y += 1) {
+                const n = Math.sin(y * 0.045) * 0.5 + Math.sin(y * 0.11 + 1.7) * 0.3 + Math.sin(y * 0.23) * 0.2;
+                const t = (n + 1) * 0.5;
+                const color = base.clone().lerp(secondary, 0.15 + t * 0.7);
+                const wobble = Math.sin(y * 0.07 + random() * 0.4) * 18 + Math.sin(y * 0.019) * 28;
+                ctx.fillStyle = `rgb(${Math.round(color.r * 255)},${Math.round(color.g * 255)},${Math.round(color.b * 255)})`;
+                ctx.fillRect(0, y, canvas.width, 1);
+                if (y % 17 < 2) {
+                    ctx.fillStyle = 'rgba(255,245,220,0.16)';
+                    ctx.fillRect(wobble, y, canvas.width, 1);
+                }
+                if (y % 29 < 2) {
+                    ctx.fillStyle = 'rgba(90,50,25,0.14)';
+                    ctx.fillRect(-wobble, y, canvas.width, 1);
+                }
+            }
+            // Storm ovals / turbulence
+            for (let i = 0; i < (id === 'jupiter' ? 28 : 18); i += 1) {
+                const x = random() * canvas.width;
+                const y = 40 + random() * (canvas.height - 80);
+                const rx = 18 + random() * 55;
+                const ry = 5 + random() * 14;
+                ctx.fillStyle = id === 'jupiter'
+                    ? `rgba(${140 + random() * 60},${50 + random() * 40},${30 + random() * 20},${0.18 + random() * 0.25})`
+                    : `rgba(255,230,180,${0.08 + random() * 0.12})`;
+                ctx.beginPath();
+                ctx.ellipse(x, y, rx, ry, (random() - 0.5) * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            if (id === 'jupiter') {
+                ctx.fillStyle = 'rgba(168,48,28,0.82)';
+                ctx.beginPath();
+                ctx.ellipse(690, 300, 70, 28, -0.22, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = 'rgba(210,90,45,0.35)';
+                ctx.beginPath();
+                ctx.ellipse(690, 300, 48, 16, -0.22, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        } else if (pattern === 'earth' || id === 'earth') {
+            // Ocean base
+            const ocean = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            ocean.addColorStop(0, '#1b4f9a');
+            ocean.addColorStop(0.5, '#2d66bd');
+            ocean.addColorStop(1, '#163f7d');
+            ctx.fillStyle = ocean;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Continents
+            ctx.fillStyle = `#${secondary.getHexString()}`;
+            for (let i = 0; i < 70; i += 1) {
+                ctx.beginPath();
+                ctx.ellipse(
+                    random() * canvas.width,
+                    random() * canvas.height,
+                    22 + random() * 70,
+                    10 + random() * 34,
+                    random() * Math.PI,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
+            }
+            // Cloud streaks
+            for (let i = 0; i < 90; i += 1) {
+                ctx.fillStyle = `rgba(255,255,255,${0.08 + random() * 0.18})`;
+                ctx.fillRect(random() * canvas.width, random() * canvas.height, 30 + random() * 120, 2 + random() * 6);
+            }
+            // Polar ice
+            ctx.fillStyle = 'rgba(230,240,255,0.55)';
+            ctx.fillRect(0, 0, canvas.width, 28);
+            ctx.fillRect(0, canvas.height - 28, canvas.width, 28);
+        } else if (pattern === 'mars' || id === 'mars') {
+            fillBase();
+            for (let i = 0; i < 80; i += 1) {
+                const c = secondary.clone().lerp(base, random());
+                ctx.fillStyle = `rgba(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)},${0.15 + random() * 0.3})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 20 + random() * 70, 8 + random() * 28, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (let i = 0; i < 55; i += 1) {
+                drawCrater(random() * canvas.width, random() * canvas.height, 4 + random() * 18, 0.45 + random() * 0.4);
+            }
+            ctx.fillStyle = 'rgba(245,248,255,0.72)';
+            ctx.fillRect(0, 0, canvas.width, 34);
+            ctx.fillRect(0, canvas.height - 34, canvas.width, 34);
+        } else if (pattern === 'moon' || pattern === 'rocky' || entry.effectType === 'moon' || entry.effectType === 'dwarf-planet' || id === 'mercury') {
+            // Grey rocky body with dense craters
+            const lightRock = base.clone().lerp(new THREE.Color(0xffffff), 0.18);
+            const darkRock = base.clone().lerp(new THREE.Color(0x000000), 0.22);
+            const rock = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            rock.addColorStop(0, `#${lightRock.getHexString()}`);
+            rock.addColorStop(0.5, `#${base.getHexString()}`);
+            rock.addColorStop(1, `#${darkRock.getHexString()}`);
+            ctx.fillStyle = rock;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Mare / dark patches
+            for (let i = 0; i < (id === 'moon' ? 18 : 10); i += 1) {
+                ctx.fillStyle = `rgba(40,38,35,${0.12 + random() * 0.2})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 30 + random() * 90, 18 + random() * 50, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // High crater density for moon
+            const craterCount = id === 'moon' ? 220 : id === 'mercury' ? 160 : 90;
+            for (let i = 0; i < craterCount; i += 1) {
+                drawCrater(
+                    random() * canvas.width,
+                    random() * canvas.height,
+                    2 + random() * (id === 'moon' ? 28 : 18),
+                    0.4 + random() * 0.6
+                );
+            }
+            // Bright ejecta rays for moon
+            if (id === 'moon') {
+                for (let i = 0; i < 8; i += 1) {
+                    const x = random() * canvas.width;
+                    const y = random() * canvas.height;
+                    for (let r = 0; r < 12; r += 1) {
+                        const ang = random() * Math.PI * 2;
+                        const len = 20 + random() * 70;
+                        ctx.strokeStyle = `rgba(230,225,210,${0.08 + random() * 0.1})`;
+                        ctx.lineWidth = 1 + random() * 2;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + Math.cos(ang) * len, y + Math.sin(ang) * len);
+                        ctx.stroke();
+                    }
+                    drawCrater(x, y, 8 + random() * 14, 0.8);
+                }
+            }
+        } else if (pattern === 'iceGiant' || entry.effectType === 'planet-ice') {
+            for (let y = 0; y < canvas.height; y += 1) {
+                const t = y / canvas.height;
+                const color = base.clone().lerp(secondary, 0.2 + Math.sin(t * Math.PI * 3) * 0.15);
+                ctx.fillStyle = `rgb(${Math.round(color.r * 255)},${Math.round(color.g * 255)},${Math.round(color.b * 255)})`;
+                ctx.fillRect(0, y, canvas.width, 1);
+            }
+            for (let i = 0; i < 40; i += 1) {
+                ctx.fillStyle = `rgba(200,230,255,${0.05 + random() * 0.1})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 40 + random() * 100, 6 + random() * 16, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            if (id === 'neptune') {
+                ctx.fillStyle = 'rgba(20,40,120,0.35)';
+                ctx.beginPath();
+                ctx.ellipse(620, 250, 55, 28, 0.1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        } else if (pattern === 'cloud' || id === 'venus' || id === 'titan') {
+            fillBase();
+            for (let i = 0; i < 120; i += 1) {
+                ctx.fillStyle = `rgba(${Math.round(cloud.r * 255)},${Math.round(cloud.g * 255)},${Math.round(cloud.b * 255)},${0.08 + random() * 0.16})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 40 + random() * 100, 8 + random() * 24, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        } else if (pattern === 'ice' || pattern === 'pluto') {
+            fillBase();
+            for (let i = 0; i < 50; i += 1) {
+                ctx.fillStyle = `rgba(255,255,255,${0.08 + random() * 0.18})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 20 + random() * 70, 10 + random() * 30, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (let i = 0; i < 40; i += 1) {
+                drawCrater(random() * canvas.width, random() * canvas.height, 3 + random() * 14, 0.35);
+            }
+        } else {
+            fillBase();
+            for (let i = 0; i < 1200; i += 1) {
+                const value = Math.floor(70 + random() * 100);
+                ctx.fillStyle = `rgba(${value},${value},${value},${0.05 + random() * 0.12})`;
+                ctx.fillRect(random() * canvas.width, random() * canvas.height, 1 + random() * 3, 1 + random() * 2);
+            }
+            for (let i = 0; i < 60; i += 1) {
+                drawCrater(random() * canvas.width, random() * canvas.height, 3 + random() * 16, 0.4);
+            }
         }
-        return null;
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.encoding = THREE.sRGBEncoding;
+        texture.anisotropy = 8;
+        texture.needsUpdate = true;
+        return texture;
+    }
+
+    createTexturedCloudShell(entry, coreSize) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+        const random = this.host.seededRandom(`${entry.id}-cloudshell`);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let y = 0; y < canvas.height; y += 1) {
+            const alpha = 0.04 + (Math.sin(y * 0.08) * 0.5 + 0.5) * 0.1;
+            ctx.fillStyle = `rgba(255,245,220,${alpha})`;
+            ctx.fillRect(0, y, canvas.width, 1);
+            if (y % 19 < 2) {
+                ctx.fillStyle = `rgba(255,255,255,${0.06 + random() * 0.08})`;
+                ctx.fillRect(Math.sin(y * 0.05) * 20, y, canvas.width, 1);
+            }
+        }
+        for (let i = 0; i < 50; i += 1) {
+            ctx.fillStyle = `rgba(255,255,255,${0.04 + random() * 0.08})`;
+            ctx.beginPath();
+            ctx.ellipse(random() * canvas.width, random() * canvas.height, 20 + random() * 80, 4 + random() * 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        const map = new THREE.CanvasTexture(canvas);
+        map.encoding = THREE.sRGBEncoding;
+        map.needsUpdate = true;
+        const shell = new THREE.Mesh(
+            new THREE.SphereGeometry(coreSize * (this.profile.clouds?.scale || 1.04), 128, 96),
+            new THREE.MeshBasicMaterial({
+                map,
+                transparent: true,
+                opacity: entry.id === 'jupiter' ? 0.28 : 0.22,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            })
+        );
+        shell.name = `${entry.id}-textured-clouds`;
+        shell.userData.baseOpacity = shell.material.opacity;
+        shell.userData.speed = entry.id === 'jupiter' ? 0.07 : 0.045;
+        this.extras.push(shell);
+        return shell;
     }
 
     addBodyExtras(group, entry, coreSize) {
         const id = entry.id;
         if (id === 'earth') {
             group.add(this.createEarthCityLights(coreSize));
-            group.add(this.createBandLayer(coreSize * 1.02, 0xffffff, 0.08, 0.04, 'earth-cloud-bands'));
+            group.add(this.createSoftCloudLayer(coreSize * 1.03, 0xffffff, 0.12, 0.035, 'earth-soft-clouds'));
         } else if (id === 'mars') {
             group.add(this.createPolarCaps(coreSize));
             group.add(this.createDustHaze(coreSize));
         } else if (id === 'jupiter') {
+            // Red spot is already baked into texture; keep a soft animated highlight.
             group.add(this.createGreatRedSpot(coreSize));
-            group.add(this.createBandLayer(coreSize * 1.015, 0xf0d2a0, 0.1, 0.06, 'jupiter-bands'));
+            group.add(this.createSoftCloudLayer(coreSize * 1.025, 0xffe0b0, 0.1, 0.06, 'jupiter-haze'));
         } else if (id === 'saturn') {
-            group.add(this.createBandLayer(coreSize * 1.012, 0xffe6b5, 0.08, 0.035, 'saturn-bands'));
-        } else if (id === 'moon') {
-            group.add(this.createCraterField(coreSize, 42));
+            group.add(this.createSoftCloudLayer(coreSize * 1.02, 0xffe6b5, 0.09, 0.04, 'saturn-haze'));
+        } else if (id === 'moon' || id === 'mercury') {
+            // Craters are primarily in the texture now; keep a few raised rim sprites for depth.
+            group.add(this.createCraterField(coreSize, id === 'moon' ? 28 : 16));
         } else if (id === 'halley') {
             group.add(this.createCometJets(coreSize));
+        } else if (entry.effectType === 'planet-ice') {
+            group.add(this.createSoftCloudLayer(coreSize * 1.03, 0xcfe9ff, 0.1, 0.03, `${id}-ice-haze`));
         }
     }
 
-    createBandLayer(radius, color, opacity, speed, name) {
+    createSoftCloudLayer(radius, color, opacity, speed, name) {
         const mesh = new THREE.Mesh(
             new THREE.SphereGeometry(radius, 96, 64),
             new THREE.MeshBasicMaterial({
@@ -244,11 +511,11 @@ class SolarSystemFocusRenderer {
     }
 
     createGreatRedSpot(coreSize) {
-        const spot = this.host.createHaloSprite(0xc14a2c, coreSize * 0.55, 0.55);
+        const spot = this.host.createHaloSprite(0xc14a2c, coreSize * 0.48, 0.42);
         spot.name = 'jupiter-great-red-spot';
-        spot.position.set(coreSize * 0.82, -coreSize * 0.18, coreSize * 0.42);
-        spot.userData.baseOpacity = 0.55;
-        spot.userData.baseScale = coreSize * 0.55;
+        spot.position.set(coreSize * 0.78, -coreSize * 0.16, coreSize * 0.48);
+        spot.userData.baseOpacity = 0.42;
+        spot.userData.baseScale = coreSize * 0.48;
         this.extras.push(spot);
         return spot;
     }
@@ -456,10 +723,16 @@ class SolarSystemFocusRenderer {
             this.atmosphere.material.uniforms.opacity.value =
                 this.atmosphere.userData.baseOpacity * (0.88 + Math.sin(time * 0.4) * 0.12);
         }
-        if (this.clouds?.material?.uniforms) {
-            this.clouds.rotation.y += deltaSeconds * 0.03;
-            this.clouds.material.uniforms.opacity.value =
-                this.clouds.userData.baseOpacity * (0.85 + Math.sin(time * 0.55) * 0.15);
+        if (this.clouds) {
+            const speed = this.clouds.userData?.speed || 0.03;
+            this.clouds.rotation.y += deltaSeconds * speed;
+            if (this.clouds.material?.uniforms) {
+                this.clouds.material.uniforms.opacity.value =
+                    this.clouds.userData.baseOpacity * (0.85 + Math.sin(time * 0.55) * 0.15);
+            } else if (this.clouds.material) {
+                this.clouds.material.opacity =
+                    (this.clouds.userData.baseOpacity || 0.22) * (0.85 + Math.sin(time * 0.55) * 0.15);
+            }
         }
         if (this.rings) {
             this.rings.children.forEach((ring) => {
@@ -509,6 +782,7 @@ class SolarSystemFocusRenderer {
 
     dispose() {
         if (this.core?.material?.map) this.core.material.map.dispose();
+        if (this.clouds?.material?.map) this.clouds.material.map.dispose();
         this.group = null;
         this.core = null;
         this.atmosphere = null;
