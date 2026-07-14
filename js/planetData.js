@@ -1058,6 +1058,54 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'luytens-star',
+        name: '鲁伊顿星',
+        nameEn: "Luyten's Star",
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '红矮星',
+        distanceLy: 12.4,
+        galactic: { lDeg: 212.3, bDeg: 10.4 },
+        spectralClass: 'M3.5V',
+        color: 0xff7f58,
+        size: 3.0,
+        temperature: '约 3150 K',
+        feature: '近邻红矮星，已知拥有两颗超级地球级行星候选，是太阳邻域宜居带研究目标之一。',
+        related: [
+            { title: '近邻红矮星', detail: '距离约 12 光年，属于太阳邻域常见低质量恒星。' },
+            { title: '行星系统', detail: '外侧行星落在保守宜居带附近，常被列为大气观测候选。' }
+        ]
+    },
+    {
+        id: 'groombridge-34',
+        name: '格鲁姆布里奇 34',
+        nameEn: 'Groombridge 34',
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        type: '双红矮星系统',
+        distanceLy: 11.6,
+        galactic: { lDeg: 127.0, bDeg: -16.0 },
+        spectralClass: 'M1.5V + M3.5V',
+        color: 0xff8860,
+        size: 3.4,
+        temperature: '约 3400 / 3100 K',
+        feature: '近邻双红矮星系统，主星周围有已确认巨行星，是研究双星环境行星形成的样本。',
+        systemLayout: {
+            sceneScale: 1.12,
+            cameraDistance: 165,
+            note: '双星间距与行星轨道均经压缩示意。',
+            bodies: [
+                { name: 'GX And', kind: 'star', color: 0xff8860, size: 12, x: 44, y: 50, detail: 'M1.5V 主星' },
+                { name: 'GQ And', kind: 'star', color: 0xff6f55, size: 9, x: 60, y: 47, detail: 'M3.5V 伴星' },
+                { name: 'b', kind: 'planet', color: 0xd2a56d, orbit: 28, angleDeg: 210, detail: '主星周围已确认巨行星' }
+            ]
+        },
+        related: [
+            { title: '双红矮星', detail: '两颗低质量恒星绕共同质心运行。' },
+            { title: '行星环境', detail: '双星扰动会改变行星轨道稳定性，是理论与观测交叉点。' }
+        ]
+    },
+    {
         id: 'vela-pulsar',
         name: '船帆座脉冲星',
         nameEn: 'Vela Pulsar',
@@ -1620,6 +1668,82 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'spica',
+        name: '角宿一',
+        nameEn: 'Spica / Alpha Virginis',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '热双星 / B 型巨星',
+        distanceLy: 250,
+        galactic: { lDeg: 316.1, bDeg: 50.8 },
+        spectralClass: 'B1III-IV + B2V',
+        color: 0xb7d8ff,
+        size: 14,
+        temperature: '约 22000 K 量级',
+        feature: '室女座主星，是明亮的热双星系统，光谱偏蓝白，是春夜星空重要地标。',
+        related: [
+            { title: '热双星', detail: '两颗高温恒星互相绕转，辐射强紫外线。' },
+            { title: '春夜亮星', detail: '与轩辕十四、五车二等共同构成北天季节亮星网络。' }
+        ]
+    },
+    {
+        id: 'regulus',
+        name: '轩辕十四',
+        nameEn: 'Regulus / Alpha Leonis',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '快速自转 B 型星',
+        distanceLy: 79,
+        galactic: { lDeg: 226.4, bDeg: 48.9 },
+        spectralClass: 'B7V',
+        color: 0xcfe4ff,
+        size: 13,
+        temperature: '约 12000 K',
+        feature: '狮子座主星，快速自转导致赤道显著扁化，是北天著名蓝白亮星。',
+        related: [
+            { title: '快速自转', detail: '自转接近临界速度，赤道半径大于两极。' },
+            { title: '多星系统', detail: '主星周围还有较暗伴星，构成更复杂系统。' }
+        ]
+    },
+    {
+        id: 'castor',
+        name: '北河二',
+        nameEn: 'Castor / Alpha Geminorum',
+        atlasMap: 'milky-way',
+        category: 'stellar-object',
+        type: '六合星系统',
+        distanceLy: 51,
+        galactic: { lDeg: 187.4, bDeg: 22.6 },
+        spectralClass: 'A1V + A2Vm + ...',
+        color: 0xe8f2ff,
+        size: 13,
+        temperature: '约 9000 K 量级',
+        feature: '双子座亮星，实际是复杂的六合星系统，是恒星多重系统研究的经典案例。',
+        related: [
+            { title: '多重系统', detail: '至少包含三对双星，视觉上仍呈现为单一亮星。' },
+            { title: '与北河三', detail: '双子座两颗主星一白一橙，形成鲜明对比。' }
+        ]
+    },
+    {
+        id: 'veil-nebula',
+        name: '面纱星云',
+        nameEn: 'Veil Nebula / Cygnus Loop',
+        atlasMap: 'milky-way',
+        category: 'supernova-remnant',
+        type: '超新星遗迹',
+        distanceLy: 2400,
+        galactic: { lDeg: 74.0, bDeg: -8.6 },
+        color: 0x7fd0ff,
+        size: 22,
+        effectType: 'supernova',
+        temperature: '激波加热气体，局部可达百万 K 量级',
+        feature: '天鹅座方向著名超新星遗迹，丝状结构清晰，是中年 SNR 的代表性目标。',
+        related: [
+            { title: '天鹅环', detail: '面纱星云是更大天鹅环超新星遗迹的一部分。' },
+            { title: '丝状激波', detail: '可见光中呈现复杂的纤维状气体结构。' }
+        ]
+    },
+    {
         id: 'rigel',
         name: '参宿七',
         nameEn: 'Rigel / Beta Orionis',
@@ -1873,6 +1997,24 @@ const CELESTIAL_CATALOG = [
         ]
     },
     {
+        id: 'draco-dwarf',
+        name: '天龙座矮星系',
+        nameEn: 'Draco Dwarf Spheroidal',
+        atlasMap: 'local-group',
+        category: 'galaxy',
+        type: '球状矮星系',
+        distanceLy: 260000,
+        galactic: { lDeg: 86.4, bDeg: 34.7 },
+        color: 0xffc8a8,
+        size: 14,
+        temperature: '非单一天体',
+        feature: '银河系卫星矮星系，暗物质主导、几乎无气体，是研究极暗星系的重要样本。',
+        related: [
+            { title: '极暗星系', detail: '恒星质量很低，动力学质量却很高，常被用于暗物质研究。' },
+            { title: '银河卫星', detail: '距离约 26 万光年，属于本星系群内的银河伴星系。' }
+        ]
+    },
+    {
         id: 'ic-1613', name: 'IC 1613', nameEn: 'IC 1613', atlasMap: 'local-group', category: 'galaxy',
         type: '不规则矮星系', distanceLy: 2380000, galactic: { lDeg: 129.7, bDeg: -60.6 }, color: 0x9ec9ff, size: 16,
         temperature: '由多代恒星与星际介质组成', feature: '本星系群中尘埃较少的不规则矮星系，是造父变星距离标尺的重要校准目标。',
@@ -2023,6 +2165,24 @@ const CELESTIAL_CATALOG = [
         type: '超星系团尺度方向标', distanceLy: 110000000, galactic: { lDeg: 284, bDeg: 74 }, color: 0xaab7ff, size: 45,
         temperature: '非单一天体', feature: '室女座超星系团/本超星系团的尺度与方向参照，不表示精确实体边界。',
         related: [{ title: '层级结构', detail: '本星系群位于室女座超星系团的一部分，并嵌入更大的拉尼亚凯亚流域。' }, { title: '显示限制', detail: '这里只表达方向和尺度概念，不绘制固定边界或均匀实体。' }]
+    },
+    {
+        id: 'm51-whirlpool',
+        name: '涡状星系 M51',
+        nameEn: 'Whirlpool Galaxy / M51',
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy',
+        type: '相互作用旋涡星系',
+        distanceLy: 23000000,
+        galactic: { lDeg: 104.9, bDeg: 68.6 },
+        color: 0xffd6a8,
+        size: 28,
+        temperature: '非单一天体',
+        feature: '著名的面对面旋涡星系，正在与伴星系 NGC 5195 相互作用，是近邻宇宙经典观测目标。',
+        related: [
+            { title: '旋臂结构', detail: '清晰的旋臂使它成为星系结构教学与成像的标准对象。' },
+            { title: '潮汐相互作用', detail: '伴星系扰动激发了恒星形成并扭曲了外盘。' }
+        ]
     }
 ];
 

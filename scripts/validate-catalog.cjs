@@ -118,6 +118,22 @@ for (const [id, atlasMap] of Object.entries(atlasBoostMaps)) {
     else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
 }
 
+const atlasBoost2Maps = {
+    'luytens-star': 'neighborhood',
+    'groombridge-34': 'neighborhood',
+    spica: 'milky-way',
+    regulus: 'milky-way',
+    castor: 'milky-way',
+    'veil-nebula': 'milky-way',
+    'draco-dwarf': 'local-group',
+    'm51-whirlpool': 'cosmic-neighborhood'
+};
+for (const [id, atlasMap] of Object.entries(atlasBoost2Maps)) {
+    const entry = CELESTIAL_CATALOG.find((candidate) => candidate.id === id);
+    if (!entry) errors.push(`${id}: missing atlas boost-2 target`);
+    else if (entry.atlasMap !== atlasMap) errors.push(`${id}: expected ${atlasMap}, got ${entry.atlasMap}`);
+}
+
 if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;
