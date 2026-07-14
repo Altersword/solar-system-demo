@@ -1288,7 +1288,13 @@ class SolarSystem {
             'red-dwarf': 10,
             sun: 5,
             'red-giant': 1,
-            supernova: 0.1
+            supernova: 0.1,
+            'planet-gas': 8,
+            'planet-ice': 4,
+            'planet-terrestrial': 2,
+            'dwarf-planet': 1,
+            moon: 1,
+            comet: 12
         };
         this.timeScale = focusScales[effectType] ?? this.savedTimeScale ?? SIMULATION.defaultDaysPerSecond;
         this.syncTimeControls();

@@ -119,6 +119,7 @@ const PLANET_DATA = {
         name: '水星',
         nameEn: 'Mercury',
         type: '类地行星',
+        effectType: 'planet-terrestrial',
         radiusKm: 2439.7,
         massKg: 3.3011e23,
         rotationPeriodHours: 1407.6,
@@ -135,6 +136,7 @@ const PLANET_DATA = {
         name: '金星',
         nameEn: 'Venus',
         type: '类地行星',
+        effectType: 'planet-terrestrial',
         radiusKm: 6051.8,
         massKg: 4.8675e24,
         rotationPeriodHours: -5832.5,
@@ -152,6 +154,7 @@ const PLANET_DATA = {
         name: '地球',
         nameEn: 'Earth',
         type: '类地行星',
+        effectType: 'planet-terrestrial',
         radiusKm: 6371,
         massKg: 5.97237e24,
         rotationPeriodHours: 23.934,
@@ -163,7 +166,7 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 1.000000 * AU_KM, eccentricity: 0.01671, inclinationDeg: 0.000, longitudeAscendingNodeDeg: -11.260, argumentPeriapsisDeg: 102.947, meanAnomalyDeg: 357.529, orbitalPeriodDays: 365.256 },
         visual: { color: 0x2d66bd, secondaryColor: 0x4f8b4b, cloudColor: 0xffffff, roughness: 0.56, pattern: 'earth' },
         moons: [
-            { id: 'moon', name: '月球', nameEn: 'Moon', radiusKm: 1737.4, massKg: 7.342e22, orbit: { semiMajorAxisKm: 384400, eccentricity: 0.0549, inclinationDeg: 5.145, longitudeAscendingNodeDeg: 125.08, argumentPeriapsisDeg: 318.15, meanAnomalyDeg: 115.37, orbitalPeriodDays: 27.3217 }, visual: { color: 0xb8b5aa, pattern: 'moon' }, feature: '潮汐锁定，稳定地球自转轴并驱动潮汐。' }
+            { id: 'moon', effectType: 'moon', name: '月球', nameEn: 'Moon', radiusKm: 1737.4, massKg: 7.342e22, orbit: { semiMajorAxisKm: 384400, eccentricity: 0.0549, inclinationDeg: 5.145, longitudeAscendingNodeDeg: 125.08, argumentPeriapsisDeg: 318.15, meanAnomalyDeg: 115.37, orbitalPeriodDays: 27.3217 }, visual: { color: 0xb8b5aa, pattern: 'moon' }, feature: '潮汐锁定，稳定地球自转轴并驱动潮汐。' }
         ]
     },
     mars: {
@@ -171,6 +174,7 @@ const PLANET_DATA = {
         name: '火星',
         nameEn: 'Mars',
         type: '类地行星',
+        effectType: 'planet-terrestrial',
         radiusKm: 3389.5,
         massKg: 6.4171e23,
         rotationPeriodHours: 24.623,
@@ -182,8 +186,8 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 1.523679 * AU_KM, eccentricity: 0.0934, inclinationDeg: 1.850, longitudeAscendingNodeDeg: 49.558, argumentPeriapsisDeg: 286.502, meanAnomalyDeg: 19.373, orbitalPeriodDays: 686.980 },
         visual: { color: 0xb95b31, secondaryColor: 0x7f3b23, roughness: 0.92, pattern: 'mars' },
         moons: [
-            { id: 'phobos', name: '火卫一', nameEn: 'Phobos', radiusKm: 11.1, massKg: 1.066e16, orbit: { semiMajorAxisKm: 9376, eccentricity: 0.0151, inclinationDeg: 1.08, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 40, orbitalPeriodDays: 0.3189 }, visual: { color: 0x77706a, pattern: 'rocky' }, feature: '靠近火星，轨道正在缓慢衰减。' },
-            { id: 'deimos', name: '火卫二', nameEn: 'Deimos', radiusKm: 6.2, massKg: 1.476e15, orbit: { semiMajorAxisKm: 23463, eccentricity: 0.0002, inclinationDeg: 1.79, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 210, orbitalPeriodDays: 1.2624 }, visual: { color: 0x68625f, pattern: 'rocky' }, feature: '小型不规则卫星，表面覆盖尘埃。' }
+            { id: 'phobos', effectType: 'moon', name: '火卫一', nameEn: 'Phobos', radiusKm: 11.1, massKg: 1.066e16, orbit: { semiMajorAxisKm: 9376, eccentricity: 0.0151, inclinationDeg: 1.08, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 40, orbitalPeriodDays: 0.3189 }, visual: { color: 0x77706a, pattern: 'rocky' }, feature: '靠近火星，轨道正在缓慢衰减。' },
+            { id: 'deimos', effectType: 'moon', name: '火卫二', nameEn: 'Deimos', radiusKm: 6.2, massKg: 1.476e15, orbit: { semiMajorAxisKm: 23463, eccentricity: 0.0002, inclinationDeg: 1.79, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 210, orbitalPeriodDays: 1.2624 }, visual: { color: 0x68625f, pattern: 'rocky' }, feature: '小型不规则卫星，表面覆盖尘埃。' }
         ]
     },
     jupiter: {
@@ -191,6 +195,7 @@ const PLANET_DATA = {
         name: '木星',
         nameEn: 'Jupiter',
         type: '气态巨行星',
+        effectType: 'planet-gas',
         radiusKm: 69911,
         massKg: 1.8982e27,
         rotationPeriodHours: 9.925,
@@ -202,10 +207,10 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 5.2044 * AU_KM, eccentricity: 0.0489, inclinationDeg: 1.303, longitudeAscendingNodeDeg: 100.464, argumentPeriapsisDeg: 273.867, meanAnomalyDeg: 20.020, orbitalPeriodDays: 4332.59 },
         visual: { color: 0xd6b07e, secondaryColor: 0x9c6b45, roughness: 0.7, pattern: 'jupiter' },
         moons: [
-            { id: 'io', name: '木卫一', nameEn: 'Io', radiusKm: 1821.6, massKg: 8.932e22, orbit: { semiMajorAxisKm: 421700, eccentricity: 0.0041, inclinationDeg: 0.04, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 20, orbitalPeriodDays: 1.769 }, visual: { color: 0xdcc967, pattern: 'io' }, feature: '太阳系火山活动最活跃的天体之一。' },
-            { id: 'europa', name: '木卫二', nameEn: 'Europa', radiusKm: 1560.8, massKg: 4.800e22, orbit: { semiMajorAxisKm: 671100, eccentricity: 0.009, inclinationDeg: 0.47, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 90, orbitalPeriodDays: 3.551 }, visual: { color: 0xc8c1a9, pattern: 'ice' }, feature: '冰壳下可能存在全球海洋。' },
-            { id: 'ganymede', name: '木卫三', nameEn: 'Ganymede', radiusKm: 2634.1, massKg: 1.482e23, orbit: { semiMajorAxisKm: 1070400, eccentricity: 0.0013, inclinationDeg: 0.20, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 180, orbitalPeriodDays: 7.155 }, visual: { color: 0x8f8880, pattern: 'moon' }, feature: '太阳系最大卫星，比水星还大。' },
-            { id: 'callisto', name: '木卫四', nameEn: 'Callisto', radiusKm: 2410.3, massKg: 1.076e23, orbit: { semiMajorAxisKm: 1882700, eccentricity: 0.0074, inclinationDeg: 0.28, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 270, orbitalPeriodDays: 16.689 }, visual: { color: 0x6f6860, pattern: 'moon' }, feature: '古老且陨坑密布。' }
+            { id: 'io', effectType: 'moon', name: '木卫一', nameEn: 'Io', radiusKm: 1821.6, massKg: 8.932e22, orbit: { semiMajorAxisKm: 421700, eccentricity: 0.0041, inclinationDeg: 0.04, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 20, orbitalPeriodDays: 1.769 }, visual: { color: 0xdcc967, pattern: 'io' }, feature: '太阳系火山活动最活跃的天体之一。' },
+            { id: 'europa', effectType: 'moon', name: '木卫二', nameEn: 'Europa', radiusKm: 1560.8, massKg: 4.800e22, orbit: { semiMajorAxisKm: 671100, eccentricity: 0.009, inclinationDeg: 0.47, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 90, orbitalPeriodDays: 3.551 }, visual: { color: 0xc8c1a9, pattern: 'ice' }, feature: '冰壳下可能存在全球海洋。' },
+            { id: 'ganymede', effectType: 'moon', name: '木卫三', nameEn: 'Ganymede', radiusKm: 2634.1, massKg: 1.482e23, orbit: { semiMajorAxisKm: 1070400, eccentricity: 0.0013, inclinationDeg: 0.20, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 180, orbitalPeriodDays: 7.155 }, visual: { color: 0x8f8880, pattern: 'moon' }, feature: '太阳系最大卫星，比水星还大。' },
+            { id: 'callisto', effectType: 'moon', name: '木卫四', nameEn: 'Callisto', radiusKm: 2410.3, massKg: 1.076e23, orbit: { semiMajorAxisKm: 1882700, eccentricity: 0.0074, inclinationDeg: 0.28, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 270, orbitalPeriodDays: 16.689 }, visual: { color: 0x6f6860, pattern: 'moon' }, feature: '古老且陨坑密布。' }
         ]
     },
     saturn: {
@@ -213,6 +218,7 @@ const PLANET_DATA = {
         name: '土星',
         nameEn: 'Saturn',
         type: '气态巨行星',
+        effectType: 'planet-gas',
         radiusKm: 58232,
         massKg: 5.6834e26,
         rotationPeriodHours: 10.656,
@@ -225,9 +231,9 @@ const PLANET_DATA = {
         rings: { innerRadiusKm: 74658, outerRadiusKm: 136775, color: 0xd7c08c },
         visual: { color: 0xe3c987, secondaryColor: 0xbfa66f, roughness: 0.75, pattern: 'saturn' },
         moons: [
-            { id: 'titan', name: '土卫六', nameEn: 'Titan', radiusKm: 2574.7, massKg: 1.345e23, orbit: { semiMajorAxisKm: 1221870, eccentricity: 0.0288, inclinationDeg: 0.35, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 40, orbitalPeriodDays: 15.945 }, visual: { color: 0xc69f61, pattern: 'cloud' }, feature: '拥有浓厚氮气大气和甲烷循环。' },
-            { id: 'enceladus', name: '土卫二', nameEn: 'Enceladus', radiusKm: 252.1, massKg: 1.080e20, orbit: { semiMajorAxisKm: 238042, eccentricity: 0.0047, inclinationDeg: 0.02, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 160, orbitalPeriodDays: 1.370 }, visual: { color: 0xf2f2ec, pattern: 'ice' }, feature: '南极喷流暗示地下海洋。' },
-            { id: 'mimas', name: '土卫一', nameEn: 'Mimas', radiusKm: 198.2, massKg: 3.750e19, orbit: { semiMajorAxisKm: 185404, eccentricity: 0.0196, inclinationDeg: 1.57, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 280, orbitalPeriodDays: 0.942 }, visual: { color: 0xaaa59b, pattern: 'moon' }, feature: '赫歇尔撞击坑非常醒目。' }
+            { id: 'titan', effectType: 'moon', name: '土卫六', nameEn: 'Titan', radiusKm: 2574.7, massKg: 1.345e23, orbit: { semiMajorAxisKm: 1221870, eccentricity: 0.0288, inclinationDeg: 0.35, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 40, orbitalPeriodDays: 15.945 }, visual: { color: 0xc69f61, pattern: 'cloud' }, feature: '拥有浓厚氮气大气和甲烷循环。' },
+            { id: 'enceladus', effectType: 'moon', name: '土卫二', nameEn: 'Enceladus', radiusKm: 252.1, massKg: 1.080e20, orbit: { semiMajorAxisKm: 238042, eccentricity: 0.0047, inclinationDeg: 0.02, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 160, orbitalPeriodDays: 1.370 }, visual: { color: 0xf2f2ec, pattern: 'ice' }, feature: '南极喷流暗示地下海洋。' },
+            { id: 'mimas', effectType: 'moon', name: '土卫一', nameEn: 'Mimas', radiusKm: 198.2, massKg: 3.750e19, orbit: { semiMajorAxisKm: 185404, eccentricity: 0.0196, inclinationDeg: 1.57, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 280, orbitalPeriodDays: 0.942 }, visual: { color: 0xaaa59b, pattern: 'moon' }, feature: '赫歇尔撞击坑非常醒目。' }
         ]
     },
     uranus: {
@@ -235,6 +241,7 @@ const PLANET_DATA = {
         name: '天王星',
         nameEn: 'Uranus',
         type: '冰巨行星',
+        effectType: 'planet-ice',
         radiusKm: 25362,
         massKg: 8.6810e25,
         rotationPeriodHours: -17.24,
@@ -247,8 +254,8 @@ const PLANET_DATA = {
         rings: { innerRadiusKm: 51149, outerRadiusKm: 122600, color: 0x8ba0aa },
         visual: { color: 0x9bd3dc, roughness: 0.65, pattern: 'iceGiant' },
         moons: [
-            { id: 'titania', name: '天卫三', nameEn: 'Titania', radiusKm: 788.4, massKg: 3.420e21, orbit: { semiMajorAxisKm: 435910, eccentricity: 0.0011, inclinationDeg: 0.34, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 75, orbitalPeriodDays: 8.706 }, visual: { color: 0x918b86, pattern: 'moon' }, feature: '天王星最大卫星。' },
-            { id: 'oberon', name: '天卫四', nameEn: 'Oberon', radiusKm: 761.4, massKg: 3.010e21, orbit: { semiMajorAxisKm: 583520, eccentricity: 0.0014, inclinationDeg: 0.06, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 230, orbitalPeriodDays: 13.463 }, visual: { color: 0x716b68, pattern: 'moon' }, feature: '外侧大卫星，表面较暗。' }
+            { id: 'titania', effectType: 'moon', name: '天卫三', nameEn: 'Titania', radiusKm: 788.4, massKg: 3.420e21, orbit: { semiMajorAxisKm: 435910, eccentricity: 0.0011, inclinationDeg: 0.34, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 75, orbitalPeriodDays: 8.706 }, visual: { color: 0x918b86, pattern: 'moon' }, feature: '天王星最大卫星。' },
+            { id: 'oberon', effectType: 'moon', name: '天卫四', nameEn: 'Oberon', radiusKm: 761.4, massKg: 3.010e21, orbit: { semiMajorAxisKm: 583520, eccentricity: 0.0014, inclinationDeg: 0.06, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 230, orbitalPeriodDays: 13.463 }, visual: { color: 0x716b68, pattern: 'moon' }, feature: '外侧大卫星，表面较暗。' }
         ]
     },
     neptune: {
@@ -256,6 +263,7 @@ const PLANET_DATA = {
         name: '海王星',
         nameEn: 'Neptune',
         type: '冰巨行星',
+        effectType: 'planet-ice',
         radiusKm: 24622,
         massKg: 1.02413e26,
         rotationPeriodHours: 16.11,
@@ -267,7 +275,7 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 30.1104 * AU_KM, eccentricity: 0.00946, inclinationDeg: 1.770, longitudeAscendingNodeDeg: 131.784, argumentPeriapsisDeg: 276.336, meanAnomalyDeg: 256.228, orbitalPeriodDays: 60190 },
         visual: { color: 0x3459d4, secondaryColor: 0x2440a0, roughness: 0.6, pattern: 'iceGiant' },
         moons: [
-            { id: 'triton', name: '海卫一', nameEn: 'Triton', radiusKm: 1353.4, massKg: 2.140e22, orbit: { semiMajorAxisKm: 354759, eccentricity: 0.000016, inclinationDeg: 156.9, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 130, orbitalPeriodDays: -5.877 }, visual: { color: 0xb6b0aa, pattern: 'ice' }, feature: '逆行轨道，可能是被捕获的柯伊伯带天体。' }
+            { id: 'triton', effectType: 'moon', name: '海卫一', nameEn: 'Triton', radiusKm: 1353.4, massKg: 2.140e22, orbit: { semiMajorAxisKm: 354759, eccentricity: 0.000016, inclinationDeg: 156.9, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 130, orbitalPeriodDays: -5.877 }, visual: { color: 0xb6b0aa, pattern: 'ice' }, feature: '逆行轨道，可能是被捕获的柯伊伯带天体。' }
         ]
     },
     ceres: {
@@ -275,6 +283,7 @@ const PLANET_DATA = {
         name: '谷神星',
         nameEn: 'Ceres',
         type: '矮行星 / 小行星带最大天体',
+        effectType: 'dwarf-planet',
         radiusKm: 469.7,
         massKg: 9.3835e20,
         rotationPeriodHours: 9.074,
@@ -290,6 +299,7 @@ const PLANET_DATA = {
         name: '冥王星',
         nameEn: 'Pluto',
         type: '矮行星 / 柯伊伯带天体',
+        effectType: 'dwarf-planet',
         radiusKm: 1188.3,
         massKg: 1.303e22,
         rotationPeriodHours: -153.3,
@@ -300,7 +310,7 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 39.482 * AU_KM, eccentricity: 0.2488, inclinationDeg: 17.16, longitudeAscendingNodeDeg: 110.30, argumentPeriapsisDeg: 113.76, meanAnomalyDeg: 14.53, orbitalPeriodDays: 90560 },
         visual: { color: 0xc3a98f, secondaryColor: 0x8c6d59, roughness: 0.88, pattern: 'pluto' },
         moons: [
-            { id: 'charon', name: '卡戎', nameEn: 'Charon', radiusKm: 606, massKg: 1.586e21, orbit: { semiMajorAxisKm: 19591, eccentricity: 0.0002, inclinationDeg: 0.08, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 60, orbitalPeriodDays: 6.387 }, visual: { color: 0x9a958d, pattern: 'moon' }, feature: '与冥王星组成双天体系统，二者共同绕质心运动。' }
+            { id: 'charon', effectType: 'moon', name: '卡戎', nameEn: 'Charon', radiusKm: 606, massKg: 1.586e21, orbit: { semiMajorAxisKm: 19591, eccentricity: 0.0002, inclinationDeg: 0.08, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 60, orbitalPeriodDays: 6.387 }, visual: { color: 0x9a958d, pattern: 'moon' }, feature: '与冥王星组成双天体系统，二者共同绕质心运动。' }
         ]
     },
     eris: {
@@ -308,6 +318,7 @@ const PLANET_DATA = {
         name: '阋神星',
         nameEn: 'Eris',
         type: '矮行星 / 离散盘天体',
+        effectType: 'dwarf-planet',
         radiusKm: 1163,
         massKg: 1.6466e22,
         rotationPeriodHours: 25.9,
@@ -317,7 +328,7 @@ const PLANET_DATA = {
         orbit: { semiMajorAxisKm: 67.78 * AU_KM, eccentricity: 0.44, inclinationDeg: 44.04, longitudeAscendingNodeDeg: 35.95, argumentPeriapsisDeg: 150.8, meanAnomalyDeg: 204.2, orbitalPeriodDays: 203830 },
         visual: { color: 0xdad7cc, roughness: 0.9, pattern: 'ice' },
         moons: [
-            { id: 'dysnomia', name: '迪丝诺美亚', nameEn: 'Dysnomia', radiusKm: 350, orbit: { semiMajorAxisKm: 37300, eccentricity: 0.01, inclinationDeg: 0, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 120, orbitalPeriodDays: 15.77 }, visual: { color: 0xb8b6ae, pattern: 'moon' }, feature: '阋神星唯一已知卫星。' }
+            { id: 'dysnomia', effectType: 'moon', name: '迪丝诺美亚', nameEn: 'Dysnomia', radiusKm: 350, orbit: { semiMajorAxisKm: 37300, eccentricity: 0.01, inclinationDeg: 0, longitudeAscendingNodeDeg: 0, argumentPeriapsisDeg: 0, meanAnomalyDeg: 120, orbitalPeriodDays: 15.77 }, visual: { color: 0xb8b6ae, pattern: 'moon' }, feature: '阋神星唯一已知卫星。' }
         ]
     },
     halley: {
@@ -325,6 +336,7 @@ const PLANET_DATA = {
         name: '哈雷彗星',
         nameEn: '1P/Halley',
         type: '周期彗星',
+        effectType: 'comet',
         radiusKm: 5.5,
         massKg: 2.2e14,
         rotationPeriodHours: 52.8,

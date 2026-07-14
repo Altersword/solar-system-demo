@@ -98,6 +98,24 @@ class FocusController {
                 new THREE.Vector3(0, 22, 110),
                 new THREE.Vector3(0, 0, 0)
             );
+        } else if ([
+            'planet-terrestrial',
+            'planet-gas',
+            'planet-ice',
+            'dwarf-planet',
+            'moon',
+            'comet'
+        ].includes(entry.effectType)) {
+            const profile = this.focusSpecialRenderer?.profile;
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = profile?.bloomStrength ?? 0.2;
+            this.host.bloomPass.radius = 0.45;
+            this.host.bloomPass.threshold = profile?.bloomThreshold ?? 0.55;
+            this.host.controls.maxDistance = Math.max(180, (profile?.cameraDistance || 110) * 2.2);
+            this.host.flyCameraToPos(
+                new THREE.Vector3(0, (profile?.cameraDistance || 110) * 0.18, profile?.cameraDistance || 110),
+                new THREE.Vector3(0, 0, 0)
+            );
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
@@ -149,11 +167,23 @@ class FocusController {
         const focusTitle = this.focusGroup.children.find((child) => child.userData?.effectRole === 'focus-title');
         if (focusTitle) focusTitle.visible = !document.body.classList.contains('ui-hidden');
 
-        if (!['black-hole', 'pulsar', 'supernova', 'sun'].includes(this.focusedCatalogEntry?.effectType)) {
+        if (!['black-hole', 'pulsar', 'supernova', 'sun', 'planet-gas', 'planet-ice', 'comet'].includes(this.focusedCatalogEntry?.effectType)) {
             this.focusGroup.rotation.y += deltaSeconds * 0.08;
         }
         const effectType = this.focusedCatalogEntry?.effectType;
-        if (['pulsar', 'supernova', 'red-giant', 'white-dwarf', 'sun'].includes(effectType)) {
+        if ([
+            'pulsar',
+            'supernova',
+            'red-giant',
+            'white-dwarf',
+            'sun',
+            'planet-terrestrial',
+            'planet-gas',
+            'planet-ice',
+            'dwarf-planet',
+            'moon',
+            'comet'
+        ].includes(effectType)) {
             this.focusSpecialRenderer?.update?.(deltaSeconds, time, this.host.camera);
         } else {
             this.host.updateSpecialObjectEffects(
