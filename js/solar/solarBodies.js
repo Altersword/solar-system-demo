@@ -3,7 +3,7 @@
 /**
  * Owns solar-system geometry: sun, planets, moons, orbits, dust belts.
  */
-class SolarBodies {
+globalThis.SolarBodies = class SolarBodies {
     constructor(host) {
         this.host = host;
         this.bodyGroups = new THREE.Group();

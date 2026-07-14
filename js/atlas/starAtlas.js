@@ -4,7 +4,7 @@
  * Owns nearby-star atlas: catalog markers, deep-sky objects, map layers,
  * atlas animations, and expanded multi-body system views.
  */
-class StarAtlas {
+globalThis.StarAtlas = class StarAtlas {
     constructor(host) {
         this.host = host;
         this.atlasGroup = new THREE.Group();

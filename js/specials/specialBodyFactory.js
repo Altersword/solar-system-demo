@@ -3,7 +3,7 @@
  * Returns { renderer, object3d, ownsScreen }.
  */
 /* global BlackHoleRenderer, PulsarRenderer, SupernovaRemnantRenderer, RedGiantRenderer, WhiteDwarfRenderer, SunRenderer, SolarSystemFocusRenderer, SimpleSpecialsRenderer, THREE */
-class SpecialBodyFactory {
+globalThis.SpecialBodyFactory = class SpecialBodyFactory {
     /**
      * @param {object} host SolarSystem (renderer, blackHoleConfig, helpers)
      * @param {object} entry catalog entry with effectType

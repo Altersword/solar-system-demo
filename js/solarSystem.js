@@ -12,14 +12,21 @@ class SolarSystem {
         this.controls = null;
         this.clock = new THREE.Clock();
 
+        const deps = globalThis;
+        const requiredDeps = ['SolarBodies', 'StarAtlas', 'FocusController', 'AppContext', 'BloomComposer'];
+        const missingDeps = requiredDeps.filter((name) => typeof deps[name] !== 'function');
+        if (missingDeps.length) {
+            throw new Error(`SolarSystem dependencies are not ready: ${missingDeps.join(', ')}`);
+        }
+
         this.sun = null;
         this.sunLight = null;
         this.starfield = null;
         this.milkyWay = null;
-        this.solarBodies = new SolarBodies(this);
+        this.solarBodies = new deps.SolarBodies(this);
         this.bodyGroups = this.solarBodies.bodyGroups;
         this.orbitGroups = this.solarBodies.orbitGroups;
-        this.starAtlas = new StarAtlas(this);
+        this.starAtlas = new deps.StarAtlas(this);
         this.atlasGroup = this.starAtlas.atlasGroup;
         this.expandedSystemGroup = this.starAtlas.expandedSystemGroup;
         this.focusGroup = null;
@@ -98,14 +105,14 @@ class SolarSystem {
         this.rebuildBodies();
         this.setupControls();
         this.setupBloom();
-        this.focusController = new FocusController(this);
+        this.focusController = new globalThis.FocusController(this);
         this.setupEventListeners();
         this.animate();
         if (typeof window.hideLoading === 'function') window.hideLoading();
     }
 
     setupScene() {
-        this.ctx = new AppContext();
+        this.ctx = new globalThis.AppContext();
         this.ctx.setup(
             document.getElementById('canvas-container'),
             this.getModeConfig().cameraPosition
@@ -141,7 +148,7 @@ class SolarSystem {
     }
 
     setupBloom() {
-        this.bloom = new BloomComposer(this.renderer, this.scene, this.camera);
+        this.bloom = new globalThis.BloomComposer(this.renderer, this.scene, this.camera);
         this.composer = this.bloom.composer;
         this.bloomPass = this.bloom.bloomPass;
     }

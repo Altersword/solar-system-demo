@@ -2,7 +2,7 @@
  * Optional UnrealBloomPass via EffectComposer.
  */
 /* global THREE */
-class BloomComposer {
+globalThis.BloomComposer = class BloomComposer {
     constructor(renderer, scene, camera) {
         this.renderer = renderer;
         this.scene = scene;

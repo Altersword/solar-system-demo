@@ -3,7 +3,7 @@
  * Camera flight stays on host (shared with expanded system views).
  */
 /* global THREE, SpecialBodyFactory */
-class FocusController {
+globalThis.FocusController = class FocusController {
     constructor(host) {
         this.host = host;
         this.focusGroup = null;
@@ -33,7 +33,7 @@ class FocusController {
         group.position.set(0, 0, 0);
         group.userData.focusView = true;
 
-        const created = SpecialBodyFactory.create(this.host, entry);
+        const created = globalThis.SpecialBodyFactory.create(this.host, entry);
         this.focusSpecialRenderer = created.renderer;
         this.focusRenderer = created.ownsScreen ? created.renderer : null;
         group.add(created.object3d);

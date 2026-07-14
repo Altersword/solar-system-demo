@@ -2,7 +2,7 @@
  * Scene / camera / renderer bootstrap and quality settings.
  */
 /* global THREE */
-class AppContext {
+globalThis.AppContext = class AppContext {
     constructor() {
         this.scene = null;
         this.camera = null;

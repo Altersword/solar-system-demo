@@ -2344,8 +2344,4651 @@ const CELESTIAL_CATALOG = [
             { title: '旋臂与 H II 区', detail: '外盘分布大量明亮恒星形成复合体。' },
             { title: '近邻宇宙', detail: '是本超星系团范围内最常被成像的旋涡星系之一。' }
         ]
+    },
+
+    {
+        id: 'gj-1061',
+        name: "格利泽 1061",
+        'nameEn': "GJ 1061",
+        'atlasMap': "neighborhood",
+        'category': "nearby-star",
+        'type': "多行星红矮星系统",
+        'distanceLy': 12,
+        'galactic': {
+            'lDeg': 313,
+            'bDeg': -46.8
+        },
+        'spectralClass': "M5.5V",
+        'color': 16735567,
+        'size': 3.1,
+        'temperature': "约 2950 K",
+        'feature': "距离太阳约 12 光年的近邻红矮星，拥有紧凑的多行星系统。",
+        'systemLayout': {
+            'sceneScale': 1.18,
+            'cameraDistance': 172,
+            'note': "轨道经过压缩与拉开，仅用于表达系统层次。",
+            'bodies': [
+                {
+                    'name': "GJ 1061",
+                    'kind': "star",
+                    'color': 16735567,
+                    'size': 12,
+                    'x': 50,
+                    'y': 50,
+                    'detail': "M5.5V 红矮星"
+                },
+                {
+                    'name': "b",
+                    'kind': "planet",
+                    'color': 9286873,
+                    'size': 4,
+                    'orbit': 18,
+                    'angleDeg': 18,
+                    'detail': "内侧行星"
+                },
+                {
+                    'name': "c",
+                    'kind': "planet",
+                    'color': 7521955,
+                    'size': 4.5,
+                    'orbit': 28,
+                    'angleDeg': 142,
+                    'detail': "中间轨道行星"
+                },
+                {
+                    'name': "d",
+                    'kind': "planet",
+                    'color': 13935978,
+                    'size': 5,
+                    'orbit': 38,
+                    'angleDeg': 258,
+                    'detail': "外侧行星"
+                }
+            ]
+        },
+        'related': [
+            {
+                'title': "近邻红矮星",
+                'detail': "适合用于比较低质量恒星的行星形成环境。"
+            },
+            {
+                'title': "紧凑轨道",
+                'detail': "多颗行星都在靠近主星的轨道上运行。"
+            }
+        ]
+    },
+    {
+        'id': "wolf-1061",
+        'name': "沃尔夫 1061",
+        'nameEn': "Wolf 1061",
+        'atlasMap': "neighborhood",
+        'category': "nearby-star",
+        'type': "多行星红矮星系统",
+        'distanceLy': 13.8,
+        'galactic': {
+            'lDeg': 352.9,
+            'bDeg': -13.4
+        },
+        'spectralClass': "M3V",
+        'color': 16740440,
+        'size': 3.2,
+        'temperature': "约 3350 K",
+        'feature': "距离太阳约 14 光年的活跃红矮星，拥有紧凑的多行星系统。",
+        'systemLayout': {
+            'sceneScale': 1.16,
+            'cameraDistance': 176,
+            'note': "轨道按可读性重新排布，不代表真实比例。",
+            'bodies': [
+                {
+                    'name': "Wolf 1061",
+                    'kind': "star",
+                    'color': 16740440,
+                    'size': 12,
+                    'x': 50,
+                    'y': 50,
+                    'detail': "M3V 红矮星"
+                },
+                {
+                    'name': "b",
+                    'kind': "planet",
+                    'color': 10469079,
+                    'size': 4,
+                    'orbit': 17,
+                    'angleDeg': 35,
+                    'detail': "内侧行星"
+                },
+                {
+                    'name': "c",
+                    'kind': "planet",
+                    'color': 7849898,
+                    'size': 4.5,
+                    'orbit': 27,
+                    'angleDeg': 158,
+                    'detail': "宜居带附近重点目标"
+                },
+                {
+                    'name': "d",
+                    'kind': "planet",
+                    'color': 14067564,
+                    'size': 5,
+                    'orbit': 37,
+                    'angleDeg': 276,
+                    'detail': "外侧行星"
+                }
+            ]
+        },
+        'related': [
+            {
+                'title': "近邻多行星系统",
+                'detail': "数颗行星围绕低质量红矮星运行。"
+            },
+            {
+                'title': "宜居带研究",
+                'detail': "中间轨道行星可用于讨论红矮星的大气保持。"
+            }
+        ]
+    },
+    {
+        'id': "m44-beehive",
+        'name': "M44 蜂巢星团",
+        'nameEn': "Beehive Cluster / M44",
+        'atlasMap': "milky-way",
+        'category': "deep-sky",
+        'type': "疏散星团",
+        'distanceLy': 610,
+        'galactic': {
+            'lDeg': 205.9,
+            'bDeg': 3
+        },
+        'color': 16770733,
+        'size': 20,
+        'temperature': "年轻至中年轻恒星群",
+        'feature': "巨蟹座方向的明亮疏散星团，是银河层中适合与单颗恒星对照的星团目标。",
+        'related': [
+            {
+                'title': "疏散星团",
+                'detail': "成员星由共同分子云形成。"
+            },
+            {
+                'title': "银河盘面",
+                'detail': "位于银河盘附近，适合作为银河层的方向标志。"
+            }
+        ]
+    },
+    {
+        'id': "double-cluster-perseus",
+        'name': "英仙座双星团 h + χ",
+        'nameEn': "Double Cluster h and Chi Persei",
+        'atlasMap': "milky-way",
+        'category': "deep-sky",
+        'type': "双疏散星团",
+        'distanceLy': 7500,
+        'galactic': {
+            'lDeg': 134.7,
+            'bDeg': -3.7
+        },
+        'color': 12179967,
+        'size': 24,
+        'temperature': "富含蓝白色年轻恒星",
+        'feature': "英仙座方向紧邻的两个年轻疏散星团，适合表现银河盘内成团恒星的密集尺度。",
+        'related': [
+            {
+                'title': "h Persei 与 χ Persei",
+                'detail': "两个星团在视线上相互接近，形成极具辨识度的双团结构。"
+            },
+            {
+                'title': "年轻恒星",
+                'detail': "成员中包含大量明亮的蓝白色恒星。"
+            }
+        ]
+    },
+    {
+        'id': "rho-ophiuchi-cloud",
+        'name': "蛇夫座 ρ 星云复合体",
+        'nameEn': "Rho Ophiuchi Cloud Complex",
+        'atlasMap': "milky-way",
+        'category': "nebula",
+        'type': "恒星形成区 / 分子云",
+        'distanceLy': 460,
+        'galactic': {
+            'lDeg': 353,
+            'bDeg': 17
+        },
+        'color': 16748456,
+        'size': 23,
+        'temperature': "冷分子云与年轻恒星",
+        'feature': "蛇夫座方向的近邻恒星形成区，尘埃、反射星云与年轻恒星交织。",
+        'related': [
+            {
+                'title': "恒星形成区",
+                'detail': "致密分子云正在孕育新生恒星。"
+            },
+            {
+                'title': "尘埃消光",
+                'detail': "复杂尘埃结构会遮挡背景恒星。"
+            }
+        ]
+    },
+    {
+        'id': "ngc-147",
+        'name': "NGC 147 矮椭圆星系",
+        'nameEn': "NGC 147",
+        'atlasMap': "local-group",
+        'category': "galaxy",
+        'type': "卫星矮椭圆星系",
+        'distanceLy': 2400000,
+        'galactic': {
+            'lDeg': 119.8,
+            'bDeg': -14.3
+        },
+        'color': 16762530,
+        'size': 16,
+        'temperature': "老年恒星为主",
+        'feature': "仙女座星系的卫星矮椭圆星系，与 NGC 185 构成一对适合并置观察的伴星系。",
+        'related': [
+            {
+                'title': "M31 卫星星系",
+                'detail': "属于本星系群内的矮星系成员。"
+            },
+            {
+                'title': "老年恒星",
+                'detail': "恒星形成活动较弱，色调偏红黄。"
+            }
+        ]
+    },
+    {
+        'id': "ngc-185",
+        'name': "NGC 185 矮椭圆星系",
+        'nameEn': "NGC 185",
+        'atlasMap': "local-group",
+        'category': "galaxy",
+        'type': "卫星矮椭圆星系",
+        'distanceLy': 2300000,
+        'galactic': {
+            'lDeg': 120.8,
+            'bDeg': -14.5
+        },
+        'color': 16765098,
+        'size': 16,
+        'temperature': "老年恒星与少量恒星形成区",
+        'feature': "仙女座星系的近邻卫星矮椭圆星系，展示本星系群中小型星系的多样性。",
+        'related': [
+            {
+                'title': "NGC 147 的伴星系",
+                'detail': "两者在天空中方向相近，常被作为卫星星系对来研究。"
+            },
+            {
+                'title': "残余恒星形成",
+                'detail': "内部仍可见少量较年轻恒星与尘埃。"
+            }
+        ]
+    },
+    {
+        'id': "ngc-2403",
+        'name': "NGC 2403",
+        'nameEn': "NGC 2403",
+        'atlasMap': "cosmic-neighborhood",
+        'category': "galaxy",
+        'type': "近邻旋涡星系",
+        'distanceLy': 8000000,
+        'galactic': {
+            'lDeg': 150.6,
+            'bDeg': 29.2
+        },
+        'color': 16766632,
+        'size': 26,
+        'temperature': "恒星形成活跃的旋涡盘",
+        'feature': "长颈鹿座方向的近邻旋涡星系，是宇宙近邻层中连接银河与外部星系的自然入口。",
+        'related': [
+            {
+                'title': "M81 群周边",
+                'detail': "常与 M81、M82 等近邻星系放在同一片天区观察。"
+            },
+            {
+                'title': "恒星形成区",
+                'detail': "旋臂中分布多个明亮 H II 区。"
+            }
+        ]
+    },
+    {
+        'id': "yz-ceti",
+        'name': "YZ 天坛座",
+        'nameEn': "YZ Ceti",
+        'atlasMap': "neighborhood",
+        'category': "nearby-star",
+        'type': "多行星红矮星系统",
+        'distanceLy': 12.1,
+        'galactic': { 'lDeg': 149.7, 'bDeg': -78.8 },
+        'color': 16741989,
+        'size': 13,
+        'temperature': "约 3150 K",
+        'feature': "距离太阳约十二光年的低质量红矮星；三颗近轨道行星使它成为近邻紧凑行星系统的代表。",
+        'systemLayout': {
+            'sceneScale': 1.18,
+            'cameraDistance': 170,
+            'note': "轨道为压缩示意，用于呈现紧凑多行星系统的层次。",
+            'bodies': [
+                { 'name': "YZ Ceti", 'kind': "star", 'color': 16741989, 'size': 12, 'x': 50, 'y': 50, 'detail': "M 型红矮星" },
+                { 'name': "b", 'kind': "planet", 'color': 11119017, 'size': 4, 'orbit': 17, 'angleDeg': 28, 'detail': "内侧岩质行星" },
+                { 'name': "c", 'kind': "planet", 'color': 8750462, 'size': 4.5, 'orbit': 27, 'angleDeg': 148, 'detail': "中间轨道行星" },
+                { 'name': "d", 'kind': "planet", 'color': 14073664, 'size': 5, 'orbit': 37, 'angleDeg': 264, 'detail': "外侧行星" }
+            ]
+        },
+        'related': [
+            { 'title': "近邻红矮星", 'detail': "低质量恒星的活动性与行星大气演化是重要研究主题。" },
+            { 'title': "紧凑行星系统", 'detail': "多颗行星都在靠近主星的区域运行。" }
+        ]
+    },
+    {
+        'id': "l-98-59",
+        'name': "L 98-59",
+        'nameEn': "L 98-59",
+        'atlasMap': "neighborhood",
+        'category': "nearby-star",
+        'type': "多行星红矮星系统",
+        'distanceLy': 35,
+        'galactic': { 'lDeg': 281.8, 'bDeg': -17.6 },
+        'color': 16744288,
+        'size': 14,
+        'temperature': "约 3360 K",
+        'feature': "约三十五光年外的近邻红矮星，拥有多颗尺寸接近地球的短周期行星，是比较行星密度与潮汐环境的紧凑样本。",
+        'systemLayout': {
+            'sceneScale': 1.2,
+            'cameraDistance': 174,
+            'note': "轨道按可读性拉开，不表示真实半长轴比例。",
+            'bodies': [
+                { 'name': "L 98-59", 'kind': "star", 'color': 16744288, 'size': 12, 'x': 50, 'y': 50, 'detail': "M 型红矮星" },
+                { 'name': "b", 'kind': "planet", 'color': 11245506, 'size': 4, 'orbit': 17, 'angleDeg': 42, 'detail': "内侧地球大小行星" },
+                { 'name': "c", 'kind': "planet", 'color': 8102397, 'size': 4.5, 'orbit': 28, 'angleDeg': 166, 'detail': "中间轨道行星" },
+                { 'name': "d", 'kind': "planet", 'color': 13927890, 'size': 5, 'orbit': 39, 'angleDeg': 282, 'detail': "外侧行星" }
+            ]
+        },
+        'related': [
+            { 'title': "地球大小行星", 'detail': "该系统为低质量行星的质量、半径与组成比较提供样本。" },
+            { 'title': "红矮星宜居性", 'detail': "短周期轨道有助于研究潮汐锁定与恒星活动的影响。" }
+        ]
+    },
+    {
+        'id': "ngc-7000-north-america",
+        'name': "NGC 7000 北美星云",
+        'nameEn': "North America Nebula / NGC 7000",
+        'atlasMap': "milky-way",
+        'category': "nebula",
+        'type': "发射星云 / 电离氢区",
+        'distanceLy': 2590,
+        'galactic': { 'lDeg': 85.5, 'bDeg': -1 },
+        'color': 16745878,
+        'size': 30,
+        'temperature': "电离氢气体、尘埃与年轻恒星",
+        'feature': "天鹅座方向的大尺度发射星云，明亮氢气与暗尘埃共同勾勒出极具辨识度的轮廓。",
+        'related': [
+            { 'title': "天鹅座 X 区域", 'detail': "位于银河盘面附近，邻近丰富的气体与恒星形成结构。" },
+            { 'title': "电离氢发射", 'detail': "高能恒星辐射使氢气发出红色发射线。" }
+        ]
+    },
+    {
+        'id': "m22-globular-cluster",
+        'name': "M22 人马座球状星团",
+        'nameEn': "Messier 22 / NGC 6656",
+        'atlasMap': "milky-way",
+        'category': "deep-sky",
+        'type': "球状星团",
+        'distanceLy': 10600,
+        'galactic': { 'lDeg': 9.9, 'bDeg': -7.6 },
+        'color': 16770481,
+        'size': 22,
+        'temperature': "以老年低金属丰度恒星为主",
+        'feature': "朝向银河核球方向的明亮球状星团，适合补足盘面星云之外的古老致密恒星群。",
+        'related': [
+            { 'title': "银河晕成员", 'detail': "球状星团保存着银河系早期形成阶段的恒星族群。" },
+            { 'title': "人马座方向", 'detail': "视线接近银河中心区域，背景恒星与尘埃更为密集。" }
+        ]
+    },
+    {
+        'id': "leo-a",
+        'name': "狮子座 A",
+        'nameEn': "Leo A",
+        'atlasMap': "local-group",
+        'category': "galaxy",
+        'type': "孤立矮不规则星系",
+        'distanceLy': 2600000,
+        'galactic': { 'lDeg': 196.9, 'bDeg': 52.4 },
+        'color': 12184158,
+        'size': 17,
+        'temperature': "低金属丰度气体与年轻、老年恒星并存",
+        'feature': "本星系群外围较为孤立的矮不规则星系，可用于观察弱环境作用下的小星系缓慢演化。",
+        'related': [
+            { 'title': "本星系群外围", 'detail': "相对远离银河系与仙女座星系的大型卫星体系。" },
+            { 'title': "恒星形成历史", 'detail': "稀疏气体与多代恒星记录了延续较久的演化过程。" }
+        ]
+    },
+    {
+        'id': "sagittarius-dwarf-irregular",
+        'name': "人马座矮不规则星系",
+        'nameEn': "Sagittarius Dwarf Irregular Galaxy / SagDIG",
+        'atlasMap': "local-group",
+        'category': "galaxy",
+        'type': "矮不规则星系",
+        'distanceLy': 3500000,
+        'galactic': { 'lDeg': 21.1, 'bDeg': -16.3 },
+        'color': 11006519,
+        'size': 16,
+        'temperature': "富气体的低金属丰度恒星系统",
+        'feature': "位于本星系群边缘的气体丰富矮星系，为银河与仙女座卫星之外的低质量星系提供对照。",
+        'related': [
+            { 'title': "本星系群边缘", 'detail': "距离主要大星系较远，受到的潮汐影响相对有限。" },
+            { 'title': "低质量星系演化", 'detail': "气体储量和稀疏恒星形成可与卫星矮星系比较。" }
+        ]
+    },
+    {
+        'id': "m83-southern-pinwheel",
+        'name': "M83 南风车星系",
+        'nameEn': "Southern Pinwheel Galaxy / M83",
+        'atlasMap': "cosmic-neighborhood",
+        'category': "galaxy",
+        'type': "棒旋星系",
+        'distanceLy': 14700000,
+        'galactic': { 'lDeg': 314.6, 'bDeg': 32 },
+        'color': 16755745,
+        'size': 30,
+        'temperature': "旋臂中富含年轻蓝星与电离气体",
+        'feature': "半人马座 A / M83 星系群中的正面旋涡星系；单独列出后，能将原有群组方向细化为可观察的恒星形成盘。",
+        'related': [
+            { 'title': "半人马座 A / M83 星系群", 'detail': "与半人马座 A 共同构成近邻宇宙中的重要星系群方向。" },
+            { 'title': "恒星形成旋臂", 'detail': "盘面中遍布年轻星团、H II 区与明亮旋臂结构。" }
+        ]
+    },
+    {
+        'id': "m94-canes-venatici",
+        'name': "M94 猎犬座星系",
+        'nameEn': "Cat's Eye Galaxy / M94",
+        'atlasMap': "cosmic-neighborhood",
+        'category': "galaxy",
+        'type': "环状旋涡星系",
+        'distanceLy': 16000000,
+        'galactic': { 'lDeg': 123.4, 'bDeg': 76 },
+        'color': 16768111,
+        'size': 25,
+        'temperature': "中心恒星形成环与较老外盘恒星",
+        'feature': "猎犬座 I 星系群中的近邻旋涡星系，醒目的内环使它适合作为盘星系结构演化的补充目标。",
+        'related': [
+            { 'title': "猎犬座 I 星系群", 'detail': "是太阳系附近若干松散星系群之一。" },
+            { 'title': "环状结构", 'detail': "中心区域的环状恒星形成与外盘形成鲜明层次。" }
+        ]
+    }
+,
+    // 克制扩充批次 1
+    {
+        "id": "epsilon-indi",
+        "name": "波江座 ε",
+        "nameEn": "Epsilon Indi",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 K 型恒星系统",
+        "distanceLy": 11.8,
+        "galactic": {
+            "lDeg": 336.2,
+            "bDeg": -48
+        },
+        "color": 16767372,
+        "size": 14,
+        "temperature": "约 4600 K",
+        "feature": "波江座 ε 是近邻 K 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "82-g-eridani",
+        "name": "波江座 82",
+        "nameEn": "82 G. Eridani",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 G 型恒星系统",
+        "distanceLy": 19.7,
+        "galactic": {
+            "lDeg": 201,
+            "bDeg": -46
+        },
+        "color": 16772765,
+        "size": 13,
+        "temperature": "约 5400 K",
+        "feature": "波江座 82 是近邻 G 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "horsehead-nebula",
+        "name": "马头星云",
+        "nameEn": "Horsehead Nebula / Barnard 33",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "暗星云与发射星云复合体",
+        "distanceLy": 1500,
+        "galactic": {
+            "lDeg": 207,
+            "bDeg": -2
+        },
+        "color": 10618879,
+        "size": 26,
+        "temperature": "尘埃、分子气体与电离氢区",
+        "feature": "马头星云 是暗星云与发射星云复合体，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "california-nebula",
+        "name": "加州星云",
+        "nameEn": "California Nebula / NGC 1499",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "大尺度发射星云",
+        "distanceLy": 1000,
+        "galactic": {
+            "lDeg": 160,
+            "bDeg": -7
+        },
+        "color": 16749976,
+        "size": 27,
+        "temperature": "电离氢气体与尘埃",
+        "feature": "加州星云 是大尺度发射星云，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "sagittarius-dwarf-spheroidal",
+        "name": "人马座矮椭球星系",
+        "nameEn": "Sagittarius Dwarf Spheroidal Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "银河系卫星矮椭球星系",
+        "distanceLy": 78000,
+        "galactic": {
+            "lDeg": 5.6,
+            "bDeg": -14.2
+        },
+        "color": 16762530,
+        "size": 17,
+        "temperature": "以老年恒星为主",
+        "feature": "人马座矮椭球星系 是银河系卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "sextans-a",
+        "name": "六分仪座 A",
+        "nameEn": "Sextans A",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "矮不规则星系",
+        "distanceLy": 4300000,
+        "galactic": {
+            "lDeg": 246,
+            "bDeg": 40
+        },
+        "color": 11006519,
+        "size": 17,
+        "temperature": "富气体的年轻恒星系统",
+        "feature": "六分仪座 A 是矮不规则星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-300",
+        "name": "NGC 300",
+        "nameEn": "Sculptor Galaxy / NGC 300",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "近邻旋涡星系",
+        "distanceLy": 6100000,
+        "galactic": {
+            "lDeg": 300,
+            "bDeg": -79
+        },
+        "color": 16755745,
+        "size": 25,
+        "temperature": "年轻蓝星与电离气体",
+        "feature": "NGC 300 是近邻旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-55",
+        "name": "NGC 55",
+        "nameEn": "NGC 55",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向不规则旋涡星系",
+        "distanceLy": 6500000,
+        "galactic": {
+            "lDeg": 333,
+            "bDeg": -76
+        },
+        "color": 12184158,
+        "size": 24,
+        "temperature": "恒星形成盘与尘埃带",
+        "feature": "NGC 55 是侧向不规则旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 2
+    {
+        "id": "delta-pavonis",
+        "name": "孔雀座 δ",
+        "nameEn": "Delta Pavonis",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻太阳型恒星",
+        "distanceLy": 19.9,
+        "galactic": {
+            "lDeg": 329,
+            "bDeg": -31
+        },
+        "color": 16772765,
+        "size": 13,
+        "temperature": "约 5600 K",
+        "feature": "孔雀座 δ 是近邻太阳型恒星，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "gliese-832",
+        "name": "格利泽 832",
+        "nameEn": "Gliese 832",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星红矮星系统",
+        "distanceLy": 16.1,
+        "galactic": {
+            "lDeg": 346,
+            "bDeg": -46
+        },
+        "color": 16744288,
+        "size": 12,
+        "temperature": "约 3600 K",
+        "feature": "格利泽 832 是多行星红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "heart-nebula",
+        "name": "心脏星云",
+        "nameEn": "Heart Nebula / IC 1805",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "发射星云与恒星形成区",
+        "distanceLy": 7500,
+        "galactic": {
+            "lDeg": 134,
+            "bDeg": 1
+        },
+        "color": 16745878,
+        "size": 29,
+        "temperature": "电离氢气体与年轻星团",
+        "feature": "心脏星云 是发射星云与恒星形成区，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "soul-nebula",
+        "name": "灵魂星云",
+        "nameEn": "Soul Nebula / IC 1848",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "发射星云与恒星形成区",
+        "distanceLy": 7500,
+        "galactic": {
+            "lDeg": 135,
+            "bDeg": 1
+        },
+        "color": 16749976,
+        "size": 29,
+        "temperature": "电离氢气体与年轻星团",
+        "feature": "灵魂星云 是发射星云与恒星形成区，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "sextans-b",
+        "name": "六分仪座 B",
+        "nameEn": "Sextans B",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "矮不规则星系",
+        "distanceLy": 4500000,
+        "galactic": {
+            "lDeg": 233,
+            "bDeg": 43
+        },
+        "color": 11006519,
+        "size": 17,
+        "temperature": "低金属丰度气体与恒星",
+        "feature": "六分仪座 B 是矮不规则星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "phoenix-dwarf",
+        "name": "凤凰座矮星系",
+        "nameEn": "Phoenix Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "过渡型矮星系",
+        "distanceLy": 1400000,
+        "galactic": {
+            "lDeg": 272,
+            "bDeg": -68
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "老年恒星与残余气体",
+        "feature": "凤凰座矮星系 是过渡型矮星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ic-342",
+        "name": "IC 342",
+        "nameEn": "IC 342",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "近邻正面旋涡星系",
+        "distanceLy": 10700000,
+        "galactic": {
+            "lDeg": 138,
+            "bDeg": 10
+        },
+        "color": 16768111,
+        "size": 26,
+        "temperature": "恒星形成活跃的旋臂",
+        "feature": "IC 342 是近邻正面旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-6946",
+        "name": "NGC 6946",
+        "nameEn": "Fireworks Galaxy / NGC 6946",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "恒星形成活跃的旋涡星系",
+        "distanceLy": 22000000,
+        "galactic": {
+            "lDeg": 95,
+            "bDeg": 12
+        },
+        "color": 16755745,
+        "size": 28,
+        "temperature": "年轻星团与超新星遗迹丰富",
+        "feature": "NGC 6946 是恒星形成活跃的旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 3
+    {
+        "id": "gj-15-a",
+        "name": "格利泽 15 A",
+        "nameEn": "Gliese 15 A",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星系统",
+        "distanceLy": 11.7,
+        "galactic": {
+            "lDeg": 108,
+            "bDeg": -26
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3600 K",
+        "feature": "格利泽 15 A 是近邻红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "gj-1002",
+        "name": "格利泽 1002",
+        "nameEn": "Gliese 1002",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星红矮星系统",
+        "distanceLy": 15.8,
+        "galactic": {
+            "lDeg": 203,
+            "bDeg": -33
+        },
+        "color": 16735567,
+        "size": 12,
+        "temperature": "约 3000 K",
+        "feature": "格利泽 1002 是多行星红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "omega-nebula",
+        "name": "M17 牡马座星云",
+        "nameEn": "Omega Nebula / M17",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "发射星云与恒星形成区",
+        "distanceLy": 5500,
+        "galactic": {
+            "lDeg": 15,
+            "bDeg": -0.7
+        },
+        "color": 16749976,
+        "size": 28,
+        "temperature": "电离氢气体与年轻恒星",
+        "feature": "M17 牡马座星云 是发射星云与恒星形成区，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "m6-butterfly-cluster",
+        "name": "M6 蝶形星团",
+        "nameEn": "Butterfly Cluster / M6",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "疏散星团",
+        "distanceLy": 1600,
+        "galactic": {
+            "lDeg": 353,
+            "bDeg": -0.6
+        },
+        "color": 12179967,
+        "size": 20,
+        "temperature": "年轻蓝白恒星群",
+        "feature": "M6 蝶形星团 是疏散星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "tucana-dwarf",
+        "name": "杜鹃座矮星系",
+        "nameEn": "Tucana Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "孤立矮椭球星系",
+        "distanceLy": 2800000,
+        "galactic": {
+            "lDeg": 323,
+            "bDeg": -47
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "以老年低金属丰度恒星为主",
+        "feature": "杜鹃座矮星系 是孤立矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "cetus-dwarf",
+        "name": "鲸鱼座矮星系",
+        "nameEn": "Cetus Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "孤立矮椭球星系",
+        "distanceLy": 2500000,
+        "galactic": {
+            "lDeg": 101,
+            "bDeg": -72
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "老年恒星族群",
+        "feature": "鲸鱼座矮星系 是孤立矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "m64-black-eye",
+        "name": "M64 黑眼星系",
+        "nameEn": "Black Eye Galaxy / M64",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "尘埃丰富的旋涡星系",
+        "distanceLy": 17000000,
+        "galactic": {
+            "lDeg": 315,
+            "bDeg": 84
+        },
+        "color": 16768111,
+        "size": 25,
+        "temperature": "中心尘埃带与旋涡盘",
+        "feature": "M64 黑眼星系 是尘埃丰富的旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "m63-sunflower",
+        "name": "M63 向日葵星系",
+        "nameEn": "Sunflower Galaxy / M63",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "絮状旋涡星系",
+        "distanceLy": 29000000,
+        "galactic": {
+            "lDeg": 100,
+            "bDeg": 78
+        },
+        "color": 16755745,
+        "size": 26,
+        "temperature": "盘面恒星形成与细碎旋臂",
+        "feature": "M63 向日葵星系 是絮状旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 4
+    {
+        "id": "gj-887",
+        "name": "格利泽 887",
+        "nameEn": "Gliese 887",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星系统",
+        "distanceLy": 10.7,
+        "galactic": {
+            "lDeg": 349,
+            "bDeg": -65
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3700 K",
+        "feature": "格利泽 887 是近邻红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "gj-251",
+        "name": "格利泽 251",
+        "nameEn": "Gliese 251",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星系统",
+        "distanceLy": 18.2,
+        "galactic": {
+            "lDeg": 213,
+            "bDeg": -18
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3500 K",
+        "feature": "格利泽 251 是近邻红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "m7-ptolemy-cluster",
+        "name": "M7 托勒密星团",
+        "nameEn": "Ptolemy Cluster / M7",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "疏散星团",
+        "distanceLy": 980,
+        "galactic": {
+            "lDeg": 356,
+            "bDeg": -5
+        },
+        "color": 12179967,
+        "size": 20,
+        "temperature": "年轻至中年轻恒星群",
+        "feature": "M7 托勒密星团 是疏散星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "m35-open-cluster",
+        "name": "M35 双子座星团",
+        "nameEn": "Messier 35",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "疏散星团",
+        "distanceLy": 2800,
+        "galactic": {
+            "lDeg": 186,
+            "bDeg": 2
+        },
+        "color": 12179967,
+        "size": 21,
+        "temperature": "年轻蓝白恒星群",
+        "feature": "M35 双子座星团 是疏散星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "aquarius-dwarf",
+        "name": "宝瓶座矮星系",
+        "nameEn": "Aquarius Dwarf Galaxy / DDO 210",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "矮不规则星系",
+        "distanceLy": 3100000,
+        "galactic": {
+            "lDeg": 34,
+            "bDeg": -31
+        },
+        "color": 11006519,
+        "size": 16,
+        "temperature": "低金属丰度气体与恒星",
+        "feature": "宝瓶座矮星系 是矮不规则星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "pegasus-dwarf",
+        "name": "飞马座矮不规则星系",
+        "nameEn": "Pegasus Dwarf Irregular Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "矮不规则星系",
+        "distanceLy": 3600000,
+        "galactic": {
+            "lDeg": 94,
+            "bDeg": -43
+        },
+        "color": 11006519,
+        "size": 16,
+        "temperature": "稀疏气体与年轻恒星",
+        "feature": "飞马座矮不规则星系 是矮不规则星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "m106",
+        "name": "M106",
+        "nameEn": "Messier 106 / NGC 4258",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "活动核旋涡星系",
+        "distanceLy": 24000000,
+        "galactic": {
+            "lDeg": 139,
+            "bDeg": 68
+        },
+        "color": 16768111,
+        "size": 27,
+        "temperature": "旋涡盘与活跃星系核",
+        "feature": "M106 是活动核旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-2903",
+        "name": "NGC 2903",
+        "nameEn": "NGC 2903",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "棒旋星系",
+        "distanceLy": 30000000,
+        "galactic": {
+            "lDeg": 210,
+            "bDeg": 44
+        },
+        "color": 16755745,
+        "size": 26,
+        "temperature": "明亮棒结构与恒星形成旋臂",
+        "feature": "NGC 2903 是棒旋星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 5
+    {
+        "id": "gj-486",
+        "name": "格利泽 486",
+        "nameEn": "Gliese 486",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "行星凌日红矮星系统",
+        "distanceLy": 26.3,
+        "galactic": {
+            "lDeg": 88,
+            "bDeg": 19
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3300 K",
+        "feature": "格利泽 486 是行星凌日红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "55-cancri",
+        "name": "巨蟹座 55",
+        "nameEn": "55 Cancri",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星太阳型恒星系统",
+        "distanceLy": 41,
+        "galactic": {
+            "lDeg": 184,
+            "bDeg": 31
+        },
+        "color": 16772765,
+        "size": 14,
+        "temperature": "约 5200 K",
+        "feature": "巨蟹座 55 是多行星太阳型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "m37-open-cluster",
+        "name": "M37 御夫座星团",
+        "nameEn": "Messier 37",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "疏散星团",
+        "distanceLy": 4400,
+        "galactic": {
+            "lDeg": 177,
+            "bDeg": 3
+        },
+        "color": 12179967,
+        "size": 21,
+        "temperature": "中年轻恒星群",
+        "feature": "M37 御夫座星团 是疏散星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "m41-open-cluster",
+        "name": "M41 大犬座星团",
+        "nameEn": "Messier 41",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "疏散星团",
+        "distanceLy": 2300,
+        "galactic": {
+            "lDeg": 230,
+            "bDeg": -20
+        },
+        "color": 12179967,
+        "size": 20,
+        "temperature": "年轻至中年轻恒星群",
+        "feature": "M41 大犬座星团 是疏散星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-3109",
+        "name": "NGC 3109",
+        "nameEn": "NGC 3109",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "棒状矮不规则星系",
+        "distanceLy": 4300000,
+        "galactic": {
+            "lDeg": 262,
+            "bDeg": 23
+        },
+        "color": 11006519,
+        "size": 18,
+        "temperature": "富气体的低质量星系",
+        "feature": "NGC 3109 是棒状矮不规则星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "antlia-dwarf",
+        "name": "蚂蚁座矮星系",
+        "nameEn": "Antlia Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "过渡型矮星系",
+        "distanceLy": 4300000,
+        "galactic": {
+            "lDeg": 263,
+            "bDeg": 22
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "老年恒星与残余气体",
+        "feature": "蚂蚁座矮星系 是过渡型矮星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-2841",
+        "name": "NGC 2841",
+        "nameEn": "NGC 2841",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "大质量旋涡星系",
+        "distanceLy": 46000000,
+        "galactic": {
+            "lDeg": 150,
+            "bDeg": 38
+        },
+        "color": 16768111,
+        "size": 27,
+        "temperature": "较老恒星盘与紧密旋臂",
+        "feature": "NGC 2841 是大质量旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "m104-sombrero",
+        "name": "M104 草帽星系",
+        "nameEn": "Sombrero Galaxy / M104",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "尘埃带显著的旋涡星系",
+        "distanceLy": 31000000,
+        "galactic": {
+            "lDeg": 298,
+            "bDeg": 51
+        },
+        "color": 16770481,
+        "size": 27,
+        "temperature": "明亮核球与暗尘埃带",
+        "feature": "M104 草帽星系 是尘埃带显著的旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 6
+    {
+        "id": "hd-20794",
+        "name": "HD 20794",
+        "nameEn": "82 G. Eridani / HD 20794",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻太阳型行星系统",
+        "distanceLy": 19.7,
+        "galactic": {
+            "lDeg": 282,
+            "bDeg": -60
+        },
+        "color": 16772765,
+        "size": 13,
+        "temperature": "约 5400 K",
+        "feature": "HD 20794 是近邻太阳型行星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "hd-40307",
+        "name": "HD 40307",
+        "nameEn": "HD 40307",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星 K 型恒星系统",
+        "distanceLy": 42,
+        "galactic": {
+            "lDeg": 222,
+            "bDeg": -28
+        },
+        "color": 16767372,
+        "size": 13,
+        "temperature": "约 5000 K",
+        "feature": "HD 40307 是多行星 K 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "m5-globular-cluster",
+        "name": "M5 球状星团",
+        "nameEn": "Messier 5",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "球状星团",
+        "distanceLy": 24500,
+        "galactic": {
+            "lDeg": 4,
+            "bDeg": 47
+        },
+        "color": 16770481,
+        "size": 22,
+        "temperature": "老年低金属丰度恒星",
+        "feature": "M5 球状星团 是球状星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "m15-globular-cluster",
+        "name": "M15 球状星团",
+        "nameEn": "Messier 15",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "球状星团",
+        "distanceLy": 33600,
+        "galactic": {
+            "lDeg": 65,
+            "bDeg": -27
+        },
+        "color": 16770481,
+        "size": 22,
+        "temperature": "致密老年恒星群",
+        "feature": "M15 球状星团 是球状星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "andromeda-i",
+        "name": "仙女座 I",
+        "nameEn": "Andromeda I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2500000,
+        "galactic": {
+            "lDeg": 122,
+            "bDeg": -24
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "以老年恒星为主",
+        "feature": "仙女座 I 是仙女座卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "andromeda-v",
+        "name": "仙女座 V",
+        "nameEn": "Andromeda V",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2500000,
+        "galactic": {
+            "lDeg": 126,
+            "bDeg": -15
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "以老年恒星为主",
+        "feature": "仙女座 V 是仙女座卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "m65",
+        "name": "M65",
+        "nameEn": "Messier 65 / NGC 3623",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "旋涡星系",
+        "distanceLy": 35000000,
+        "galactic": {
+            "lDeg": 234,
+            "bDeg": 56
+        },
+        "color": 16768111,
+        "size": 25,
+        "temperature": "盘面尘埃与恒星形成结构",
+        "feature": "M65 是旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "m66",
+        "name": "M66",
+        "nameEn": "Messier 66 / NGC 3627",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "受相互作用影响的旋涡星系",
+        "distanceLy": 35000000,
+        "galactic": {
+            "lDeg": 233,
+            "bDeg": 55
+        },
+        "color": 16755745,
+        "size": 26,
+        "temperature": "不对称旋臂与尘埃结构",
+        "feature": "M66 是受相互作用影响的旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 7
+    {
+        "id": "hd-85512",
+        "name": "HD 85512",
+        "nameEn": "HD 85512",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 K 型行星系统",
+        "distanceLy": 36,
+        "galactic": {
+            "lDeg": 283,
+            "bDeg": -10
+        },
+        "color": 16767372,
+        "size": 13,
+        "temperature": "约 4700 K",
+        "feature": "HD 85512 是近邻 K 型行星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "hd-69830",
+        "name": "HD 69830",
+        "nameEn": "HD 69830",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星 K 型恒星系统",
+        "distanceLy": 41,
+        "galactic": {
+            "lDeg": 242,
+            "bDeg": -5
+        },
+        "color": 16767372,
+        "size": 13,
+        "temperature": "约 5400 K",
+        "feature": "HD 69830 是多行星 K 型恒星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "m2-globular-cluster",
+        "name": "M2 球状星团",
+        "nameEn": "Messier 2",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "球状星团",
+        "distanceLy": 37500,
+        "galactic": {
+            "lDeg": 54,
+            "bDeg": -36
+        },
+        "color": 16770481,
+        "size": 22,
+        "temperature": "老年低金属丰度恒星",
+        "feature": "M2 球状星团 是球状星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-6397",
+        "name": "NGC 6397",
+        "nameEn": "NGC 6397",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "近邻球状星团",
+        "distanceLy": 7800,
+        "galactic": {
+            "lDeg": 338,
+            "bDeg": -12
+        },
+        "color": 16770481,
+        "size": 21,
+        "temperature": "老年恒星与白矮星族群",
+        "feature": "NGC 6397 是近邻球状星团，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "andromeda-vi",
+        "name": "仙女座 VI",
+        "nameEn": "Andromeda VI / Pegasus Dwarf Spheroidal",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2700000,
+        "galactic": {
+            "lDeg": 109,
+            "bDeg": -36
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "以老年恒星为主",
+        "feature": "仙女座 VI 是仙女座卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "andromeda-vii",
+        "name": "仙女座 VII",
+        "nameEn": "Andromeda VII / Cassiopeia Dwarf",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2500000,
+        "galactic": {
+            "lDeg": 109,
+            "bDeg": -10
+        },
+        "color": 16762530,
+        "size": 16,
+        "temperature": "以老年恒星为主",
+        "feature": "仙女座 VII 是仙女座卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-3628",
+        "name": "NGC 3628",
+        "nameEn": "Hamburger Galaxy / NGC 3628",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向旋涡星系",
+        "distanceLy": 35000000,
+        "galactic": {
+            "lDeg": 240,
+            "bDeg": 64
+        },
+        "color": 16768111,
+        "size": 26,
+        "temperature": "长尘埃带与受相互作用的外盘",
+        "feature": "NGC 3628 是侧向旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-1316",
+        "name": "NGC 1316",
+        "nameEn": "Fornax A / NGC 1316",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "射电透镜星系",
+        "distanceLy": 62000000,
+        "galactic": {
+            "lDeg": 240,
+            "bDeg": -57
+        },
+        "color": 16762530,
+        "size": 27,
+        "temperature": "并合残余与活跃射电结构",
+        "feature": "NGC 1316 是射电透镜星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 8
+    {
+        "id": "k2-18",
+        "name": "K2-18",
+        "nameEn": "K2-18",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "行星凌日红矮星系统",
+        "distanceLy": 124,
+        "galactic": {
+            "lDeg": 260,
+            "bDeg": 64
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3500 K",
+        "feature": "K2-18 是行星凌日红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "toi-700",
+        "name": "TOI-700",
+        "nameEn": "TOI-700",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星红矮星系统",
+        "distanceLy": 101,
+        "galactic": {
+            "lDeg": 272,
+            "bDeg": -25
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3500 K",
+        "feature": "TOI-700 是多行星红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "ic-443",
+        "name": "IC 443 水母星云",
+        "nameEn": "IC 443 / Jellyfish Nebula",
+        "atlasMap": "milky-way",
+        "category": "supernova-remnant",
+        "type": "超新星遗迹与分子云复合体",
+        "distanceLy": 5000,
+        "galactic": {
+            "lDeg": 189,
+            "bDeg": 3
+        },
+        "color": 12192434,
+        "size": 25,
+        "temperature": "激波加热气体与分子云",
+        "feature": "IC 443 水母星云 是超新星遗迹与分子云复合体，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "tycho-supernova-remnant",
+        "name": "第谷超新星遗迹",
+        "nameEn": "Tycho's Supernova Remnant",
+        "atlasMap": "milky-way",
+        "category": "supernova-remnant",
+        "type": "Ia 型超新星遗迹",
+        "distanceLy": 7500,
+        "galactic": {
+            "lDeg": 120,
+            "bDeg": 1.4
+        },
+        "color": 12192434,
+        "size": 24,
+        "temperature": "高速膨胀的激波壳层",
+        "feature": "第谷超新星遗迹 是Ia 型超新星遗迹，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "andromeda-x",
+        "name": "仙女座 X",
+        "nameEn": "Andromeda X",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2400000,
+        "galactic": {
+            "lDeg": 115,
+            "bDeg": -20
+        },
+        "color": 16762530,
+        "size": 15,
+        "temperature": "以老年恒星为主",
+        "feature": "仙女座 X 是仙女座卫星矮椭球星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "lgs-3",
+        "name": "LGS 3",
+        "nameEn": "LGS 3 / Pisces Dwarf",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "过渡型矮星系",
+        "distanceLy": 2000000,
+        "galactic": {
+            "lDeg": 127,
+            "bDeg": -40
+        },
+        "color": 16762530,
+        "size": 15,
+        "temperature": "老年恒星与稀疏气体",
+        "feature": "LGS 3 是过渡型矮星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-1097",
+        "name": "NGC 1097",
+        "nameEn": "NGC 1097",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "棒旋星系与活动星系核",
+        "distanceLy": 45000000,
+        "galactic": {
+            "lDeg": 291,
+            "bDeg": -54
+        },
+        "color": 16755745,
+        "size": 27,
+        "temperature": "核环恒星形成与长旋臂",
+        "feature": "NGC 1097 是棒旋星系与活动星系核，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-891",
+        "name": "NGC 891",
+        "nameEn": "NGC 891",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向旋涡星系",
+        "distanceLy": 30000000,
+        "galactic": {
+            "lDeg": 140,
+            "bDeg": -17
+        },
+        "color": 16768111,
+        "size": 26,
+        "temperature": "薄盘尘埃带与扩展恒星晕",
+        "feature": "NGC 891 是侧向旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+    // 克制扩充批次 9
+    {
+        "id": "gj-357",
+        "name": "格利泽 357",
+        "nameEn": "Gliese 357",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星红矮星系统",
+        "distanceLy": 31,
+        "galactic": {
+            "lDeg": 249,
+            "bDeg": 16
+        },
+        "color": 16741989,
+        "size": 12,
+        "temperature": "约 3500 K",
+        "feature": "格利泽 357 是多行星红矮星系统，作为太阳邻域层的恒星与行星系统样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻恒星研究",
+                "detail": "用于比较不同质量恒星及其行星系统。"
+            }
+        ]
+    },
+    {
+        "id": "sn-1006-remnant",
+        "name": "SN 1006 超新星遗迹",
+        "nameEn": "SN 1006 Supernova Remnant",
+        "atlasMap": "milky-way",
+        "category": "supernova-remnant",
+        "type": "Ia 型超新星遗迹",
+        "distanceLy": 6500,
+        "galactic": {
+            "lDeg": 327,
+            "bDeg": 14.6
+        },
+        "color": 12192434,
+        "size": 24,
+        "temperature": "高速膨胀的稀薄激波壳层",
+        "feature": "SN 1006 超新星遗迹 是Ia 型超新星遗迹，作为银河地标层的深空结构样本纳入目录。",
+        "related": [
+            {
+                "title": "银河结构",
+                "detail": "用于补充银河盘面、星团和激波遗迹的空间层次。"
+            }
+        ]
+    },
+    {
+        "id": "leo-t",
+        "name": "狮子座 T",
+        "nameEn": "Leo T",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "富气体超微弱矮星系",
+        "distanceLy": 1400000,
+        "galactic": {
+            "lDeg": 214,
+            "bDeg": 43
+        },
+        "color": 11006519,
+        "size": 15,
+        "temperature": "老年恒星与中性氢气体",
+        "feature": "狮子座 T 是富气体超微弱矮星系，作为本星系群层的低质量星系样本纳入目录。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "可与银河系和仙女座星系的卫星系统进行对照。"
+            }
+        ]
+    },
+    {
+        "id": "ngc-7331",
+        "name": "NGC 7331",
+        "nameEn": "NGC 7331",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "近邻旋涡星系",
+        "distanceLy": 40000000,
+        "galactic": {
+            "lDeg": 94,
+            "bDeg": -21
+        },
+        "color": 16768111,
+        "size": 27,
+        "temperature": "明亮核球与恒星形成盘",
+        "feature": "NGC 7331 是近邻旋涡星系，作为宇宙近邻层的代表性星系样本纳入目录。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于观察星系盘、尘埃、恒星形成与环境效应的差异。"
+            }
+        ]
+    },
+
+    // 克制扩充至 300 项：五个小批次，每批四层各增加 5 项
+    {
+        "id": "luhman-16",
+        "name": "卢曼 16",
+        "nameEn": "Luhman 16",
+        "atlasMap": "neighborhood",
+        "category": "stellar-object",
+        "type": "近邻棕矮星双星",
+        "distanceLy": 6.5,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "卢曼 16位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 315,
+            "bDeg": 5
+        }
+    },
+    {
+        "id": "wise-0855-0714",
+        "name": "WISE 0855−0714",
+        "nameEn": "WISE 0855−0714",
+        "atlasMap": "neighborhood",
+        "category": "stellar-object",
+        "type": "超冷棕矮星",
+        "distanceLy": 7.4,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "WISE 0855−0714位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 237,
+            "bDeg": 21
+        }
+    },
+    {
+        "id": "scr-1845-6357",
+        "name": "SCR 1845−6357",
+        "nameEn": "SCR 1845−6357",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "红矮星—棕矮星双星",
+        "distanceLy": 13,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "SCR 1845−6357位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 329,
+            "bDeg": -24
+        }
+    },
+    {
+        "id": "denis-1048-3956",
+        "name": "DENIS 1048−3956",
+        "nameEn": "DENIS 1048−3956",
+        "atlasMap": "neighborhood",
+        "category": "stellar-object",
+        "type": "超冷红矮星",
+        "distanceLy": 13,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "DENIS 1048−3956位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 278,
+            "bDeg": 17
+        }
+    },
+    {
+        "id": "gliese-1005",
+        "name": "格利泽 1005",
+        "nameEn": "Gliese 1005",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星双星",
+        "distanceLy": 19,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 1005位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 35,
+            "bDeg": -52
+        }
+    },
+    {
+        "id": "flame-nebula",
+        "name": "火焰星云",
+        "nameEn": "Flame Nebula (NGC 2024)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "发射与反射星云复合体",
+        "distanceLy": 1400,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "火焰星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 207,
+            "bDeg": -19
+        }
+    },
+    {
+        "id": "running-man-nebula",
+        "name": "奔跑人星云",
+        "nameEn": "Running Man Nebula (NGC 1977)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "反射星云",
+        "distanceLy": 1500,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "奔跑人星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 209,
+            "bDeg": -19
+        }
+    },
+    {
+        "id": "messier-78",
+        "name": "M78 星云",
+        "nameEn": "Messier 78",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "猎户座反射星云",
+        "distanceLy": 1600,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M78 星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 207,
+            "bDeg": -17
+        }
+    },
+    {
+        "id": "barnards-loop",
+        "name": "巴纳德环",
+        "nameEn": "Barnard's Loop",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "巨大电离氢弧",
+        "distanceLy": 1500,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "巴纳德环是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 207,
+            "bDeg": -19
+        }
+    },
+    {
+        "id": "elephant-trunk-nebula",
+        "name": "象鼻星云",
+        "nameEn": "Elephant’s Trunk Nebula",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "暗星云与恒星形成区",
+        "distanceLy": 2400,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "象鼻星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 99,
+            "bDeg": 4
+        }
+    },
+    {
+        "id": "carina-dwarf",
+        "name": "船底座矮星系",
+        "nameEn": "Carina Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "银河系矮椭球卫星",
+        "distanceLy": 330000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "船底座矮星系是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 260,
+            "bDeg": -22
+        }
+    },
+    {
+        "id": "carina-ii",
+        "name": "船底座 II",
+        "nameEn": "Carina II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 120000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "船底座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 270,
+            "bDeg": -18
+        }
+    },
+    {
+        "id": "carina-iii",
+        "name": "船底座 III",
+        "nameEn": "Carina III",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 90000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "船底座 III是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 269,
+            "bDeg": -17
+        }
+    },
+    {
+        "id": "bootes-i",
+        "name": "牧夫座 I",
+        "nameEn": "Boötes I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 197000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "牧夫座 I是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 358,
+            "bDeg": 70
+        }
+    },
+    {
+        "id": "bootes-ii",
+        "name": "牧夫座 II",
+        "nameEn": "Boötes II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 140000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "牧夫座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 340,
+            "bDeg": 66
+        }
+    },
+    {
+        "id": "messier-74",
+        "name": "M74 幽灵星系",
+        "nameEn": "Messier 74",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "正面旋涡星系",
+        "distanceLy": 32000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M74 幽灵星系位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 138,
+            "bDeg": -45
+        }
+    },
+    {
+        "id": "messier-77",
+        "name": "M77",
+        "nameEn": "Messier 77",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "活动核棒旋星系",
+        "distanceLy": 47000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M77位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 173,
+            "bDeg": -52
+        }
+    },
+    {
+        "id": "messier-95",
+        "name": "M95",
+        "nameEn": "Messier 95",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "棒旋星系",
+        "distanceLy": 33000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M95位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 233,
+            "bDeg": 55
+        }
+    },
+    {
+        "id": "messier-96",
+        "name": "M96",
+        "nameEn": "Messier 96",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "狮子座 I 星系群旋涡星系",
+        "distanceLy": 35000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M96位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 234,
+            "bDeg": 57
+        }
+    },
+    {
+        "id": "messier-98",
+        "name": "M98",
+        "nameEn": "Messier 98",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "室女座方向旋涡星系",
+        "distanceLy": 44000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M98位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 280,
+            "bDeg": 75
+        }
+    },
+    {
+        "id": "gliese-1111",
+        "name": "格利泽 1111",
+        "nameEn": "Gliese 1111",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星",
+        "distanceLy": 19,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 1111位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 192,
+            "bDeg": 65
+        }
+    },
+    {
+        "id": "gliese-1245",
+        "name": "格利泽 1245",
+        "nameEn": "Gliese 1245",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "耀斑红矮星三合星系统",
+        "distanceLy": 14,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 1245位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 123,
+            "bDeg": 58
+        }
+    },
+    {
+        "id": "lhs-292",
+        "name": "LHS 292",
+        "nameEn": "LHS 292",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "超冷红矮星",
+        "distanceLy": 14,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "LHS 292位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 202,
+            "bDeg": 55
+        }
+    },
+    {
+        "id": "lp-944-20",
+        "name": "LP 944−20",
+        "nameEn": "LP 944−20",
+        "atlasMap": "neighborhood",
+        "category": "stellar-object",
+        "type": "近邻棕矮星",
+        "distanceLy": 21,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "LP 944−20位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 289,
+            "bDeg": -29
+        }
+    },
+    {
+        "id": "gliese-570",
+        "name": "格利泽 570",
+        "nameEn": "Gliese 570",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多星与棕矮星系统",
+        "distanceLy": 19,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 570位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 336,
+            "bDeg": -58
+        }
+    },
+    {
+        "id": "cocoon-nebula",
+        "name": "茧星云",
+        "nameEn": "Cocoon Nebula (IC 5146)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "发射与反射星云",
+        "distanceLy": 2500,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "茧星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 94,
+            "bDeg": -5
+        }
+    },
+    {
+        "id": "bubble-nebula",
+        "name": "气泡星云",
+        "nameEn": "Bubble Nebula (NGC 7635)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "恒星风吹出的发射星云",
+        "distanceLy": 7100,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "气泡星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 117,
+            "bDeg": 0
+        }
+    },
+    {
+        "id": "crescent-nebula",
+        "name": "新月星云",
+        "nameEn": "Crescent Nebula (NGC 6888)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "沃尔夫—瑞叶星云",
+        "distanceLy": 4700,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "新月星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 76,
+            "bDeg": 1
+        }
+    },
+    {
+        "id": "thors-helmet",
+        "name": "托尔头盔星云",
+        "nameEn": "Thor’s Helmet (NGC 2359)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "沃尔夫—瑞叶气泡星云",
+        "distanceLy": 12000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "托尔头盔星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 224,
+            "bDeg": -2
+        }
+    },
+    {
+        "id": "medusa-nebula",
+        "name": "水母星云",
+        "nameEn": "Medusa Nebula (Abell 21)",
+        "atlasMap": "milky-way",
+        "category": "nebula",
+        "type": "行星状星云",
+        "distanceLy": 5000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "水母星云是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 205,
+            "bDeg": 12
+        }
+    },
+    {
+        "id": "canes-venatici-i",
+        "name": "猎犬座 I",
+        "nameEn": "Canes Venatici I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "银河系矮椭球卫星",
+        "distanceLy": 710000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "猎犬座 I是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 74,
+            "bDeg": 80
+        }
+    },
+    {
+        "id": "canes-venatici-ii",
+        "name": "猎犬座 II",
+        "nameEn": "Canes Venatici II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 520000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "猎犬座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 113,
+            "bDeg": 83
+        }
+    },
+    {
+        "id": "coma-berenices-dwarf",
+        "name": "后发座矮星系",
+        "nameEn": "Coma Berenices Dwarf",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 144000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "后发座矮星系是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 242,
+            "bDeg": 84
+        }
+    },
+    {
+        "id": "hercules-dwarf",
+        "name": "武仙座矮星系",
+        "nameEn": "Hercules Dwarf Galaxy",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 430000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "武仙座矮星系是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 28,
+            "bDeg": 37
+        }
+    },
+    {
+        "id": "segue-1",
+        "name": "赛格 1",
+        "nameEn": "Segue 1",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "极暗矮星系",
+        "distanceLy": 75000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "赛格 1是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 221,
+            "bDeg": 50
+        }
+    },
+    {
+        "id": "messier-99",
+        "name": "M99",
+        "nameEn": "Messier 99",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "不对称旋涡星系",
+        "distanceLy": 55000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M99位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 286,
+            "bDeg": 76
+        }
+    },
+    {
+        "id": "messier-100",
+        "name": "M100",
+        "nameEn": "Messier 100",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "大设计旋涡星系",
+        "distanceLy": 55000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M100位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 283,
+            "bDeg": 74
+        }
+    },
+    {
+        "id": "messier-108",
+        "name": "M108 冲浪板星系",
+        "nameEn": "Messier 108",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向棒旋星系",
+        "distanceLy": 46000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "M108 冲浪板星系位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 142,
+            "bDeg": 61
+        }
+    },
+    {
+        "id": "ngc-1055",
+        "name": "NGC 1055",
+        "nameEn": "NGC 1055",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向旋涡星系",
+        "distanceLy": 52000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1055位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 172,
+            "bDeg": -51
+        }
+    },
+    {
+        "id": "ngc-1365",
+        "name": "NGC 1365",
+        "nameEn": "NGC 1365",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "大棒旋星系",
+        "distanceLy": 56000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1365位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 238,
+            "bDeg": -54
+        }
+    },
+    {
+        "id": "gliese-569",
+        "name": "格利泽 569",
+        "nameEn": "Gliese 569",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "红矮星与棕矮星伴星系统",
+        "distanceLy": 32,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 569位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 87,
+            "bDeg": 55
+        }
+    },
+    {
+        "id": "gliese-445",
+        "name": "格利泽 445",
+        "nameEn": "Gliese 445",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "高速近邻红矮星",
+        "distanceLy": 17,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 445位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 134,
+            "bDeg": 3
+        }
+    },
+    {
+        "id": "gliese-412",
+        "name": "格利泽 412",
+        "nameEn": "Gliese 412",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "宽双星红矮星系统",
+        "distanceLy": 16,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 412位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 154,
+            "bDeg": 63
+        }
+    },
+    {
+        "id": "61-virginis",
+        "name": "室女座 61",
+        "nameEn": "61 Virginis",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 G 型多行星系统",
+        "distanceLy": 27,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "室女座 61位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 303,
+            "bDeg": 64
+        }
+    },
+    {
+        "id": "70-ophiuchi",
+        "name": "蛇夫座 70",
+        "nameEn": "70 Ophiuchi",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 K 型双星",
+        "distanceLy": 17,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "蛇夫座 70位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 29,
+            "bDeg": 12
+        }
+    },
+    {
+        "id": "ngc-2264",
+        "name": "NGC 2264 圣诞树星团",
+        "nameEn": "NGC 2264",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "年轻疏散星团与星云复合体",
+        "distanceLy": 2500,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "NGC 2264 圣诞树星团是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 202,
+            "bDeg": 2
+        }
+    },
+    {
+        "id": "messier-36",
+        "name": "M36",
+        "nameEn": "Messier 36",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "御夫座疏散星团",
+        "distanceLy": 4100,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M36是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 174,
+            "bDeg": 0
+        }
+    },
+    {
+        "id": "messier-38",
+        "name": "M38",
+        "nameEn": "Messier 38",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "御夫座疏散星团",
+        "distanceLy": 4200,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M38是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 172,
+            "bDeg": 1
+        }
+    },
+    {
+        "id": "messier-46",
+        "name": "M46",
+        "nameEn": "Messier 46",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "船尾座疏散星团",
+        "distanceLy": 5400,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M46是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 231,
+            "bDeg": -1
+        }
+    },
+    {
+        "id": "messier-47",
+        "name": "M47",
+        "nameEn": "Messier 47",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "年轻疏散星团",
+        "distanceLy": 1600,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M47是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 231,
+            "bDeg": -4
+        }
+    },
+    {
+        "id": "segue-2",
+        "name": "赛格 2",
+        "nameEn": "Segue 2",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 114000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "赛格 2是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 149,
+            "bDeg": -38
+        }
+    },
+    {
+        "id": "ursa-major-i",
+        "name": "大熊座 I",
+        "nameEn": "Ursa Major I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 330000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "大熊座 I是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 159,
+            "bDeg": 54
+        }
+    },
+    {
+        "id": "ursa-major-ii",
+        "name": "大熊座 II",
+        "nameEn": "Ursa Major II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 100000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "大熊座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 152,
+            "bDeg": 38
+        }
+    },
+    {
+        "id": "willman-1",
+        "name": "威尔曼 1",
+        "nameEn": "Willman 1",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "极暗矮星系",
+        "distanceLy": 120000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "威尔曼 1是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 158,
+            "bDeg": 57
+        }
+    },
+    {
+        "id": "crater-ii",
+        "name": "巨爵座 II",
+        "nameEn": "Crater II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "扩展型矮星系",
+        "distanceLy": 390000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "巨爵座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 282,
+            "bDeg": 42
+        }
+    },
+    {
+        "id": "ngc-1399",
+        "name": "NGC 1399",
+        "nameEn": "NGC 1399",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "天炉座星系团中心椭圆星系",
+        "distanceLy": 65000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1399位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 236,
+            "bDeg": -54
+        }
+    },
+    {
+        "id": "ngc-1512",
+        "name": "NGC 1512",
+        "nameEn": "NGC 1512",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "环状棒旋星系",
+        "distanceLy": 38000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1512位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 270,
+            "bDeg": -48
+        }
+    },
+    {
+        "id": "ngc-1566",
+        "name": "NGC 1566",
+        "nameEn": "NGC 1566",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "大设计旋涡星系",
+        "distanceLy": 60000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1566位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 253,
+            "bDeg": -49
+        }
+    },
+    {
+        "id": "ngc-1672",
+        "name": "NGC 1672",
+        "nameEn": "NGC 1672",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "棒旋与核环星系",
+        "distanceLy": 60000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1672位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 277,
+            "bDeg": -30
+        }
+    },
+    {
+        "id": "ngc-1808",
+        "name": "NGC 1808",
+        "nameEn": "NGC 1808",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "恒星暴发棒旋星系",
+        "distanceLy": 40000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 1808位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 276,
+            "bDeg": -16
+        }
+    },
+    {
+        "id": "36-ophiuchi",
+        "name": "蛇夫座 36",
+        "nameEn": "36 Ophiuchi",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 K 型三合星系统",
+        "distanceLy": 19,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "蛇夫座 36位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 358,
+            "bDeg": -10
+        }
+    },
+    {
+        "id": "40-eridani-a",
+        "name": "波江座 40 A",
+        "nameEn": "40 Eridani A",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻 K 型主序星",
+        "distanceLy": 16,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "波江座 40 A位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 200,
+            "bDeg": -39
+        }
+    },
+    {
+        "id": "gliese-22",
+        "name": "格利泽 22",
+        "nameEn": "Gliese 22",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻红矮星多星系统",
+        "distanceLy": 33,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 22位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 126,
+            "bDeg": -47
+        }
+    },
+    {
+        "id": "gliese-86",
+        "name": "格利泽 86",
+        "nameEn": "Gliese 86",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "行星宿主 K 型恒星",
+        "distanceLy": 35,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 86位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 280,
+            "bDeg": -49
+        }
+    },
+    {
+        "id": "51-pegasi",
+        "name": "飞马座 51",
+        "nameEn": "51 Pegasi",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "首批热木星宿主恒星",
+        "distanceLy": 51,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "飞马座 51位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 91,
+            "bDeg": -34
+        }
+    },
+    {
+        "id": "messier-48",
+        "name": "M48",
+        "nameEn": "Messier 48",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "长蛇座疏散星团",
+        "distanceLy": 1500,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M48是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 227,
+            "bDeg": -2
+        }
+    },
+    {
+        "id": "messier-50",
+        "name": "M50",
+        "nameEn": "Messier 50",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "麒麟座疏散星团",
+        "distanceLy": 3200,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M50是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 226,
+            "bDeg": -2
+        }
+    },
+    {
+        "id": "messier-52",
+        "name": "M52",
+        "nameEn": "Messier 52",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "仙后座疏散星团",
+        "distanceLy": 4600,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M52是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 112,
+            "bDeg": 0
+        }
+    },
+    {
+        "id": "messier-67",
+        "name": "M67",
+        "nameEn": "Messier 67",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "老年疏散星团",
+        "distanceLy": 2700,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M67是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 216,
+            "bDeg": 32
+        }
+    },
+    {
+        "id": "messier-93",
+        "name": "M93",
+        "nameEn": "Messier 93",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "船尾座疏散星团",
+        "distanceLy": 3600,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M93是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 248,
+            "bDeg": -7
+        }
+    },
+    {
+        "id": "reticulum-ii",
+        "name": "网罟座 II",
+        "nameEn": "Reticulum II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 105000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "网罟座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 266,
+            "bDeg": -49
+        }
+    },
+    {
+        "id": "horologium-i",
+        "name": "时钟座 I",
+        "nameEn": "Horologium I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 260000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "时钟座 I是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 271,
+            "bDeg": -54
+        }
+    },
+    {
+        "id": "eridanus-ii",
+        "name": "波江座 II",
+        "nameEn": "Eridanus II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "孤立超微弱矮星系",
+        "distanceLy": 1200000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "波江座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 249,
+            "bDeg": -52
+        }
+    },
+    {
+        "id": "hydrus-i",
+        "name": "水蛇座 I",
+        "nameEn": "Hydrus I",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 90000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "水蛇座 I是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 291,
+            "bDeg": -34
+        }
+    },
+    {
+        "id": "triangulum-ii",
+        "name": "三角座 II",
+        "nameEn": "Triangulum II",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "超微弱矮星系",
+        "distanceLy": 100000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "三角座 II是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 141,
+            "bDeg": -24
+        }
+    },
+    {
+        "id": "ngc-2146",
+        "name": "NGC 2146",
+        "nameEn": "NGC 2146",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "相互作用恒星暴发星系",
+        "distanceLy": 70000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 2146位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 160,
+            "bDeg": 11
+        }
+    },
+    {
+        "id": "ngc-2683",
+        "name": "NGC 2683",
+        "nameEn": "NGC 2683",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向旋涡星系",
+        "distanceLy": 30000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 2683位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 240,
+            "bDeg": 30
+        }
+    },
+    {
+        "id": "ngc-2997",
+        "name": "NGC 2997",
+        "nameEn": "NGC 2997",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "南天旋涡星系",
+        "distanceLy": 40000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 2997位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 254,
+            "bDeg": -32
+        }
+    },
+    {
+        "id": "ngc-3077",
+        "name": "NGC 3077",
+        "nameEn": "NGC 3077",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "M81 星系群相互作用成员",
+        "distanceLy": 12000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 3077位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 142,
+            "bDeg": 40
+        }
+    },
+    {
+        "id": "ngc-3521",
+        "name": "NGC 3521",
+        "nameEn": "NGC 3521",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "尘埃丰富旋涡星系",
+        "distanceLy": 35000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 3521位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 232,
+            "bDeg": 57
+        }
+    },
+    {
+        "id": "47-ursa-majoris",
+        "name": "大熊座 47",
+        "nameEn": "47 Ursae Majoris",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "多行星 G 型恒星系统",
+        "distanceLy": 46,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "大熊座 47位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 155,
+            "bDeg": 59
+        }
+    },
+    {
+        "id": "rho-coronae-borealis",
+        "name": "北冕座ρ",
+        "nameEn": "Rho Coronae Borealis",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "近邻行星宿主恒星",
+        "distanceLy": 57,
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "北冕座ρ位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 41,
+            "bDeg": 48
+        }
+    },
+    {
+        "id": "gj-1214",
+        "name": "格利泽 1214",
+        "nameEn": "GJ 1214",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "超级地球宿主红矮星",
+        "distanceLy": 48,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 1214位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 29,
+            "bDeg": 66
+        }
+    },
+    {
+        "id": "gliese-849",
+        "name": "格利泽 849",
+        "nameEn": "Gliese 849",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "长周期巨行星宿主红矮星",
+        "distanceLy": 29,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "格利泽 849位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 300,
+            "bDeg": 10
+        }
+    },
+    {
+        "id": "hd-260655",
+        "name": "HD 260655",
+        "nameEn": "HD 260655",
+        "atlasMap": "neighborhood",
+        "category": "nearby-star",
+        "type": "双岩质行星宿主红矮星",
+        "distanceLy": 33,
+        "effectType": "red-dwarf",
+        "color": 16765120,
+        "size": 12,
+        "temperature": "近邻恒星与行星系统",
+        "feature": "HD 260655位于太阳邻域，用于比较近邻恒星、褐矮星及行星系统的空间分布。",
+        "related": [
+            {
+                "title": "观测意义",
+                "detail": "补充太阳附近低质量恒星、多星系统与行星宿主的样本。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 219,
+            "bDeg": 20
+        }
+    },
+    {
+        "id": "messier-4",
+        "name": "M4",
+        "nameEn": "Messier 4",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "天蝎座球状星团",
+        "distanceLy": 7200,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M4是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 351,
+            "bDeg": 15
+        }
+    },
+    {
+        "id": "messier-10",
+        "name": "M10",
+        "nameEn": "Messier 10",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "蛇夫座球状星团",
+        "distanceLy": 14000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M10是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 15,
+            "bDeg": 23
+        }
+    },
+    {
+        "id": "messier-12",
+        "name": "M12",
+        "nameEn": "Messier 12",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "蛇夫座球状星团",
+        "distanceLy": 16000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M12是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 15,
+            "bDeg": 26
+        }
+    },
+    {
+        "id": "messier-28",
+        "name": "M28",
+        "nameEn": "Messier 28",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "银心方向球状星团",
+        "distanceLy": 18000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M28是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 8,
+            "bDeg": -5
+        }
+    },
+    {
+        "id": "messier-92",
+        "name": "M92",
+        "nameEn": "Messier 92",
+        "atlasMap": "milky-way",
+        "category": "deep-sky",
+        "type": "古老球状星团",
+        "distanceLy": 27000,
+        "color": 11193599,
+        "size": 22,
+        "temperature": "星际介质、恒星演化与星团结构",
+        "feature": "M92是银河系内的代表性深空目标，补强星云、星团与恒星演化遗迹的观测层次。",
+        "related": [
+            {
+                "title": "银河地标",
+                "detail": "用于补充银河盘面中的恒星形成区、星团和星际介质结构。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 69,
+            "bDeg": 35
+        }
+    },
+    {
+        "id": "andromeda-ix",
+        "name": "仙女座 IX",
+        "nameEn": "Andromeda IX",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座卫星矮椭球星系",
+        "distanceLy": 2500000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "仙女座 IX是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 121,
+            "bDeg": -22
+        }
+    },
+    {
+        "id": "andromeda-xi",
+        "name": "仙女座 XI",
+        "nameEn": "Andromeda XI",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座超微弱卫星星系",
+        "distanceLy": 2500000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "仙女座 XI是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 122,
+            "bDeg": -22
+        }
+    },
+    {
+        "id": "andromeda-xii",
+        "name": "仙女座 XII",
+        "nameEn": "Andromeda XII",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座矮椭球卫星星系",
+        "distanceLy": 2500000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "仙女座 XII是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 120,
+            "bDeg": -20
+        }
+    },
+    {
+        "id": "andromeda-xiii",
+        "name": "仙女座 XIII",
+        "nameEn": "Andromeda XIII",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座矮椭球卫星星系",
+        "distanceLy": 2500000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "仙女座 XIII是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 123,
+            "bDeg": -23
+        }
+    },
+    {
+        "id": "andromeda-xiv",
+        "name": "仙女座 XIV",
+        "nameEn": "Andromeda XIV",
+        "atlasMap": "local-group",
+        "category": "galaxy",
+        "type": "仙女座矮椭球卫星星系",
+        "distanceLy": 2500000,
+        "color": 8433919,
+        "size": 17,
+        "temperature": "低表面亮度恒星族群",
+        "feature": "仙女座 XIV是本星系群的低质量成员，可与银河系、仙女座星系的卫星系统进行对照。",
+        "related": [
+            {
+                "title": "本星系群成员",
+                "detail": "用于呈现卫星星系、超微弱矮星系与孤立矮星系的分布。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 121,
+            "bDeg": -24
+        }
+    },
+    {
+        "id": "antennae-galaxies",
+        "name": "触角星系",
+        "nameEn": "Antennae Galaxies (NGC 4038/4039)",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "相互作用星系对",
+        "distanceLy": 45000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "触角星系位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 308,
+            "bDeg": 42
+        }
+    },
+    {
+        "id": "ngc-4565",
+        "name": "NGC 4565 针状星系",
+        "nameEn": "NGC 4565",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向旋涡星系",
+        "distanceLy": 30000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 4565 针状星系位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 230,
+            "bDeg": 86
+        }
+    },
+    {
+        "id": "ngc-4631",
+        "name": "NGC 4631 鲸鱼星系",
+        "nameEn": "NGC 4631",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向相互作用旋涡星系",
+        "distanceLy": 25000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 4631 鲸鱼星系位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 142,
+            "bDeg": 84
+        }
+    },
+    {
+        "id": "ngc-4945",
+        "name": "NGC 4945",
+        "nameEn": "NGC 4945",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "侧向活动星系",
+        "distanceLy": 13000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 4945位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 305,
+            "bDeg": 13
+        }
+    },
+    {
+        "id": "ngc-5238",
+        "name": "NGC 5238",
+        "nameEn": "NGC 5238",
+        "atlasMap": "cosmic-neighborhood",
+        "category": "galaxy",
+        "type": "近邻矮不规则星系",
+        "distanceLy": 15000000,
+        "color": 16762477,
+        "size": 27,
+        "temperature": "星系盘、核球与环境演化",
+        "feature": "NGC 5238位于本星系群之外的近邻宇宙，扩充旋涡、活动核与相互作用星系的观测样本。",
+        "related": [
+            {
+                "title": "近邻宇宙",
+                "detail": "用于对照星系盘、尘埃、恒星形成和星系环境的差异。"
+            }
+        ],
+        "galactic": {
+            "lDeg": 307,
+            "bDeg": 31
+        }
     }
 ];
+
+
+// 500 项目录里程碑：10 个小批次，每批为四层星图各补 5 个代表目标。
+// 坐标使用各图层独立的均匀采样带，避免新增目标在压缩星图中重叠。
+const ATLAS_EXPANSION_TO_500 = [
+    {"id":"wise-0720-0846","name":"WISE 0720−0846","nameEn":"WISE 0720−0846","type":"T 型棕矮星双星","distanceLy":22,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"wise-1541-2250","name":"WISE 1541−2250","nameEn":"WISE 1541−2250","type":"超冷 Y 型棕矮星","distanceLy":18,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"wise-0350-5658","name":"WISE 0350−5658","nameEn":"WISE 0350−5658","type":"Y 型棕矮星","distanceLy":20,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-0415-0935","name":"2MASS 0415−0935","nameEn":"2MASS J0415−0935","type":"T 型棕矮星","distanceLy":19,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-0036-1821","name":"2MASS 0036+1821","nameEn":"2MASS J0036+1821","type":"L 型棕矮星","distanceLy":28,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"ic-405","name":"火焰之星星云","nameEn":"Flaming Star Nebula (IC 405)","type":"反射与发射星云","distanceLy":1500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ic-410","name":"蝌蚪星云","nameEn":"Tadpoles Nebula (IC 410)","type":"发射星云与年轻星团","distanceLy":12000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-281","name":"吃豆人星云","nameEn":"Pacman Nebula (NGC 281)","type":"发射星云与星团","distanceLy":9200,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"sh2-101","name":"郁金香星云","nameEn":"Tulip Nebula (Sh2-101)","type":"发射星云","distanceLy":6000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"sh2-155","name":"洞穴星云","nameEn":"Cave Nebula (Sh2-155)","type":"发射星云","distanceLy":2400,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"antlia-ii","name":"蚁蜒座 II","nameEn":"Antlia II","type":"极扩散矮星系","distanceLy":430000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"aquarius-ii","name":"宝瓶座 II","nameEn":"Aquarius II","type":"超微弱矮星系","distanceLy":350000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"bootes-iii","name":"牧夫座 III","nameEn":"Boötes III","type":"潮汐扰动矮星系","distanceLy":150000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"centaurus-i","name":"半人马座 I","nameEn":"Centaurus I","type":"超微弱矮星系","distanceLy":380000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"cetus-ii","name":"鲸鱼座 II","nameEn":"Cetus II","type":"超微弱矮星系","distanceLy":100000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"messier-60","name":"M60","nameEn":"Messier 60","type":"室女座椭圆星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-61","name":"M61","nameEn":"Messier 61","type":"室女座正面棒旋星系","distanceLy":53000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-84","name":"M84","nameEn":"Messier 84","type":"室女座椭圆星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-85","name":"M85","nameEn":"Messier 85","type":"透镜状星系","distanceLy":60000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-86","name":"M86","nameEn":"Messier 86","type":"室女座椭圆星系","distanceLy":52000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"2mass-0559-1404","name":"2MASS 0559−1404","nameEn":"2MASS J0559−1404","type":"T 型棕矮星","distanceLy":18,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-0939-2448","name":"2MASS 0939−2448","nameEn":"2MASS J0939−2448","type":"金属贫乏 T 型棕矮星","distanceLy":17,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-1507-1627","name":"2MASS 1507−1627","nameEn":"2MASS J1507−1627","type":"L 型棕矮星","distanceLy":24,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-1503-2525","name":"2MASS 1503+2525","nameEn":"2MASS J1503+2525","type":"L 型棕矮星","distanceLy":25,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"2mass-1047-2124","name":"2MASS 1047+2124","nameEn":"2MASS J1047+2124","type":"射电 T 型棕矮星","distanceLy":35,"atlasMap":"neighborhood","category":"stellar-object","effectType":"red-dwarf"},
+    {"id":"ngc-2467","name":"骷髅与十字星云","nameEn":"NGC 2467","type":"恒星形成复合体","distanceLy":13000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-3576","name":"自由女神星云","nameEn":"NGC 3576","type":"大质量恒星形成区","distanceLy":9000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-6188","name":"斗龙星云","nameEn":"NGC 6188","type":"大尺度发射星云","distanceLy":4000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-6357","name":"龙虾星云","nameEn":"Lobster Nebula (NGC 6357)","type":"恒星形成区","distanceLy":5500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-6334","name":"猫爪星云","nameEn":"Cat’s Paw Nebula (NGC 6334)","type":"发射星云","distanceLy":5500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"columba-i","name":"天鸽座 I","nameEn":"Columba I","type":"超微弱矮星系","distanceLy":600000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"delve-1","name":"DElve 1","nameEn":"DElve 1","type":"超微弱矮星系","distanceLy":110000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"delve-2","name":"DElve 2","nameEn":"DElve 2","type":"超微弱矮星系","distanceLy":370000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"draco-ii","name":"天龙座 II","nameEn":"Draco II","type":"超微弱矮星系","distanceLy":70000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"grus-i","name":"天鹤座 I","nameEn":"Grus I","type":"超微弱矮星系","distanceLy":400000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"messier-88","name":"M88","nameEn":"Messier 88","type":"大设计旋涡星系","distanceLy":54000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-89","name":"M89","nameEn":"Messier 89","type":"近圆形椭圆星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-90","name":"M90","nameEn":"Messier 90","type":"室女座旋涡星系","distanceLy":60000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-91","name":"M91","nameEn":"Messier 91","type":"棒旋星系","distanceLy":52000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-102","name":"M102 纺锤星系","nameEn":"Messier 102 (NGC 5866)","type":"透镜状星系","distanceLy":44000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-54","name":"格利泽 54","nameEn":"Gliese 54","type":"近邻红矮星","distanceLy":30,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-166-c","name":"格利泽 166 C","nameEn":"Gliese 166 C","type":"近邻红矮星","distanceLy":17,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-2066","name":"格利泽 2066","nameEn":"Gliese 2066","type":"近邻红矮星系统","distanceLy":25,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-3020","name":"格利泽 3020","nameEn":"Gliese 3020","type":"近邻红矮星","distanceLy":31,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-3305","name":"格利泽 3305","nameEn":"Gliese 3305","type":"红矮星双星系统","distanceLy":29,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"ngc-6559","name":"NGC 6559","nameEn":"NGC 6559","type":"暗星云、反射星云与发射星云复合体","distanceLy":5000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-6604","name":"NGC 6604","nameEn":"NGC 6604","type":"人马座疏散星团","distanceLy":5500,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"ngc-6820","name":"NGC 6820","nameEn":"NGC 6820","type":"天鹰座发射星云","distanceLy":6000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-7380","name":"巫师星云","nameEn":"Wizard Nebula (NGC 7380)","type":"疏散星团与发射星云","distanceLy":7000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ic-1795","name":"鱼头星云","nameEn":"Fishhead Nebula (IC 1795)","type":"发射星云","distanceLy":6000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"grus-ii","name":"天鹤座 II","nameEn":"Grus II","type":"超微弱矮星系","distanceLy":180000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"hydra-ii","name":"长蛇座 II","nameEn":"Hydra II","type":"超微弱矮星系","distanceLy":440000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"indus-i","name":"印第安座 I","nameEn":"Indus I","type":"超微弱矮星系","distanceLy":230000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"leo-iv","name":"狮子座 IV","nameEn":"Leo IV","type":"超微弱矮星系","distanceLy":500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"leo-v","name":"狮子座 V","nameEn":"Leo V","type":"超微弱矮星系","distanceLy":580000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"messier-105","name":"M105","nameEn":"Messier 105","type":"狮子座 I 星系群椭圆星系","distanceLy":35000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"messier-109","name":"M109","nameEn":"Messier 109","type":"棒旋星系","distanceLy":67000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1023","name":"NGC 1023","nameEn":"NGC 1023","type":"透镜状星系与卫星群","distanceLy":36000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1275","name":"NGC 1275","nameEn":"NGC 1275","type":"英仙座星系团中心活动星系","distanceLy":240000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1386","name":"NGC 1386","nameEn":"NGC 1386","type":"活动核透镜状星系","distanceLy":53000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-3379","name":"格利泽 3379","nameEn":"Gliese 3379","type":"近邻红矮星","distanceLy":18,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-380","name":"格利泽 380","nameEn":"Gliese 380","type":"耀斑红矮星","distanceLy":15,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-388","name":"格利泽 388","nameEn":"Gliese 388 (AD Leonis)","type":"耀斑红矮星","distanceLy":16,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-436","name":"格利泽 436","nameEn":"Gliese 436","type":"热海王星宿主红矮星","distanceLy":33,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-480","name":"格利泽 480","nameEn":"Gliese 480","type":"近邻红矮星","distanceLy":46,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"sh2-132","name":"狮子星云","nameEn":"Lion Nebula (Sh2-132)","type":"发射星云","distanceLy":10000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"sh2-157","name":"龙虾钳星云","nameEn":"Lobster Claw Nebula (Sh2-157)","type":"发射星云","distanceLy":7000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-6543","name":"猫眼星云","nameEn":"Cat’s Eye Nebula (NGC 6543)","type":"行星状星云","distanceLy":3300,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-7662","name":"蓝雪球星云","nameEn":"Blue Snowball Nebula (NGC 7662)","type":"行星状星云","distanceLy":2500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-2392","name":"爱斯基摩星云","nameEn":"Eskimo Nebula (NGC 2392)","type":"行星状星云","distanceLy":2900,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"pegasus-iii","name":"飞马座 III","nameEn":"Pegasus III","type":"超微弱矮星系","distanceLy":700000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"phoenix-ii","name":"凤凰座 II","nameEn":"Phoenix II","type":"超微弱矮星系","distanceLy":260000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"pictor-i","name":"绘架座 I","nameEn":"Pictor I","type":"超微弱矮星系","distanceLy":370000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"pisces-ii","name":"双鱼座 II","nameEn":"Pisces II","type":"超微弱矮星系","distanceLy":600000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"reticulum-iii","name":"网罟座 III","nameEn":"Reticulum III","type":"超微弱矮星系","distanceLy":300000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-1404","name":"NGC 1404","nameEn":"NGC 1404","type":"天炉座星系团椭圆星系","distanceLy":65000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1427","name":"NGC 1427","nameEn":"NGC 1427","type":"天炉座星系团椭圆星系","distanceLy":65000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1448","name":"NGC 1448","nameEn":"NGC 1448","type":"近邻旋涡星系","distanceLy":56000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1553","name":"NGC 1553","nameEn":"NGC 1553","type":"透镜状星系","distanceLy":60000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-1961","name":"NGC 1961","nameEn":"NGC 1961","type":"大质量旋涡星系","distanceLy":180000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-514","name":"格利泽 514","nameEn":"Gliese 514","type":"多行星候选红矮星","distanceLy":25,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-617-a","name":"格利泽 617 A","nameEn":"Gliese 617 A","type":"近邻红矮星","distanceLy":34,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-649","name":"格利泽 649","nameEn":"Gliese 649","type":"巨行星宿主红矮星","distanceLy":34,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-674","name":"格利泽 674","nameEn":"Gliese 674","type":"近邻行星宿主红矮星","distanceLy":15,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-687","name":"格利泽 687","nameEn":"Gliese 687","type":"超级地球宿主红矮星","distanceLy":15,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"messier-76","name":"M76 小哑铃星云","nameEn":"Messier 76","type":"行星状星云","distanceLy":2500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"messier-97","name":"M97 猫头鹰星云","nameEn":"Messier 97","type":"行星状星云","distanceLy":2600,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-3242","name":"木星幽灵星云","nameEn":"Ghost of Jupiter (NGC 3242)","type":"行星状星云","distanceLy":1400,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-3132","name":"南环星云","nameEn":"Southern Ring Nebula (NGC 3132)","type":"行星状星云","distanceLy":2500,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"ngc-2022","name":"NGC 2022","nameEn":"NGC 2022","type":"行星状星云","distanceLy":8000,"atlasMap":"milky-way","category":"nebula"},
+    {"id":"sagittarius-ii","name":"人马座 II","nameEn":"Sagittarius II","type":"超微弱矮星系","distanceLy":220000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"sculptor-ii","name":"玉夫座 II","nameEn":"Sculptor II","type":"超微弱矮星系","distanceLy":280000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"tucana-ii","name":"杜鹃座 II","nameEn":"Tucana II","type":"超微弱矮星系","distanceLy":190000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"tucana-iii","name":"杜鹃座 III","nameEn":"Tucana III","type":"潮汐受扰超微弱矮星系","distanceLy":70000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"tucana-iv","name":"杜鹃座 IV","nameEn":"Tucana IV","type":"超微弱矮星系","distanceLy":160000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-2276","name":"NGC 2276","nameEn":"NGC 2276","type":"相互作用旋涡星系","distanceLy":120000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-2537","name":"NGC 2537 熊掌星系","nameEn":"NGC 2537","type":"矮不规则星系","distanceLy":23000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-2787","name":"NGC 2787","nameEn":"NGC 2787","type":"核环透镜状星系","distanceLy":24000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-2976","name":"NGC 2976","nameEn":"NGC 2976","type":"M81 星系群矮旋涡星系","distanceLy":12000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3184","name":"NGC 3184","nameEn":"NGC 3184","type":"正面旋涡星系","distanceLy":40000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-710","name":"格利泽 710","nameEn":"Gliese 710","type":"未来近距离掠过太阳的恒星","distanceLy":63,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"gliese-682","name":"格利泽 682","nameEn":"Gliese 682","type":"近邻红矮星","distanceLy":17,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-686","name":"格利泽 686","nameEn":"Gliese 686","type":"行星宿主红矮星","distanceLy":27,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-725-a","name":"格利泽 725 A","nameEn":"Gliese 725 A","type":"近邻红矮星双星成员","distanceLy":11,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-725-b","name":"格利泽 725 B","nameEn":"Gliese 725 B","type":"近邻红矮星双星成员","distanceLy":11,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"messier-23","name":"M23","nameEn":"Messier 23","type":"人马座疏散星团","distanceLy":2200,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-25","name":"M25","nameEn":"Messier 25","type":"人马座疏散星团","distanceLy":2000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-26","name":"M26","nameEn":"Messier 26","type":"盾牌座疏散星团","distanceLy":5000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-29","name":"M29","nameEn":"Messier 29","type":"天鹅座疏散星团","distanceLy":4000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-34","name":"M34","nameEn":"Messier 34","type":"英仙座疏散星团","distanceLy":1500,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"tucana-v","name":"杜鹃座 V","nameEn":"Tucana V","type":"超微弱矮星系","distanceLy":180000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"virgo-i","name":"室女座 I","nameEn":"Virgo I","type":"超微弱矮星系","distanceLy":280000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"virgo-ii","name":"室女座 II","nameEn":"Virgo II","type":"超微弱矮星系","distanceLy":550000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"horologium-ii","name":"时钟座 II","nameEn":"Horologium II","type":"超微弱矮星系","distanceLy":250000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"cassiopeia-ii","name":"仙后座 II","nameEn":"Cassiopeia II","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-3198","name":"NGC 3198","nameEn":"NGC 3198","type":"暗物质旋转曲线代表星系","distanceLy":46000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3310","name":"NGC 3310","nameEn":"NGC 3310","type":"恒星暴发旋涡星系","distanceLy":50000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3344","name":"NGC 3344","nameEn":"NGC 3344","type":"正面旋涡星系","distanceLy":22000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3370","name":"NGC 3370","nameEn":"NGC 3370","type":"超新星距离标尺旋涡星系","distanceLy":100000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3377","name":"NGC 3377","nameEn":"NGC 3377","type":"狮子座 I 星系群椭圆星系","distanceLy":35000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-740","name":"格利泽 740","nameEn":"Gliese 740","type":"近邻红矮星","distanceLy":37,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-754","name":"格利泽 754","nameEn":"Gliese 754","type":"近邻红矮星","distanceLy":19,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-784","name":"格利泽 784","nameEn":"Gliese 784","type":"近邻红矮星","distanceLy":22,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-785","name":"格利泽 785","nameEn":"Gliese 785","type":"近邻红矮星","distanceLy":26,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"gliese-905","name":"格利泽 905","nameEn":"Gliese 905","type":"近邻红矮星","distanceLy":18,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"messier-39","name":"M39","nameEn":"Messier 39","type":"天鹅座疏散星团","distanceLy":800,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-103","name":"M103","nameEn":"Messier 103","type":"仙后座疏散星团","distanceLy":8500,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"ngc-457","name":"NGC 457 ET 星团","nameEn":"NGC 457","type":"仙后座疏散星团","distanceLy":8000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"ngc-663","name":"NGC 663","nameEn":"NGC 663","type":"仙后座疏散星团","distanceLy":7000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"ngc-7789","name":"NGC 7789 白玫瑰星团","nameEn":"NGC 7789","type":"老年疏散星团","distanceLy":8000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"cassiopeia-iii","name":"仙后座 III","nameEn":"Cassiopeia III","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"lacerta-i","name":"蝎虎座 I","nameEn":"Lacerta I","type":"仙女座外围矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xv","name":"仙女座 XV","nameEn":"Andromeda XV","type":"仙女座卫星矮椭球星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xvi","name":"仙女座 XVI","nameEn":"Andromeda XVI","type":"仙女座卫星矮椭球星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xvii","name":"仙女座 XVII","nameEn":"Andromeda XVII","type":"仙女座卫星矮椭球星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-3384","name":"NGC 3384","nameEn":"NGC 3384","type":"狮子座 I 星系群透镜状星系","distanceLy":35000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3486","name":"NGC 3486","nameEn":"NGC 3486","type":"低亮度旋涡星系","distanceLy":28000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3556","name":"NGC 3556","nameEn":"NGC 3556","type":"侧向旋涡星系","distanceLy":40000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3593","name":"NGC 3593","nameEn":"NGC 3593","type":"反向旋转盘星系","distanceLy":20000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3621","name":"NGC 3621","nameEn":"NGC 3621","type":"无核球旋涡星系","distanceLy":22000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"gliese-908","name":"格利泽 908","nameEn":"Gliese 908","type":"近邻红矮星","distanceLy":17,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"ltt-1445-a","name":"LTT 1445 A","nameEn":"LTT 1445 A","type":"多岩质行星宿主红矮星","distanceLy":22,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"ltt-3780","name":"LTT 3780","nameEn":"LTT 3780","type":"双行星宿主红矮星","distanceLy":72,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"ltt-9779","name":"LTT 9779","nameEn":"LTT 9779","type":"超热海王星宿主恒星","distanceLy":260,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"toi-1231","name":"TOI-1231","nameEn":"TOI-1231","type":"温暖海王星宿主红矮星","distanceLy":90,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"messier-9","name":"M9","nameEn":"Messier 9","type":"蛇夫座球状星团","distanceLy":26000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-14","name":"M14","nameEn":"Messier 14","type":"蛇夫座球状星团","distanceLy":30000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-19","name":"M19","nameEn":"Messier 19","type":"蛇夫座球状星团","distanceLy":28000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-30","name":"M30","nameEn":"Messier 30","type":"摩羯座球状星团","distanceLy":41000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-53","name":"M53","nameEn":"Messier 53","type":"后发座球状星团","distanceLy":58000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"andromeda-xviii","name":"仙女座 XVIII","nameEn":"Andromeda XVIII","type":"仙女座外围矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xix","name":"仙女座 XIX","nameEn":"Andromeda XIX","type":"超扩散卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xx","name":"仙女座 XX","nameEn":"Andromeda XX","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxi","name":"仙女座 XXI","nameEn":"Andromeda XXI","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxii","name":"仙女座 XXII","nameEn":"Andromeda XXII","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-3810","name":"NGC 3810","nameEn":"NGC 3810","type":"正面旋涡星系","distanceLy":50000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-3953","name":"NGC 3953","nameEn":"NGC 3953","type":"大设计棒旋星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4013","name":"NGC 4013","nameEn":"NGC 4013","type":"侧向翘曲盘旋涡星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4088","name":"NGC 4088","nameEn":"NGC 4088","type":"M109 星系群旋涡星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4214","name":"NGC 4214","nameEn":"NGC 4214","type":"近邻恒星暴发矮星系","distanceLy":10000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"toi-1695","name":"TOI-1695","nameEn":"TOI-1695","type":"低质量行星宿主红矮星","distanceLy":145,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"toi-1749","name":"TOI-1749","nameEn":"TOI-1749","type":"多行星红矮星系统","distanceLy":325,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"toi-1759","name":"TOI-1759","nameEn":"TOI-1759","type":"温暖超级地球宿主红矮星","distanceLy":110,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"toi-2095","name":"TOI-2095","nameEn":"TOI-2095","type":"多行星红矮星系统","distanceLy":135,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"toi-2136","name":"TOI-2136","nameEn":"TOI-2136","type":"温暖亚海王星宿主恒星","distanceLy":110,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"messier-54","name":"M54","nameEn":"Messier 54","type":"人马座矮星系核心球状星团","distanceLy":87000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-55","name":"M55","nameEn":"Messier 55","type":"人马座球状星团","distanceLy":18000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-56","name":"M56","nameEn":"Messier 56","type":"天琴座球状星团","distanceLy":33000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-62","name":"M62","nameEn":"Messier 62","type":"蛇夫座球状星团","distanceLy":22000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-68","name":"M68","nameEn":"Messier 68","type":"长蛇座球状星团","distanceLy":33000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"andromeda-xxiii","name":"仙女座 XXIII","nameEn":"Andromeda XXIII","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxiv","name":"仙女座 XXIV","nameEn":"Andromeda XXIV","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxv","name":"仙女座 XXV","nameEn":"Andromeda XXV","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxvi","name":"仙女座 XXVI","nameEn":"Andromeda XXVI","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxvii","name":"仙女座 XXVII","nameEn":"Andromeda XXVII","type":"受潮汐扰动的卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-4236","name":"NGC 4236","nameEn":"NGC 4236","type":"低表面亮度棒旋星系","distanceLy":14000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4278","name":"NGC 4278","nameEn":"NGC 4278","type":"活动核椭圆星系","distanceLy":50000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4303","name":"NGC 4303","nameEn":"NGC 4303","type":"室女座棒旋星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4314","name":"NGC 4314","nameEn":"NGC 4314","type":"核环棒旋星系","distanceLy":40000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4388","name":"NGC 4388","nameEn":"NGC 4388","type":"室女座活动旋涡星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"toi-2285","name":"TOI-2285","nameEn":"TOI-2285","type":"温暖超级地球宿主红矮星","distanceLy":150,"atlasMap":"neighborhood","category":"nearby-star","effectType":"red-dwarf"},
+    {"id":"hd-97658","name":"HD 97658","nameEn":"HD 97658","type":"超级地球宿主 K 型恒星","distanceLy":70,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"hd-3167","name":"HD 3167","nameEn":"HD 3167","type":"紧凑多行星系统","distanceLy":150,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"hd-15337","name":"HD 15337","nameEn":"HD 15337","type":"双行星宿主恒星","distanceLy":145,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"pi-mensae","name":"山案座π","nameEn":"Pi Mensae","type":"巨行星与超级地球宿主恒星","distanceLy":60,"atlasMap":"neighborhood","category":"nearby-star"},
+    {"id":"messier-69","name":"M69","nameEn":"Messier 69","type":"人马座球状星团","distanceLy":29000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-70","name":"M70","nameEn":"Messier 70","type":"人马座球状星团","distanceLy":29000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-71","name":"M71","nameEn":"Messier 71","type":"天箭座球状星团","distanceLy":12000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-79","name":"M79","nameEn":"Messier 79","type":"天兔座球状星团","distanceLy":41000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"messier-80","name":"M80","nameEn":"Messier 80","type":"天蝎座球状星团","distanceLy":33000,"atlasMap":"milky-way","category":"deep-sky"},
+    {"id":"andromeda-xxviii","name":"仙女座 XXVIII","nameEn":"Andromeda XXVIII","type":"仙女座外围矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxix","name":"仙女座 XXIX","nameEn":"Andromeda XXIX","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxx","name":"仙女座 XXX","nameEn":"Andromeda XXX","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxxii","name":"仙女座 XXXII","nameEn":"Andromeda XXXII","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"andromeda-xxxiii","name":"仙女座 XXXIII","nameEn":"Andromeda XXXIII","type":"仙女座卫星矮星系","distanceLy":2500000,"atlasMap":"local-group","category":"galaxy"},
+    {"id":"ngc-4438","name":"NGC 4438","nameEn":"NGC 4438","type":"受环境扰动的星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4449","name":"NGC 4449","nameEn":"NGC 4449","type":"恒星暴发矮不规则星系","distanceLy":12000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4490","name":"NGC 4490 茧状星系","nameEn":"NGC 4490","type":"相互作用旋涡星系","distanceLy":30000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4526","name":"NGC 4526","nameEn":"NGC 4526","type":"透镜状星系","distanceLy":55000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"},
+    {"id":"ngc-4559","name":"NGC 4559","nameEn":"NGC 4559","type":"大盘旋涡星系","distanceLy":30000000,"atlasMap":"cosmic-neighborhood","category":"galaxy"}
+];
+
+const ATLAS_EXPANSION_TO_500_PROFILES = {
+    neighborhood: {
+        color: 0xff765c,
+        size: 8,
+        temperature: '近邻恒星、褐矮星与系外行星系统',
+        related: {
+            title: '太阳邻域',
+            detail: '用于补充太阳附近的低质量恒星、褐矮星和行星宿主样本。'
+        },
+        coordinate: { lStart: 13, lStep: 47, latitudes: [-64, -42, -28, -15, -5, 8, 21, 35, 50, 65] }
+    },
+    'milky-way': {
+        color: 0xa9c6ff,
+        size: 19,
+        temperature: '星际介质、恒星形成与星团演化',
+        related: {
+            title: '银河地标',
+            detail: '用于补充银河盘面中的星云、星团、行星状星云与恒星演化遗迹。'
+        },
+        coordinate: { lStart: 17, lStep: 31, latitudes: [-8, -5, -3, -1, 0, 1, 3, 5, 8] }
+    },
+    'local-group': {
+        color: 0x7ebdff,
+        size: 18,
+        temperature: '低表面亮度恒星族群与卫星星系演化',
+        related: {
+            title: '本星系群成员',
+            detail: '用于呈现银河系、仙女座及其周边的卫星和超微弱矮星系。'
+        },
+        coordinate: { lStart: 72, lStep: 47, latitudes: [-55, -38, -25, -15, -5, 5, 15, 25, 38, 55] }
+    },
+    'cosmic-neighborhood': {
+        color: 0xffc27d,
+        size: 24,
+        temperature: '星系盘、活动核与星系环境演化',
+        related: {
+            title: '近邻宇宙',
+            detail: '用于对照旋涡、椭圆、透镜状、相互作用与恒星暴发星系。'
+        },
+        coordinate: { lStart: 141, lStep: 53, latitudes: [-70, -52, -37, -25, -13, 0, 13, 25, 37, 52, 70] }
+    }
+};
+
+const atlasExpansionTo500LayerIndices = {
+    neighborhood: 0,
+    'milky-way': 0,
+    'local-group': 0,
+    'cosmic-neighborhood': 0
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_500.map((entry) => {
+    const profile = ATLAS_EXPANSION_TO_500_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo500LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const isBrownDwarf = entry.type.includes('棕矮星');
+    const isNebula = entry.category === 'nebula';
+    const isRemnant = entry.category === 'stellar-remnant' || entry.category === 'supernova-remnant';
+
+    return {
+        ...entry,
+        color: isNebula ? 0xd89cff : isRemnant ? 0xaee8ff : profile.color,
+        size: entry.atlasMap === 'neighborhood'
+            ? (isBrownDwarf ? 6 : profile.size)
+            : isNebula ? 22 : profile.size,
+        temperature: profile.temperature,
+        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，作为本轮均衡扩充的一员，补充${profile.related.title}的观测样本。`,
+        related: [{ ...profile.related }],
+        galactic: {
+            lDeg: (coordinate.lStart + layerIndex * coordinate.lStep) % 360,
+            bDeg: coordinate.latitudes[layerIndex % coordinate.latitudes.length]
+        }
+    };
+}));
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { AU_KM, LIGHT_YEAR_KM, SIMULATION, PLANET_DATA, PLANET_ORDER, CELESTIAL_CATALOG };
