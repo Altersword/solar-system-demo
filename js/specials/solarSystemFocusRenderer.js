@@ -181,13 +181,21 @@ class SolarSystemFocusRenderer {
                 bloomStrength: 0.15
             });
         } else if (type === 'moon') {
+            const isIo = id === 'io';
+            const isEuropa = id === 'europa';
+            const isTitan = id === 'titan';
             Object.assign(base, {
-                coreSize: id === 'moon' ? 22 : 20,
-                surfaceSprites: id === 'moon' ? 34 : entry.visual?.pattern === 'ice' ? 10 : 20,
-                atmosphere: id === 'titan' ? { scale: 1.14, color: 0xc69f61, opacity: 0.28 } : null,
-                spin: 0.045,
-                cameraDistance: id === 'moon' ? 82 : 78,
-                bloomStrength: 0.1
+                coreSize: isTitan ? 23 : (id === 'moon' ? 22 : isIo || isEuropa ? 21 : 20),
+                surfaceSprites: isIo || isEuropa || isTitan ? 0 : (id === 'moon' ? 34 : entry.visual?.pattern === 'ice' ? 10 : 20),
+                atmosphere: isTitan
+                    ? { scale: 1.19, color: 0xe3a450, opacity: 0.3 }
+                    : isEuropa
+                        ? { scale: 1.035, color: 0xaedbff, opacity: 0.045 }
+                        : null,
+                clouds: isTitan ? { scale: 1.075, color: 0xf0bd70, opacity: 0.055 } : null,
+                spin: isTitan ? 0.024 : isEuropa ? 0.03 : isIo ? 0.038 : 0.045,
+                cameraDistance: isTitan ? 92 : isIo ? 84 : isEuropa ? 82 : (id === 'moon' ? 82 : 78),
+                bloomStrength: isIo ? 0.18 : isTitan ? 0.16 : isEuropa ? 0.11 : 0.1
             });
         } else if (type === 'comet') {
             Object.assign(base, {
@@ -324,6 +332,103 @@ class SolarSystemFocusRenderer {
             ctx.fillStyle = 'rgba(245,248,255,0.72)';
             ctx.fillRect(0, 0, canvas.width, 34);
             ctx.fillRect(0, canvas.height - 34, canvas.width, 34);
+        } else if (id === 'io' || pattern === 'io') {
+            // Io: sulfur-rich plains, lava fields, and volcanic paterae rather than cratered rock.
+            const sulfur = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            sulfur.addColorStop(0, '#f2d56e');
+            sulfur.addColorStop(0.48, '#d9bb47');
+            sulfur.addColorStop(1, '#a8792a');
+            ctx.fillStyle = sulfur;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < 76; i += 1) {
+                ctx.fillStyle = `rgba(255,238,130,${0.06 + random() * 0.14})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 18 + random() * 72, 8 + random() * 28, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (let i = 0; i < 26; i += 1) {
+                const x = random() * canvas.width;
+                const y = random() * canvas.height;
+                const radius = 10 + random() * 34;
+                const plume = ctx.createRadialGradient(x, y, radius * 0.12, x, y, radius);
+                plume.addColorStop(0, 'rgba(82,38,22,0.78)');
+                plume.addColorStop(0.32, 'rgba(177,58,24,0.55)');
+                plume.addColorStop(0.64, 'rgba(230,123,35,0.2)');
+                plume.addColorStop(1, 'rgba(230,123,35,0)');
+                ctx.fillStyle = plume;
+                ctx.beginPath();
+                ctx.ellipse(x, y, radius, radius * (0.5 + random() * 0.28), random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = `rgba(86,41,23,${0.2 + random() * 0.2})`;
+                ctx.lineWidth = 1 + random() * 2;
+                ctx.beginPath();
+                ctx.moveTo(x - radius * 0.25, y + radius * 0.1);
+                ctx.bezierCurveTo(x - radius * 1.8, y + (random() - 0.5) * radius * 1.4, x + radius * 1.6, y + (random() - 0.5) * radius * 1.6, x + radius * 2.4, y + radius * 0.32);
+                ctx.stroke();
+            }
+        } else if (id === 'europa') {
+            // Europa: a bright ice shell cut through by long reddish-brown lineae.
+            const ice = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            ice.addColorStop(0, '#eff5f2');
+            ice.addColorStop(0.42, '#d7e2e3');
+            ice.addColorStop(1, '#b9c9cc');
+            ctx.fillStyle = ice;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < 105; i += 1) {
+                ctx.fillStyle = `rgba(255,255,255,${0.025 + random() * 0.07})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 30 + random() * 118, 3 + random() * 13, (random() - 0.5) * 0.35, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (let i = 0; i < 32; i += 1) {
+                const y = 22 + random() * (canvas.height - 44);
+                const start = -90 + random() * 120;
+                ctx.strokeStyle = `rgba(${92 + Math.round(random() * 46)},${59 + Math.round(random() * 35)},${42 + Math.round(random() * 26)},${0.23 + random() * 0.23})`;
+                ctx.lineWidth = 1.2 + random() * 3.2;
+                ctx.beginPath();
+                ctx.moveTo(start, y);
+                for (let x = start; x < canvas.width + 100; x += 44) {
+                    const bend = Math.sin(x * (0.009 + random() * 0.006) + y * 0.018) * (7 + random() * 17);
+                    ctx.lineTo(x, y + bend + (random() - 0.5) * 12);
+                }
+                ctx.stroke();
+            }
+            for (let i = 0; i < 12; i += 1) {
+                ctx.strokeStyle = `rgba(255,255,255,${0.11 + random() * 0.12})`;
+                ctx.lineWidth = 1 + random() * 1.5;
+                ctx.beginPath();
+                ctx.moveTo(0, random() * canvas.height);
+                ctx.quadraticCurveTo(canvas.width * 0.5, random() * canvas.height, canvas.width, random() * canvas.height);
+                ctx.stroke();
+            }
+        } else if (id === 'titan') {
+            // Titan: deep orange haze, latitude bands, muted clouds, and hints of dark hydrocarbon lakes.
+            const haze = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            haze.addColorStop(0, '#d8ad61');
+            haze.addColorStop(0.32, '#c98e3e');
+            haze.addColorStop(0.7, '#a86329');
+            haze.addColorStop(1, '#744019');
+            ctx.fillStyle = haze;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < canvas.height; y += 1) {
+                const band = Math.sin(y * 0.045) * 0.5 + Math.sin(y * 0.012 + 1.4) * 0.5;
+                ctx.fillStyle = band > 0
+                    ? `rgba(255,213,132,${0.035 + band * 0.08})`
+                    : `rgba(90,43,18,${0.02 + -band * 0.07})`;
+                ctx.fillRect(0, y, canvas.width, 1);
+            }
+            for (let i = 0; i < 72; i += 1) {
+                ctx.fillStyle = `rgba(255,221,147,${0.035 + random() * 0.11})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, random() * canvas.height, 42 + random() * 150, 5 + random() * 20, (random() - 0.5) * 0.22, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (let i = 0; i < 15; i += 1) {
+                ctx.fillStyle = `rgba(55,30,17,${0.1 + random() * 0.16})`;
+                ctx.beginPath();
+                ctx.ellipse(random() * canvas.width, 40 + random() * 150, 22 + random() * 76, 6 + random() * 20, random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
         } else if (pattern === 'moon' || pattern === 'rocky' || entry.effectType === 'moon' || entry.effectType === 'dwarf-planet' || id === 'mercury') {
             // Grey rocky body with dense craters
             const lightRock = base.clone().lerp(new THREE.Color(0xffffff), 0.18);
@@ -482,6 +587,12 @@ class SolarSystemFocusRenderer {
             group.add(this.createSoftCloudLayer(coreSize * 1.025, 0xffe0b0, 0.1, 0.06, 'jupiter-haze'));
         } else if (id === 'saturn') {
             group.add(this.createSoftCloudLayer(coreSize * 1.02, 0xffe6b5, 0.09, 0.04, 'saturn-haze'));
+        } else if (id === 'io') {
+            group.add(this.createIoVolcanicActivity(coreSize));
+        } else if (id === 'europa') {
+            group.add(this.createEuropaFractures(coreSize));
+        } else if (id === 'titan') {
+            group.add(this.createTitanHaze(coreSize));
         } else if (id === 'moon' || id === 'mercury') {
             // Craters are primarily in the texture now; keep a few raised rim sprites for depth.
             group.add(this.createCraterField(coreSize, id === 'moon' ? 28 : 16));
@@ -490,6 +601,91 @@ class SolarSystemFocusRenderer {
         } else if (entry.effectType === 'planet-ice') {
             group.add(this.createSoftCloudLayer(coreSize * 1.03, 0xcfe9ff, 0.1, 0.03, `${id}-ice-haze`));
         }
+    }
+
+    createIoVolcanicActivity(coreSize) {
+        const group = new THREE.Group();
+        group.name = 'io-volcanic-activity';
+        const sites = [
+            { position: [0.02, 0.32, 0.95], color: 0xff8a32, size: 0.26, rise: 0.72 },
+            { position: [-0.58, -0.18, 0.78], color: 0xffc24a, size: 0.2, rise: 0.5 },
+            { position: [0.58, -0.34, 0.72], color: 0xff6f29, size: 0.18, rise: 0.42 }
+        ];
+        sites.forEach((site, index) => {
+            const normal = new THREE.Vector3(...site.position).normalize();
+            const hotspot = this.host.createHaloSprite(site.color, coreSize * site.size, 0.27 + index * 0.05);
+            hotspot.name = `io-volcanic-hotspot-${index}`;
+            hotspot.position.copy(normal).multiplyScalar(coreSize * 1.022);
+            hotspot.userData.baseOpacity = 0.27 + index * 0.05;
+            group.add(hotspot);
+            this.extras.push(hotspot);
+
+            const tangent = new THREE.Vector3(-normal.y, normal.x, 0);
+            if (tangent.lengthSq() < 0.001) tangent.set(1, 0, 0);
+            tangent.normalize();
+            const start = normal.clone().multiplyScalar(coreSize * 1.018);
+            const points = [
+                start,
+                start.clone().addScaledVector(normal, coreSize * site.rise * 0.33).addScaledVector(tangent, coreSize * 0.07),
+                start.clone().addScaledVector(normal, coreSize * site.rise).addScaledVector(tangent, coreSize * (0.18 + index * 0.05))
+            ];
+            const plume = new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 20, coreSize * (0.018 - index * 0.002), 5, false),
+                new THREE.MeshBasicMaterial({
+                    color: index === 2 ? 0xd97a37 : 0xffd891,
+                    transparent: true,
+                    opacity: 0.22 - index * 0.025,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending
+                })
+            );
+            plume.name = `io-volcanic-plume-${index}`;
+            plume.userData.baseOpacity = 0.22 - index * 0.025;
+            group.add(plume);
+            this.extras.push(plume);
+        });
+        return group;
+    }
+
+    createEuropaFractures(coreSize) {
+        const group = new THREE.Group();
+        group.name = 'europa-lineae';
+        const toSurface = (latitude, longitude, radius) => new THREE.Vector3(
+            radius * Math.cos(latitude) * Math.cos(longitude),
+            radius * Math.sin(latitude),
+            radius * Math.cos(latitude) * Math.sin(longitude)
+        );
+        [1.24, 1.55, 1.83].forEach((longitude, index) => {
+            const points = [];
+            for (let step = 0; step <= 20; step += 1) {
+                const t = step / 20;
+                const latitude = -0.9 + t * 1.8;
+                const waveringLongitude = longitude + Math.sin(t * Math.PI * (2.1 + index * 0.4)) * (0.09 + index * 0.018);
+                points.push(toSurface(latitude, waveringLongitude, coreSize * 1.018));
+            }
+            const fracture = new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 40, coreSize * (0.011 + index * 0.001), 4, false),
+                new THREE.MeshBasicMaterial({
+                    color: index === 1 ? 0x6f4937 : 0x8b6249,
+                    transparent: true,
+                    opacity: 0.24 - index * 0.035,
+                    depthWrite: false
+                })
+            );
+            fracture.name = `europa-linea-${index}`;
+            fracture.userData.baseOpacity = 0.24 - index * 0.035;
+            group.add(fracture);
+            this.extras.push(fracture);
+        });
+        return group;
+    }
+
+    createTitanHaze(coreSize) {
+        const group = new THREE.Group();
+        group.name = 'titan-layered-haze';
+        group.add(this.createSoftCloudLayer(coreSize * 1.06, 0xf2be70, 0.045, 0.018, 'titan-low-haze'));
+        group.add(this.createSoftCloudLayer(coreSize * 1.115, 0xd98536, 0.032, -0.011, 'titan-upper-haze'));
+        return group;
     }
 
     createSoftCloudLayer(radius, color, opacity, speed, name) {
