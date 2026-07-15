@@ -220,13 +220,13 @@ for (const [id, atlasMap] of Object.entries(atlasBoost5Maps)) {
 }
 
 const expectedLayerCounts = {
-    neighborhood: 2505,
-    'milky-way': 2518,
-    'local-group': 2490,
-    'cosmic-neighborhood': 2487
+    neighborhood: 12505,
+    'milky-way': 12518,
+    'local-group': 12490,
+    'cosmic-neighborhood': 12487
 };
-if (CELESTIAL_CATALOG.length !== 10000) {
-    errors.push(`expected 10000 catalog entries, got ${CELESTIAL_CATALOG.length}`);
+if (CELESTIAL_CATALOG.length !== 50000) {
+    errors.push(`expected 50000 catalog entries, got ${CELESTIAL_CATALOG.length}`);
 }
 for (const [atlasMap, expectedCount] of Object.entries(expectedLayerCounts)) {
     const actualCount = CELESTIAL_CATALOG.filter((entry) => entry.atlasMap === atlasMap).length;
@@ -234,10 +234,10 @@ for (const [atlasMap, expectedCount] of Object.entries(expectedLayerCounts)) {
 }
 
 const expectedBulkRenderCounts = {
-    neighborhood: 2375,
-    'milky-way': 2375,
-    'local-group': 2375,
-    'cosmic-neighborhood': 2375
+    neighborhood: 12375,
+    'milky-way': 12375,
+    'local-group': 12375,
+    'cosmic-neighborhood': 12375
 };
 for (const [atlasMap, expectedCount] of Object.entries(expectedBulkRenderCounts)) {
     const actualCount = CELESTIAL_CATALOG.filter((entry) => entry.atlasMap === atlasMap && entry.renderTier === 'bulk').length;
@@ -711,6 +711,65 @@ const atlasBoostTo10000Maps = Object.fromEntries([
 for (const [id, atlasMap] of Object.entries(atlasBoostTo10000Maps)) {
     const entry = catalogById.get(id);
     if (!entry) errors.push(id + ': missing 10000-item expansion target');
+    else if (entry.atlasMap !== atlasMap) errors.push(id + ': expected ' + atlasMap + ', got ' + entry.atlasMap);
+    else if (entry.renderTier !== 'bulk') errors.push(id + ': expected bulk render tier, got ' + (entry.renderTier || 'default'));
+}
+
+const atlasBoostTo20000Maps = Object.fromEntries([
+    ...Array.from({ length: 2500 }, (_, index) => ['lhs-' + (3626 + index), 'neighborhood']),
+    ...Array.from({ length: 2500 }, (_, index) => [
+        'wise-hii-w' + String(2001 + index).padStart(4, '0'),
+        'milky-way'
+    ]),
+    ...Array.from({ length: 2500 }, (_, index) => [
+        'm31-candidate-cluster-c' + String(2001 + index).padStart(4, '0'),
+        'local-group'
+    ]),
+    ...Array.from({ length: 2500 }, (_, index) => ['ugc-' + (12001 + index), 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo20000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(id + ': missing 20000-item expansion target');
+    else if (entry.atlasMap !== atlasMap) errors.push(id + ': expected ' + atlasMap + ', got ' + entry.atlasMap);
+    else if (entry.renderTier !== 'bulk') errors.push(id + ': expected bulk render tier, got ' + (entry.renderTier || 'default'));
+}
+
+
+const atlasBoostTo30000Maps = Object.fromEntries([
+    ...Array.from({ length: 2500 }, (_, index) => ['lhs-' + (6126 + index), 'neighborhood']),
+    ...Array.from({ length: 2500 }, (_, index) => [
+        'wise-hii-w' + String(4501 + index).padStart(4, '0'),
+        'milky-way'
+    ]),
+    ...Array.from({ length: 2500 }, (_, index) => [
+        'm31-candidate-cluster-c' + String(4501 + index).padStart(4, '0'),
+        'local-group'
+    ]),
+    ...Array.from({ length: 2500 }, (_, index) => ['ugc-' + (14501 + index), 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo30000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(id + ': missing 30000-item expansion target');
+    else if (entry.atlasMap !== atlasMap) errors.push(id + ': expected ' + atlasMap + ', got ' + entry.atlasMap);
+    else if (entry.renderTier !== 'bulk') errors.push(id + ': expected bulk render tier, got ' + (entry.renderTier || 'default'));
+}
+
+
+const atlasBoostTo50000Maps = Object.fromEntries([
+    ...Array.from({ length: 5000 }, (_, index) => ['lhs-' + (8626 + index), 'neighborhood']),
+    ...Array.from({ length: 5000 }, (_, index) => [
+        'wise-hii-w' + String(7001 + index).padStart(4, '0'),
+        'milky-way'
+    ]),
+    ...Array.from({ length: 5000 }, (_, index) => [
+        'm31-candidate-cluster-c' + String(7001 + index).padStart(4, '0'),
+        'local-group'
+    ]),
+    ...Array.from({ length: 5000 }, (_, index) => ['ugc-' + (17001 + index), 'cosmic-neighborhood'])
+]);
+for (const [id, atlasMap] of Object.entries(atlasBoostTo50000Maps)) {
+    const entry = catalogById.get(id);
+    if (!entry) errors.push(id + ': missing 50000-item expansion target');
     else if (entry.atlasMap !== atlasMap) errors.push(id + ': expected ' + atlasMap + ', got ' + entry.atlasMap);
     else if (entry.renderTier !== 'bulk') errors.push(id + ': expected bulk render tier, got ' + (entry.renderTier || 'default'));
 }

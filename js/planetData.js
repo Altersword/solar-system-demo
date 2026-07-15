@@ -7463,6 +7463,341 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_10000_BATCHES.flat().map((entry, in
     };
 }));
 
+const ATLAS_EXPANSION_TO_20000_NEIGHBORHOOD = Array.from({ length: 2500 }, (_, index) => {
+    const number = 3626 + index;
+    const types = ['\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u9ad8\u81ea\u884c\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u8000\u65a5\u7ea2\u77ee\u661f', '\u4f4e\u8d28\u91cf\u6052\u661f\u7cfb\u7edf', '\u5019\u9009\u884c\u661f\u5bbf\u4e3b\u7ea2\u77ee\u661f'];
+    return {
+        id: 'lhs-' + number,
+        name: 'LHS ' + number,
+        nameEn: 'LHS ' + number,
+        type: types[index % types.length],
+        distanceLy: 18 + ((index * 19) % 182),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_20000_MILKY_WAY = Array.from({ length: 2500 }, (_, index) => {
+    const number = 2001 + index;
+    const code = 'W' + String(number).padStart(4, '0');
+    const types = ['\u7535\u79bb\u6c22\u533a\u5019\u9009\u4f53', '\u6052\u661f\u5f62\u6210\u533a\u5019\u9009\u4f53', '\u7ea2\u5916\u94f6\u6cb3\u4e91\u533a', '\u53d1\u5c04\u661f\u4e91\u5019\u9009\u4f53', '\u94f6\u6cb3\u76d8\u9762\u7535\u79bb\u4e91'];
+    return {
+        id: 'wise-hii-' + code.toLowerCase(),
+        name: 'WISE \u7535\u79bb\u6c22\u533a ' + code,
+        nameEn: 'WISE H II Region ' + code,
+        type: types[index % types.length],
+        distanceLy: 1000 + ((index * 211) % 26800),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_20000_LOCAL_GROUP = Array.from({ length: 2500 }, (_, index) => {
+    const number = 2001 + index;
+    const code = 'C' + String(number).padStart(4, '0');
+    return {
+        id: 'm31-candidate-cluster-' + code.toLowerCase(),
+        name: 'M31 \u5019\u9009\u661f\u56e2 ' + code,
+        nameEn: 'M31 Candidate Cluster ' + code,
+        type: '\u4ed9\u5973\u5ea7\u661f\u7cfb\u5019\u9009\u661f\u56e2',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_20000_COSMIC_NEIGHBORHOOD = Array.from({ length: 2500 }, (_, index) => {
+    const number = 12001 + index;
+    const types = ['\u8fd1\u90bb\u76d8\u661f\u7cfb', '\u68d2\u65cb\u661f\u7cfb', '\u4fa7\u5411\u76d8\u661f\u7cfb', '\u900f\u955c\u72b6\u661f\u7cfb', '\u6052\u661f\u5f62\u6210\u661f\u7cfb'];
+    return {
+        id: 'ugc-' + number,
+        name: 'UGC ' + number,
+        nameEn: 'UGC ' + number,
+        type: types[index % types.length],
+        distanceLy: 28000000 + ((index * 7100000) % 232000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_20000_BATCHES = Array.from({ length: 500 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_20000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_20000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_20000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_20000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_20000_PROFILES = {
+    neighborhood: {
+        ...ATLAS_EXPANSION_TO_10000_PROFILES.neighborhood,
+        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+    },
+    'milky-way': {
+        ...ATLAS_EXPANSION_TO_10000_PROFILES['milky-way'],
+        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' }
+    },
+    'local-group': {
+        ...ATLAS_EXPANSION_TO_10000_PROFILES['local-group'],
+        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u518d\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' }
+    },
+    'cosmic-neighborhood': {
+        ...ATLAS_EXPANSION_TO_10000_PROFILES['cosmic-neighborhood'],
+        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' }
+    }
+};
+
+const atlasExpansionTo20000LayerIndices = {
+    neighborhood: 2375,
+    'milky-way': 2375,
+    'local-group': 2375,
+    'cosmic-neighborhood': 2375
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_20000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_20000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo20000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 476;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 20000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
+
+const ATLAS_EXPANSION_TO_30000_NEIGHBORHOOD = Array.from({ length: 2500 }, (_, index) => {
+    const number = 6126 + index;
+    const types = ['\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u9ad8\u81ea\u884c\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u8000\u65a5\u7ea2\u77ee\u661f', '\u4f4e\u8d28\u91cf\u6052\u661f\u7cfb\u7edf', '\u5019\u9009\u884c\u661f\u5bbf\u4e3b\u7ea2\u77ee\u661f'];
+    return {
+        id: 'lhs-' + number,
+        name: 'LHS ' + number,
+        nameEn: 'LHS ' + number,
+        type: types[index % types.length],
+        distanceLy: 18 + ((index * 23) % 182),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_30000_MILKY_WAY = Array.from({ length: 2500 }, (_, index) => {
+    const number = 4501 + index;
+    const code = 'W' + String(number).padStart(4, '0');
+    const types = ['\u7535\u79bb\u6c22\u533a\u5019\u9009\u4f53', '\u6052\u661f\u5f62\u6210\u533a\u5019\u9009\u4f53', '\u7ea2\u5916\u94f6\u6cb3\u4e91\u533a', '\u53d1\u5c04\u661f\u4e91\u5019\u9009\u4f53', '\u94f6\u6cb3\u76d8\u9762\u7535\u79bb\u4e91'];
+    return {
+        id: 'wise-hii-' + code.toLowerCase(),
+        name: 'WISE \u7535\u79bb\u6c22\u533a ' + code,
+        nameEn: 'WISE H II Region ' + code,
+        type: types[index % types.length],
+        distanceLy: 1000 + ((index * 223) % 26800),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_30000_LOCAL_GROUP = Array.from({ length: 2500 }, (_, index) => {
+    const number = 4501 + index;
+    const code = 'C' + String(number).padStart(4, '0');
+    return {
+        id: 'm31-candidate-cluster-' + code.toLowerCase(),
+        name: 'M31 \u5019\u9009\u661f\u56e2 ' + code,
+        nameEn: 'M31 Candidate Cluster ' + code,
+        type: '\u4ed9\u5973\u5ea7\u661f\u7cfb\u5019\u9009\u661f\u56e2',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_30000_COSMIC_NEIGHBORHOOD = Array.from({ length: 2500 }, (_, index) => {
+    const number = 14501 + index;
+    const types = ['\u8fd1\u90bb\u76d8\u661f\u7cfb', '\u68d2\u65cb\u661f\u7cfb', '\u4fa7\u5411\u76d8\u661f\u7cfb', '\u900f\u955c\u72b6\u661f\u7cfb', '\u6052\u661f\u5f62\u6210\u661f\u7cfb'];
+    return {
+        id: 'ugc-' + number,
+        name: 'UGC ' + number,
+        nameEn: 'UGC ' + number,
+        type: types[index % types.length],
+        distanceLy: 28000000 + ((index * 7300000) % 232000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_30000_BATCHES = Array.from({ length: 500 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_30000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_30000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_30000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_30000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_30000_PROFILES = {
+    neighborhood: {
+        ...ATLAS_EXPANSION_TO_20000_PROFILES.neighborhood,
+        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+    },
+    'milky-way': {
+        ...ATLAS_EXPANSION_TO_20000_PROFILES['milky-way'],
+        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' }
+    },
+    'local-group': {
+        ...ATLAS_EXPANSION_TO_20000_PROFILES['local-group'],
+        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u7b2c\u4e09\u8f6e\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u6837\u672c\u3002' }
+    },
+    'cosmic-neighborhood': {
+        ...ATLAS_EXPANSION_TO_20000_PROFILES['cosmic-neighborhood'],
+        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' }
+    }
+};
+
+const atlasExpansionTo30000LayerIndices = {
+    neighborhood: 4875,
+    'milky-way': 4875,
+    'local-group': 4875,
+    'cosmic-neighborhood': 4875
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_30000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_30000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo30000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 976;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 30000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
+
+const ATLAS_EXPANSION_TO_50000_NEIGHBORHOOD = Array.from({ length: 5000 }, (_, index) => {
+    const number = 8626 + index;
+    const types = ['\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u9ad8\u81ea\u884c\u8fd1\u90bb\u7ea2\u77ee\u661f', '\u8000\u65a5\u7ea2\u77ee\u661f', '\u4f4e\u8d28\u91cf\u6052\u661f\u7cfb\u7edf', '\u5019\u9009\u884c\u661f\u5bbf\u4e3b\u7ea2\u77ee\u661f'];
+    return {
+        id: 'lhs-' + number,
+        name: 'LHS ' + number,
+        nameEn: 'LHS ' + number,
+        type: types[index % types.length],
+        distanceLy: 18 + ((index * 29) % 182),
+        atlasMap: 'neighborhood',
+        category: 'nearby-star',
+        effectType: 'red-dwarf'
+    };
+});
+
+const ATLAS_EXPANSION_TO_50000_MILKY_WAY = Array.from({ length: 5000 }, (_, index) => {
+    const number = 7001 + index;
+    const code = 'W' + String(number).padStart(4, '0');
+    const types = ['\u7535\u79bb\u6c22\u533a\u5019\u9009\u4f53', '\u6052\u661f\u5f62\u6210\u533a\u5019\u9009\u4f53', '\u7ea2\u5916\u94f6\u6cb3\u4e91\u533a', '\u53d1\u5c04\u661f\u4e91\u5019\u9009\u4f53', '\u94f6\u6cb3\u76d8\u9762\u7535\u79bb\u4e91'];
+    return {
+        id: 'wise-hii-' + code.toLowerCase(),
+        name: 'WISE \u7535\u79bb\u6c22\u533a ' + code,
+        nameEn: 'WISE H II Region ' + code,
+        type: types[index % types.length],
+        distanceLy: 1000 + ((index * 227) % 26800),
+        atlasMap: 'milky-way',
+        category: 'nebula'
+    };
+});
+
+const ATLAS_EXPANSION_TO_50000_LOCAL_GROUP = Array.from({ length: 5000 }, (_, index) => {
+    const number = 7001 + index;
+    const code = 'C' + String(number).padStart(4, '0');
+    return {
+        id: 'm31-candidate-cluster-' + code.toLowerCase(),
+        name: 'M31 \u5019\u9009\u661f\u56e2 ' + code,
+        nameEn: 'M31 Candidate Cluster ' + code,
+        type: '\u4ed9\u5973\u5ea7\u661f\u7cfb\u5019\u9009\u661f\u56e2',
+        distanceLy: 2500000,
+        atlasMap: 'local-group',
+        category: 'deep-sky'
+    };
+});
+
+const ATLAS_EXPANSION_TO_50000_COSMIC_NEIGHBORHOOD = Array.from({ length: 5000 }, (_, index) => {
+    const number = 17001 + index;
+    const types = ['\u8fd1\u90bb\u76d8\u661f\u7cfb', '\u68d2\u65cb\u661f\u7cfb', '\u4fa7\u5411\u76d8\u661f\u7cfb', '\u900f\u955c\u72b6\u661f\u7cfb', '\u6052\u661f\u5f62\u6210\u661f\u7cfb'];
+    return {
+        id: 'ugc-' + number,
+        name: 'UGC ' + number,
+        nameEn: 'UGC ' + number,
+        type: types[index % types.length],
+        distanceLy: 28000000 + ((index * 7700000) % 232000000),
+        atlasMap: 'cosmic-neighborhood',
+        category: 'galaxy'
+    };
+});
+
+const ATLAS_EXPANSION_TO_50000_BATCHES = Array.from({ length: 1000 }, (_, batchIndex) => [
+    ...ATLAS_EXPANSION_TO_50000_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_50000_MILKY_WAY.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_50000_LOCAL_GROUP.slice(batchIndex * 5, batchIndex * 5 + 5),
+    ...ATLAS_EXPANSION_TO_50000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
+]);
+
+const ATLAS_EXPANSION_TO_50000_PROFILES = {
+    neighborhood: {
+        ...ATLAS_EXPANSION_TO_30000_PROFILES.neighborhood,
+        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 50000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+    },
+    'milky-way': {
+        ...ATLAS_EXPANSION_TO_30000_PROFILES['milky-way'],
+        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u94f6\u6cb3\u76d8\u9762\u7684\u5927\u89c4\u6a21\u6279\u91cf\u7d22\u5f15\u3002' }
+    },
+    'local-group': {
+        ...ATLAS_EXPANSION_TO_30000_PROFILES['local-group'],
+        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u4e94\u4e07\u7ea7\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' }
+    },
+    'cosmic-neighborhood': {
+        ...ATLAS_EXPANSION_TO_30000_PROFILES['cosmic-neighborhood'],
+        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u7684\u5927\u89c4\u6a21\u538b\u529b\u6d4b\u8bd5\u3002' }
+    }
+};
+
+const atlasExpansionTo50000LayerIndices = {
+    neighborhood: 7375,
+    'milky-way': 7375,
+    'local-group': 7375,
+    'cosmic-neighborhood': 7375
+};
+
+CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_50000_BATCHES.flat().map((entry, index) => {
+    const profile = ATLAS_EXPANSION_TO_50000_PROFILES[entry.atlasMap];
+    const layerIndex = atlasExpansionTo50000LayerIndices[entry.atlasMap]++;
+    const coordinate = profile.coordinate;
+    const batchNumber = Math.floor(index / 20) + 1476;
+
+    return {
+        ...entry,
+        color: profile.color,
+        size: profile.size,
+        renderTier: 'bulk',
+        temperature: profile.temperature,
+        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 50000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
+        related: [{ ...profile.related }],
+        dataQuality: 'synthetic',
+        source: 'generated-stress-test',
+        galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
+    };
+}));
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { AU_KM, LIGHT_YEAR_KM, SIMULATION, PLANET_DATA, PLANET_ORDER, CELESTIAL_CATALOG };
 }

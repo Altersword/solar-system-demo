@@ -19,6 +19,7 @@ class PulsarRenderer {
         this.worldDirection = new THREE.Vector3();
         this.toCamera = new THREE.Vector3();
         this.magneticDirection = new THREE.Vector3(0, 1, 0);
+        this.magneticTilt = THREE.MathUtils.degToRad(31);
     }
 
     create(entry) {
@@ -46,7 +47,7 @@ class PulsarRenderer {
 
         const magneticAxis = new THREE.Group();
         magneticAxis.name = 'neutron-star-magnetic-axis';
-        magneticAxis.rotation.z = THREE.MathUtils.degToRad(31);
+        magneticAxis.rotation.z = this.magneticTilt;
         magneticAxis.add(this.createPulsarBeamPair(coreRadius));
         magneticAxis.add(this.createMagneticFieldLines(coreRadius));
 
@@ -83,30 +84,35 @@ class PulsarRenderer {
             this.worldDirection.copy(this.magneticDirection).applyQuaternion(this.worldQuaternion).normalize();
             this.toCamera.copy(camera.position).sub(this.worldPosition).normalize();
             const alignment = Math.abs(this.worldDirection.dot(this.toCamera));
-            lighthousePulse = THREE.MathUtils.clamp(Math.pow(alignment, 18) * 2.35, 0, 1);
+            // The observable beam crosses the default focus camera at an oblique angle.
+            // Remap that crossing into a narrow phase window so the lighthouse has a
+            // readable peak instead of remaining permanently faint.
+            const phaseWindow = THREE.MathUtils.clamp((alignment - 0.52) / 0.28, 0, 1);
+            lighthousePulse = Math.pow(phaseWindow, 3.2);
         }
 
         if (this.coreMaterial?.uniforms) {
             this.coreMaterial.uniforms.uTime.value = time;
             this.coreMaterial.uniforms.uPulse.value = lighthousePulse;
         }
+        const beamFactor = 0.14 + lighthousePulse * 2.38;
         this.beamLayers.forEach((beam) => {
-            beam.material.opacity = beam.userData.baseOpacity * (0.26 + lighthousePulse * 2.35);
+            beam.material.opacity = Math.min(0.96, beam.userData.baseOpacity * beamFactor);
         });
         this.hotspots.forEach((hotspot) => {
             const scale = hotspot.userData.baseScale * (0.8 + lighthousePulse * 0.42);
             hotspot.scale.set(scale, scale, 1);
-            hotspot.material.opacity = 0.32 + lighthousePulse * 0.65;
+            hotspot.material.opacity = 0.18 + lighthousePulse * 0.76;
         });
         if (this.wind) {
             this.wind.rotation.y += deltaSeconds * 0.52;
             this.wind.rotation.z += deltaSeconds * 0.018;
-            this.wind.material.opacity = this.wind.userData.baseOpacity * (0.86 + Math.sin(time * 1.2) * 0.14);
+            this.wind.material.opacity = this.wind.userData.baseOpacity * (0.64 + Math.sin(time * 1.2) * 0.10);
         }
         this.shockArcs.forEach((arc, index) => {
             const wave = 1 + Math.sin(time * 0.92 + index * 1.3) * 0.028;
             arc.scale.setScalar(wave);
-            arc.material.opacity = arc.userData.baseOpacity * (0.72 + Math.sin(time * 1.35 + index) * 0.22);
+            arc.material.opacity = arc.userData.baseOpacity * (0.52 + Math.sin(time * 1.35 + index) * 0.14);
         });
     }
 
@@ -126,7 +132,8 @@ class PulsarRenderer {
         return new THREE.ShaderMaterial({
             uniforms: {
                 uTime: { value: 0 },
-                uPulse: { value: 0 }
+                uPulse: { value: 0 },
+                uMagneticAxis: { value: new THREE.Vector3(-Math.sin(this.magneticTilt), Math.cos(this.magneticTilt), 0) }
             },
             vertexShader: `
                 varying vec3 vObjectNormal;
@@ -145,6 +152,7 @@ class PulsarRenderer {
 
                 uniform float uTime;
                 uniform float uPulse;
+                uniform vec3 uMagneticAxis;
                 varying vec3 vObjectNormal;
                 varying vec3 vViewNormal;
                 varying vec3 vObjectPosition;
@@ -158,7 +166,7 @@ class PulsarRenderer {
                     crust = 0.5 + crust * 0.18;
 
                     float equatorialBand = exp(-pow(latitude / 0.34, 2.0));
-                    float polarHeat = pow(abs(n.y), 10.0);
+                    float polarHeat = pow(abs(dot(n, normalize(uMagneticAxis))), 10.0);
                     float limb = pow(1.0 - abs(normalize(vViewNormal).z), 2.2);
 
                     vec3 deepBlue = vec3(0.025, 0.14, 0.3);
@@ -177,12 +185,13 @@ class PulsarRenderer {
     createPulsarBeamPair(coreRadius) {
         const beams = new THREE.Group();
         beams.name = 'neutron-star-beams';
-        const length = coreRadius * 19;
+        const length = coreRadius * 23;
 
         [-1, 1].forEach((direction) => {
             const layers = [
-                { radius: coreRadius * 0.055, opacity: 0.31, color: 0xf2feff },
-                { radius: coreRadius * 0.14, opacity: 0.065, color: 0x8be6ff }
+                { radius: coreRadius * 0.038, opacity: 0.39, color: 0xf6feff },
+                { radius: coreRadius * 0.082, opacity: 0.105, color: 0xa4edff },
+                { radius: coreRadius * 0.16, opacity: 0.022, color: 0x4cafff }
             ];
 
             layers.forEach((layer, index) => {
@@ -195,7 +204,7 @@ class PulsarRenderer {
                     side: THREE.DoubleSide
                 });
                 const cone = new THREE.Mesh(
-                    new THREE.ConeGeometry(layer.radius * (1.45 + index * 0.35), length, 32, 1, true),
+                    new THREE.ConeGeometry(layer.radius * (1.18 + index * 0.25), length, 32, 1, true),
                     material
                 );
                 cone.name = `pulsar-beam-${direction}-${index}`;
@@ -209,7 +218,7 @@ class PulsarRenderer {
 
             const random = this.host.seededRandom(`pulsar-beam-particles-${direction}`);
             const positions = [];
-            for (let i = 0; i < 110; i += 1) {
+            for (let i = 0; i < 96; i += 1) {
                 const distance = coreRadius * 1.1 + random() * (length - coreRadius);
                 const spread = (distance / length) * coreRadius * 0.72;
                 const angle = random() * Math.PI * 2;
@@ -226,7 +235,7 @@ class PulsarRenderer {
                 size: 1.2,
                 map: this.host.createRadialTexture(0xffffff),
                 transparent: true,
-                opacity: 0.28,
+                opacity: 0.32,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false,
                 alphaTest: 0.002
@@ -234,7 +243,7 @@ class PulsarRenderer {
             const particles = new THREE.Points(geometry, material);
             particles.name = `pulsar-beam-particles-${direction}`;
             particles.userData.beamLayer = true;
-            particles.userData.baseOpacity = 0.28;
+            particles.userData.baseOpacity = 0.32;
             beams.add(particles);
             this.beamLayers.push(particles);
         });
@@ -307,7 +316,7 @@ class PulsarRenderer {
             map: this.host.createRadialTexture(0xffffff),
             vertexColors: true,
             transparent: true,
-            opacity: 0.38,
+            opacity: 0.24,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             alphaTest: 0.002,
@@ -316,7 +325,7 @@ class PulsarRenderer {
         const wind = new THREE.Points(geometry, material);
         wind.name = 'pulsar-wind-nebula';
         wind.userData.effectRole = 'neutron-star-wind';
-        wind.userData.baseOpacity = 0.38;
+        wind.userData.baseOpacity = 0.24;
         wind.scale.set(1.18, 0.64, 0.92);
         wind.position.x = coreRadius * 0.45;
         this.wind = wind;
@@ -329,7 +338,7 @@ class PulsarRenderer {
         group.userData.effectRole = 'neutron-star-shocks';
 
         [3.2, 4.5, 5.8, 7.1].forEach((multiplier, index) => {
-            const opacity = 0.18 - index * 0.027;
+            const opacity = 0.12 - index * 0.018;
             const radius = coreRadius * multiplier;
             const start = -1.2 + index * 0.58;
             const span = 1.35 + (index % 2) * 0.42;
