@@ -11,45 +11,100 @@ class SupernovaRemnantRenderer {
         this.filaments = [];
         this.gasClouds = [];
         this.centralSource = null;
+        this.extras = [];
     }
 
     create(entry) {
         const group = new THREE.Group();
         group.name = `${entry.id}-supernova-remnant-model`;
         group.userData.effectType = 'supernova';
+        group.userData.remnantType = entry.remnantType || 'shell';
 
-        const shellConfigs = [
-            { radius: 42, color: 0x79ddff, opacity: 0.24, seed: 'hot', speed: 0.055 },
-            { radius: 55, color: 0x7677ff, opacity: 0.14, seed: 'gas', speed: -0.032 },
-            { radius: 68, color: 0xff7d54, opacity: 0.11, seed: 'dust', speed: 0.021 }
-        ];
-        shellConfigs.forEach((config, index) => {
-            const shell = this.createIrregularShell(entry, config, index);
-            group.add(shell);
-            this.shells.push(shell);
-        });
+        const rType = entry.remnantType || 'shell';
 
-        const filamentGroup = this.createFilaments(entry);
-        group.add(filamentGroup);
-        group.add(this.createParticleCloud(entry, 'inner', 1300, 18, 58, 0x8adfff, 1.5, 0.26));
-        group.add(this.createParticleCloud(entry, 'outer', 900, 48, 78, 0xff8d61, 1.35, 0.2));
+        if (rType === 'plerion') {
+            const coreSize = 4.2;
+            const coreGlow = this.host.createGlowMesh(coreSize * 1.8, 0xaff4ff, 0.62);
+            coreGlow.name = 'plerion-core-glow';
+            coreGlow.userData.baseOpacity = 0.62;
+            group.add(coreGlow);
+            const source = new THREE.Mesh(
+                new THREE.SphereGeometry(coreSize, 32, 24),
+                new THREE.MeshBasicMaterial({ color: 0xd9f7ff, transparent: true, opacity: 0.62 })
+            );
+            source.name = 'plerion-core';
+            group.add(source);
+            this.centralSource = source;
+            group.add(this.createParticleCloud(entry, 'plerion-inner', 2200, 6, 32, 0x8adfff, 1.8, 0.32));
+            group.add(this.createParticleCloud(entry, 'plerion-outer', 1400, 28, 62, 0x4a9aff, 1.4, 0.18));
+            const ghostShell = this.createIrregularShell(entry, { radius: 68, color: 0x5588ff, opacity: 0.07, seed: "ghost", speed: 0.018 }, 0);
+            group.add(ghostShell);
+            this.shells.push(ghostShell);
+            const torus = new THREE.Mesh(
+                new THREE.TorusGeometry(22, 1.8, 16, 48),
+                new THREE.MeshBasicMaterial({ color: 0x7fcfff, transparent: true, opacity: 0.14, blending: THREE.AdditiveBlending, depthWrite: false })
+            );
+            torus.name = 'plerion-torus';
+            torus.rotation.x = 0.6;
+            torus.userData.baseOpacity = 0.14;
+            torus.userData.rotationSpeed = 0.035;
+            group.add(torus);
+            this.extras = [torus];
+        } else {
+            const shellConfigs = rType === "mixed"
+                ? [
+                    { radius: 32, color: 0x88ddff, opacity: 0.18, seed: "inner", speed: 0.06 },
+                    { radius: 48, color: 0x6677ff, opacity: 0.10, seed: "mid", speed: -0.035 },
+                    { radius: 62, color: 0xff6d44, opacity: 0.08, seed: "outer", speed: 0.022 }
+                ]
+                : [
+                    { radius: 42, color: 0x79ddff, opacity: 0.24, seed: "hot", speed: 0.055 },
+                    { radius: 55, color: 0x7677ff, opacity: 0.14, seed: "gas", speed: -0.032 },
+                    { radius: 68, color: 0xff7d54, opacity: 0.11, seed: "dust", speed: 0.021 }
+                ];
+            shellConfigs.forEach((config, index) => {
+                const shell = this.createIrregularShell(entry, config, index);
+                group.add(shell);
+                this.shells.push(shell);
+            });
+            const filamentGroup = this.createFilaments(entry, rType === "mixed" ? 14 : 24);
+            group.add(filamentGroup);
 
-        const source = new THREE.Mesh(
-            new THREE.SphereGeometry(2.1, 32, 24),
-            new THREE.MeshBasicMaterial({ color: 0xd9f7ff, transparent: true, opacity: 0.58 })
-        );
-        source.name = 'remnant-central-source';
-        source.add(this.host.createGlowMesh(7.5, 0x8fdcff, 0.18));
-        group.add(source);
-        this.centralSource = source;
+            if (rType === "mixed") {
+                group.add(this.createParticleCloud(entry, 'mixed-inner', 1000, 14, 40, 0x8adfff, 1.6, 0.24));
+                group.add(this.createParticleCloud(entry, 'mixed-outer', 700, 40, 72, 0xff8d61, 1.35, 0.16));
+                const source = new THREE.Mesh(
+                    new THREE.SphereGeometry(3.5, 32, 24),
+                    new THREE.MeshBasicMaterial({ color: 0xd9f7ff, transparent: true, opacity: 0.62 })
+                );
+                source.name = 'remnant-central-source';
+                source.add(this.host.createGlowMesh(9.0, 0x8fdcff, 0.22));
+                group.add(source);
+                this.centralSource = source;
+            } else {
+                group.add(this.createParticleCloud(entry, 'inner', 1300, 18, 58, 0x8adfff, 1.5, 0.26));
+                group.add(this.createParticleCloud(entry, 'outer', 900, 48, 78, 0xff8d61, 1.35, 0.2));
+                const source = new THREE.Mesh(
+                    new THREE.SphereGeometry(2.1, 32, 24),
+                    new THREE.MeshBasicMaterial({ color: 0xd9f7ff, transparent: true, opacity: 0.58 })
+                );
+                source.name = 'remnant-central-source';
+                source.add(this.host.createGlowMesh(7.5, 0x8fdcff, 0.18));
+                group.add(source);
+                this.centralSource = source;
+            }
+        }
 
         group.rotation.set(0.18, -0.3, 0.08);
         this.group = group;
         return group;
     }
 
+
     update(deltaSeconds, time) {
         if (!this.group) return;
+        const rType = this.group.userData.remnantType || 'shell';
+
         this.shells.forEach((shell, index) => {
             shell.rotation.y += deltaSeconds * shell.userData.rotationSpeed;
             shell.rotation.x += deltaSeconds * shell.userData.rotationSpeed * 0.28;
@@ -66,13 +121,26 @@ class SupernovaRemnantRenderer {
             cloud.material.opacity = cloud.userData.baseOpacity * (0.9 + Math.sin(time * 0.42 + index) * 0.1);
         });
         if (this.centralSource) {
-            const pulse = 0.92 + Math.sin(time * 2.4) * 0.08;
+            const rate = rType === "plerion" ? 3.6 : 2.4;
+            const pulse = 0.92 + Math.sin(time * rate) * 0.08;
             this.centralSource.scale.setScalar(pulse);
-            this.centralSource.material.opacity = 0.48 + Math.sin(time * 2.4) * 0.1;
+            this.centralSource.material.opacity = (rType === "plerion" ? 0.52 : 0.48) + Math.sin(time * rate) * 0.1;
         }
-        const expansion = 1 + Math.sin(time * 0.36) * 0.012;
+        if (this.extras) {
+            this.extras.forEach((item, index) => {
+                if (item.userData?.rotationSpeed) {
+                    item.rotation.z += deltaSeconds * item.userData.rotationSpeed;
+                }
+                if (item.material && item.userData?.baseOpacity != null) {
+                    item.material.opacity = item.userData.baseOpacity * (0.82 + Math.sin(time * 0.5 + index) * 0.18);
+                }
+            });
+        }
+        const expansionRate = rType === "plerion" ? 0.022 : 0.012;
+        const expansion = 1 + Math.sin(time * (rType === "plerion" ? 0.28 : 0.36)) * expansionRate;
         this.group.scale.setScalar(expansion);
     }
+
 
     dispose() {
         this.group = null;
@@ -80,7 +148,9 @@ class SupernovaRemnantRenderer {
         this.filaments = [];
         this.gasClouds = [];
         this.centralSource = null;
+        this.extras = [];
     }
+
 
     createIrregularShell(entry, config, index) {
         const geometry = new THREE.SphereGeometry(config.radius, 48, 32);
@@ -145,11 +215,12 @@ class SupernovaRemnantRenderer {
         return shell;
     }
 
-    createFilaments(entry) {
+    createFilaments(entry, count) {
         const group = new THREE.Group();
         group.name = 'remnant-filaments';
         const random = this.host.seededRandom(`${entry.id}-filaments`);
-        for (let index = 0; index < 24; index += 1) {
+        const total = count || 24;
+        for (let index = 0; index < total; index += 1) {
             const radius = 45 + random() * 27;
             const start = random() * Math.PI * 2;
             const span = 0.4 + random() * 1.05;
@@ -181,6 +252,7 @@ class SupernovaRemnantRenderer {
         }
         return group;
     }
+
 
     createParticleCloud(entry, suffix, count, innerRadius, outerRadius, color, size, opacity) {
         const random = this.host.seededRandom(`${entry.id}-${suffix}-particles`);

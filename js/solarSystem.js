@@ -739,6 +739,10 @@ class SolarSystem {
         const width = window.innerWidth;
         const height = window.innerHeight;
         const position = this.labelWorldPosition;
+        // Build a frustum from the camera once per batch for cheap pre-culling
+        const frustum = new THREE.Frustum();
+        frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+        const camPos = this.camera.position;
 
         const candidates = [];
         this.labels.forEach((label) => {
@@ -748,7 +752,19 @@ class SolarSystem {
             }
 
             label.object.getWorldPosition(position);
-            const distance = position.distanceTo(this.camera.position);
+            // Cheap distance-based pre-cull: skip objects > 4000 units away
+            const dx = position.x - camPos.x, dy = position.y - camPos.y, dz = position.z - camPos.z;
+            const distSq = dx * dx + dy * dy + dz * dz;
+            if (distSq > 4000 * 4000) {
+                label.element.style.display = 'none';
+                return;
+            }
+            // Cheap frustum pre-cull before full projection
+            if (!frustum.containsPoint(position)) {
+                label.element.style.display = 'none';
+                return;
+            }
+            const distance = Math.sqrt(distSq);
             position.project(this.camera);
 
             const x = (position.x * 0.5 + 0.5) * width;
@@ -992,7 +1008,7 @@ class SolarSystem {
         document.getElementById('info-atmosphere').textContent = data.atmosphere || data.composition || '无明显大气';
         document.getElementById('info-temperature').textContent = data.surfaceTemperature || 'N/A';
         document.getElementById('info-moons').textContent = data.moons ? data.moons.length : 0;
-        document.getElementById('info-feature').textContent = data.feature || 'N/A';
+        document.getElementById('info-feature').textContent = data.feature ? '【真实天体数据】' + data.feature : 'N/A';
 
         const moonsList = document.getElementById('moons-list');
         moonsList.innerHTML = '';
@@ -1077,7 +1093,7 @@ class SolarSystem {
                                                     : '深空方向标';
         document.getElementById('info-temperature').textContent = data.temperature || 'N/A';
         document.getElementById('info-moons').textContent = data.related?.length || 0;
-        const dataQualityPrefix = data.dataQuality === 'synthetic' ? '\u3010\u6a21\u62df\u538b\u529b\u6d4b\u8bd5\u6570\u636e\u3011' : '';
+        const dataQualityPrefix = data.dataQuality === 'synthetic' ? '\u3010\u6a21\u62df\u538b\u529b\u6d4b\u8bd5\u6570\u636e\u3011' : '\u3010\u771f\u5b9e\u5929\u4f53\u6570\u636e\u3011';
         document.getElementById('info-feature').textContent = `${dataQualityPrefix}${data.feature || 'N/A'}`;
 
         const moonsList = document.getElementById('moons-list');
@@ -1187,24 +1203,29 @@ class SolarSystem {
 
     flyCameraTo(target, distance) {
         const offset = new THREE.Vector3(0, distance * 0.46, distance).applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.32);
+        const endPos = target.clone().add(offset);
+        const flightDist = this.camera.position.distanceTo(endPos);
+        const duration = Math.min(2.8, Math.max(0.8, flightDist * 0.012));
         this.cameraFlight = {
             startPosition: this.camera.position.clone(),
             startTarget: this.controls.target.clone(),
-            endPosition: target.clone().add(offset),
+            endPosition: endPos,
             endTarget: target.clone(),
             startTime: this.clock.elapsedTime,
-            duration: 1.35
+            duration
         };
     }
 
     flyCameraToPos(endPos, endTarget) {
+        const dist = this.camera.position.distanceTo(endPos);
+        const duration = Math.min(2.8, Math.max(0.8, dist * 0.012));
         this.cameraFlight = {
             startPosition: this.camera.position.clone(),
             startTarget: this.controls.target.clone(),
             endPosition: endPos.clone(),
             endTarget: endTarget.clone(),
             startTime: this.clock.elapsedTime,
-            duration: 1.35
+            duration
         };
     }
 
@@ -1212,7 +1233,10 @@ class SolarSystem {
         if (!this.cameraFlight) return;
         const elapsed = this.clock.elapsedTime - this.cameraFlight.startTime;
         const rawT = THREE.MathUtils.clamp(elapsed / this.cameraFlight.duration, 0, 1);
-        const t = rawT * rawT * (3 - 2 * rawT);
+        // Cinematic ease-in-out with subtle overshoot at the end
+        const smooth = rawT * rawT * (3 - 2 * rawT);
+        const overshoot = 1 + 0.03 * Math.sin(smooth * Math.PI) * (1 - smooth);
+        const t = Math.min(1, smooth * overshoot);
         this.camera.position.lerpVectors(this.cameraFlight.startPosition, this.cameraFlight.endPosition, t);
         this.controls.target.lerpVectors(this.cameraFlight.startTarget, this.cameraFlight.endTarget, t);
         if (rawT >= 1) {

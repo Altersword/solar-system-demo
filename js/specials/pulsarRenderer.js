@@ -63,6 +63,7 @@ class PulsarRenderer {
         });
 
         rotor.add(magneticAxis);
+        rotor.add(this.createPulsarFlashSprite(coreRadius));
         model.add(rotor);
         model.add(this.createPulsarWindNebula(entry, coreRadius));
         model.add(this.createPulsarShockRings(coreRadius));
@@ -95,15 +96,25 @@ class PulsarRenderer {
             this.coreMaterial.uniforms.uTime.value = time;
             this.coreMaterial.uniforms.uPulse.value = lighthousePulse;
         }
-        const beamFactor = 0.14 + lighthousePulse * 2.38;
+        const beamBase = 0.06;
+        const beamBoost = lighthousePulse * 12.0;
+        const beamFactor = beamBase + beamBoost;
         this.beamLayers.forEach((beam) => {
-            beam.material.opacity = Math.min(0.96, beam.userData.baseOpacity * beamFactor);
+            beam.material.opacity = Math.min(1.0, beam.userData.baseOpacity * beamFactor);
         });
         this.hotspots.forEach((hotspot) => {
-            const scale = hotspot.userData.baseScale * (0.8 + lighthousePulse * 0.42);
+            const scale = hotspot.userData.baseScale * (0.72 + lighthousePulse * 0.55);
             hotspot.scale.set(scale, scale, 1);
-            hotspot.material.opacity = 0.18 + lighthousePulse * 0.76;
+            hotspot.material.opacity = 0.12 + lighthousePulse * 0.86;
         });
+        // Flash sprite: visible only during pulse peak
+        const flashObj = this.group?.getObjectByName('pulsar-flash');
+        if (flashObj) {
+            const flashIntensity = Math.pow(lighthousePulse, 2.5);
+            flashObj.material.opacity = flashIntensity * 0.55;
+            const flashScale = flashObj.userData.baseScale * (0.8 + flashIntensity * 1.5);
+            flashObj.scale.set(flashScale, flashScale, 1);
+        }
         if (this.wind) {
             this.wind.rotation.y += deltaSeconds * 0.52;
             this.wind.rotation.z += deltaSeconds * 0.018;
@@ -166,16 +177,22 @@ class PulsarRenderer {
                     crust = 0.5 + crust * 0.18;
 
                     float equatorialBand = exp(-pow(latitude / 0.34, 2.0));
-                    float polarHeat = pow(abs(dot(n, normalize(uMagneticAxis))), 10.0);
+                    float polarHeat = pow(abs(dot(n, normalize(uMagneticAxis))), 8.0);
                     float limb = pow(1.0 - abs(normalize(vViewNormal).z), 2.2);
 
                     vec3 deepBlue = vec3(0.025, 0.14, 0.3);
                     vec3 electricBlue = vec3(0.16, 0.62, 0.98);
                     vec3 iceWhite = vec3(0.84, 0.98, 1.0);
+                    vec3 flashWhite = vec3(1.2, 1.25, 1.4);
                     vec3 color = mix(deepBlue, electricBlue, crust * 0.72 + equatorialBand * 0.16);
-                    color = mix(color, iceWhite, polarHeat * (0.58 + uPulse * 0.42));
+                    color = mix(color, iceWhite, polarHeat * (0.52 + uPulse * 0.48));
+                    // Dramatic pole flash when beam sweeps across camera
+                    float flashRim = pow(polarHeat, 1.5) * uPulse;
+                    color += flashWhite * flashRim * 0.55;
                     color += vec3(0.08, 0.5, 0.92) * limb * 0.85;
-                    color += iceWhite * uPulse * polarHeat * 0.38;
+                    color += iceWhite * uPulse * polarHeat * 0.55;
+                    // Blinding flash at pulse peak
+                    color += flashWhite * pow(uPulse, 4.0) * 0.35;
                     gl_FragColor = vec4(color, 1.0);
                 }
             `
@@ -185,42 +202,55 @@ class PulsarRenderer {
     createPulsarBeamPair(coreRadius) {
         const beams = new THREE.Group();
         beams.name = 'neutron-star-beams';
-        const length = coreRadius * 23;
+        const length = coreRadius * 28;
 
         [-1, 1].forEach((direction) => {
-            const layers = [
-                { radius: coreRadius * 0.038, opacity: 0.39, color: 0xf6feff },
-                { radius: coreRadius * 0.082, opacity: 0.105, color: 0xa4edff },
-                { radius: coreRadius * 0.16, opacity: 0.022, color: 0x4cafff }
-            ];
-
-            layers.forEach((layer, index) => {
-                const material = new THREE.MeshBasicMaterial({
-                    color: layer.color,
+            // Sharply collimated inner beam core (narrow, bright)
+            const coreBeam = new THREE.Mesh(
+                new THREE.ConeGeometry(coreRadius * 0.022, length * 1.15, 16, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0xf6feff,
                     transparent: true,
-                    opacity: layer.opacity,
+                    opacity: 0.52,
                     blending: THREE.AdditiveBlending,
                     depthWrite: false,
                     side: THREE.DoubleSide
-                });
-                const cone = new THREE.Mesh(
-                    new THREE.ConeGeometry(layer.radius * (1.18 + index * 0.25), length, 32, 1, true),
-                    material
-                );
-                cone.name = `pulsar-beam-${direction}-${index}`;
-                cone.position.y = direction * length * 0.5;
-                cone.rotation.x = direction > 0 ? Math.PI : 0;
-                cone.userData.beamLayer = true;
-                cone.userData.baseOpacity = layer.opacity;
-                beams.add(cone);
-                this.beamLayers.push(cone);
-            });
+                })
+            );
+            coreBeam.name = `pulsar-beam-core-${direction}`;
+            coreBeam.position.y = direction * length * 0.57;
+            coreBeam.rotation.x = direction > 0 ? Math.PI : 0;
+            coreBeam.userData.beamLayer = true;
+            coreBeam.userData.baseOpacity = 0.52;
+            beams.add(coreBeam);
+            this.beamLayers.push(coreBeam);
 
+            // Outer glow sheath — very faint, wide
+            const sheath = new THREE.Mesh(
+                new THREE.ConeGeometry(coreRadius * 0.065, length * 1.1, 24, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0xa4edff,
+                    transparent: true,
+                    opacity: 0.12,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    side: THREE.DoubleSide
+                })
+            );
+            sheath.name = `pulsar-beam-sheath-${direction}`;
+            sheath.position.y = direction * length * 0.55;
+            sheath.rotation.x = direction > 0 ? Math.PI : 0;
+            sheath.userData.beamLayer = true;
+            sheath.userData.baseOpacity = 0.12;
+            beams.add(sheath);
+            this.beamLayers.push(sheath);
+
+            // Beam particles — streaming outward
             const random = this.host.seededRandom(`pulsar-beam-particles-${direction}`);
             const positions = [];
-            for (let i = 0; i < 96; i += 1) {
-                const distance = coreRadius * 1.1 + random() * (length - coreRadius);
-                const spread = (distance / length) * coreRadius * 0.72;
+            for (let i = 0; i < 80; i += 1) {
+                const distance = coreRadius * 1.5 + random() * (length - coreRadius);
+                const spread = (distance / length) * coreRadius * 0.28;
                 const angle = random() * Math.PI * 2;
                 positions.push(
                     Math.cos(angle) * spread * random(),
@@ -230,25 +260,33 @@ class PulsarRenderer {
             }
             const geometry = new THREE.BufferGeometry();
             geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-            const material = new THREE.PointsMaterial({
+            const particleMat = new THREE.PointsMaterial({
                 color: 0xdaf8ff,
-                size: 1.2,
+                size: 1.0,
                 map: this.host.createRadialTexture(0xffffff),
                 transparent: true,
-                opacity: 0.32,
+                opacity: 0.28,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false,
                 alphaTest: 0.002
             });
-            const particles = new THREE.Points(geometry, material);
+            const particles = new THREE.Points(geometry, particleMat);
             particles.name = `pulsar-beam-particles-${direction}`;
             particles.userData.beamLayer = true;
-            particles.userData.baseOpacity = 0.32;
+            particles.userData.baseOpacity = 0.28;
             beams.add(particles);
             this.beamLayers.push(particles);
         });
 
         return beams;
+    }
+    createPulsarFlashSprite(coreRadius) {
+        const flash = this.host.createHaloSprite(0xffffff, coreRadius * 5.5, 0);
+        flash.name = 'pulsar-flash';
+        flash.position.set(0, coreRadius * 0.5, 0);
+        flash.userData.baseScale = coreRadius * 5.5;
+        flash.material.opacity = 0;
+        return flash;
     }
 
     createMagneticFieldLines(coreRadius) {

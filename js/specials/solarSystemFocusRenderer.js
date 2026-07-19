@@ -606,17 +606,29 @@ class SolarSystemFocusRenderer {
     createIoVolcanicActivity(coreSize) {
         const group = new THREE.Group();
         group.name = 'io-volcanic-activity';
+        // Surface-wide lava glow from volcanic plains
+        const lavaGlow = this.host.createHaloSprite(0xff6a1a, coreSize * 1.35, 0.09);
+        lavaGlow.name = 'io-lava-glow';
+        lavaGlow.position.set(0.12, 0.08, 0.88).multiplyScalar(coreSize);
+        lavaGlow.userData.baseOpacity = 0.09;
+        lavaGlow.userData.phase = 2.8;
+        group.add(lavaGlow);
+        this.extras.push(lavaGlow);
+
         const sites = [
-            { position: [0.02, 0.32, 0.95], color: 0xff8a32, size: 0.26, rise: 0.72 },
-            { position: [-0.58, -0.18, 0.78], color: 0xffc24a, size: 0.2, rise: 0.5 },
-            { position: [0.58, -0.34, 0.72], color: 0xff6f29, size: 0.18, rise: 0.42 }
+            { position: [0.02, 0.32, 0.95], color: 0xff8a32, size: 0.28, rise: 0.82, phase: 0.0 },
+            { position: [-0.58, -0.18, 0.78], color: 0xffc24a, size: 0.22, rise: 0.6, phase: 1.7 },
+            { position: [0.58, -0.34, 0.72], color: 0xff6f29, size: 0.2, rise: 0.52, phase: 3.1 },
+            { position: [-0.28, 0.58, 0.76], color: 0xffaa44, size: 0.17, rise: 0.38, phase: 4.2 }
         ];
         sites.forEach((site, index) => {
             const normal = new THREE.Vector3(...site.position).normalize();
-            const hotspot = this.host.createHaloSprite(site.color, coreSize * site.size, 0.27 + index * 0.05);
+            const hotspot = this.host.createHaloSprite(site.color, coreSize * site.size, 0.3 + index * 0.04);
             hotspot.name = `io-volcanic-hotspot-${index}`;
             hotspot.position.copy(normal).multiplyScalar(coreSize * 1.022);
-            hotspot.userData.baseOpacity = 0.27 + index * 0.05;
+            hotspot.userData.baseOpacity = 0.3 + index * 0.04;
+            hotspot.userData.phase = site.phase;
+            hotspot.userData.baseScale = coreSize * site.size;
             group.add(hotspot);
             this.extras.push(hotspot);
 
@@ -624,29 +636,31 @@ class SolarSystemFocusRenderer {
             if (tangent.lengthSq() < 0.001) tangent.set(1, 0, 0);
             tangent.normalize();
             const start = normal.clone().multiplyScalar(coreSize * 1.018);
+            const rise = site.rise;
             const points = [
                 start,
-                start.clone().addScaledVector(normal, coreSize * site.rise * 0.33).addScaledVector(tangent, coreSize * 0.07),
-                start.clone().addScaledVector(normal, coreSize * site.rise).addScaledVector(tangent, coreSize * (0.18 + index * 0.05))
+                start.clone().addScaledVector(normal, coreSize * rise * 0.33).addScaledVector(tangent, coreSize * 0.07),
+                start.clone().addScaledVector(normal, coreSize * rise).addScaledVector(tangent, coreSize * (0.2 + index * 0.04))
             ];
             const plume = new THREE.Mesh(
-                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 20, coreSize * (0.018 - index * 0.002), 5, false),
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 24, coreSize * (0.02 - index * 0.002), 5, false),
                 new THREE.MeshBasicMaterial({
                     color: index === 2 ? 0xd97a37 : 0xffd891,
                     transparent: true,
-                    opacity: 0.22 - index * 0.025,
+                    opacity: 0.25 - index * 0.025,
                     depthWrite: false,
                     blending: THREE.AdditiveBlending
                 })
             );
             plume.name = `io-volcanic-plume-${index}`;
-            plume.userData.baseOpacity = 0.22 - index * 0.025;
+            plume.userData.baseOpacity = 0.25 - index * 0.025;
+            plume.userData.phase = site.phase + 0.5;
+            plume.userData.rise = rise;
             group.add(plume);
             this.extras.push(plume);
         });
         return group;
     }
-
     createEuropaFractures(coreSize) {
         const group = new THREE.Group();
         group.name = 'europa-lineae';
@@ -655,39 +669,92 @@ class SolarSystemFocusRenderer {
             radius * Math.sin(latitude),
             radius * Math.cos(latitude) * Math.sin(longitude)
         );
-        [1.24, 1.55, 1.83].forEach((longitude, index) => {
+        // Primary long lineae — equatorial arc bands
+        [1.24, 1.55, 1.83, 2.1, 2.35].forEach((longitude, index) => {
             const points = [];
-            for (let step = 0; step <= 20; step += 1) {
-                const t = step / 20;
-                const latitude = -0.9 + t * 1.8;
-                const waveringLongitude = longitude + Math.sin(t * Math.PI * (2.1 + index * 0.4)) * (0.09 + index * 0.018);
+            const steps = 24 - index * 2;
+            for (let step = 0; step <= steps; step += 1) {
+                const t = step / steps;
+                const latitude = -1.0 + t * 2.0;
+                const waveringLongitude = longitude + Math.sin(t * Math.PI * (2.1 + index * 0.35)) * (0.09 + index * 0.018);
                 points.push(toSurface(latitude, waveringLongitude, coreSize * 1.018));
             }
             const fracture = new THREE.Mesh(
-                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 40, coreSize * (0.011 + index * 0.001), 4, false),
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 50, coreSize * (0.009 + index * 0.001), 4, false),
                 new THREE.MeshBasicMaterial({
-                    color: index === 1 ? 0x6f4937 : 0x8b6249,
+                    color: index % 2 === 0 ? 0x8b6249 : 0x6f4937,
                     transparent: true,
-                    opacity: 0.24 - index * 0.035,
+                    opacity: 0.22 - index * 0.025,
                     depthWrite: false
                 })
             );
             fracture.name = `europa-linea-${index}`;
-            fracture.userData.baseOpacity = 0.24 - index * 0.035;
+            fracture.userData.baseOpacity = 0.22 - index * 0.025;
+            group.add(fracture);
+            this.extras.push(fracture);
+        });
+        // Secondary chaotic lineae — shorter, more chaotic cross-cuts
+        [-0.85, 0.12, 0.72].forEach((baseLat, idx) => {
+            const points = [];
+            const steps = 14 + idx * 3;
+            for (let step = 0; step <= steps; step += 1) {
+                const t = step / steps;
+                const latitude = baseLat + Math.sin(t * Math.PI * 1.7 + idx) * 0.6;
+                const longitude = 0.5 + t * 1.8 + Math.sin(t * Math.PI * 3.3 + idx * 1.2) * 0.25;
+                points.push(toSurface(latitude, longitude, coreSize * 1.018));
+            }
+            const fracture = new THREE.Mesh(
+                new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 30, coreSize * 0.006, 4, false),
+                new THREE.MeshBasicMaterial({
+                    color: 0xa07858,
+                    transparent: true,
+                    opacity: 0.18 - idx * 0.02,
+                    depthWrite: false
+                })
+            );
+            fracture.name = `europa-linea-chaotic-${idx}`;
+            fracture.userData.baseOpacity = 0.18 - idx * 0.02;
             group.add(fracture);
             this.extras.push(fracture);
         });
         return group;
     }
-
     createTitanHaze(coreSize) {
         const group = new THREE.Group();
         group.name = 'titan-layered-haze';
-        group.add(this.createSoftCloudLayer(coreSize * 1.06, 0xf2be70, 0.045, 0.018, 'titan-low-haze'));
-        group.add(this.createSoftCloudLayer(coreSize * 1.115, 0xd98536, 0.032, -0.011, 'titan-upper-haze'));
+        // Layered atmospheric haze with independent slow rotation
+        const lowHaze = this.createSoftCloudLayer(coreSize * 1.06, 0xf2be70, 0.045, 0.018, 'titan-low-haze');
+        const upperHaze = this.createSoftCloudLayer(coreSize * 1.115, 0xd98536, 0.032, -0.011, 'titan-upper-haze');
+        group.add(lowHaze);
+        group.add(upperHaze);
+        // Polar haze caps
+        [-1, 1].forEach((dir) => {
+            const polarHaze = this.host.createHaloSprite(0xd47a28, coreSize * 0.45, 0.12);
+            polarHaze.name = `titan-polar-haze-${dir > 0 ? 'north' : 'south'}`;
+            polarHaze.position.set(0, dir * coreSize * 0.88, 0);
+            polarHaze.userData.baseOpacity = 0.12;
+            polarHaze.userData.speed = 0.005 * dir;
+            group.add(polarHaze);
+            this.extras.push(polarHaze);
+        });
+        // Dark hydrocarbon lake hints on the surface
+        const lakeRandom = this.host.seededRandom('titan-lakes');
+        for (let i = 0; i < 18; i += 1) {
+            const lake = this.host.createHaloSprite(0x332211, coreSize * (0.04 + lakeRandom() * 0.09), 0.25 + lakeRandom() * 0.15);
+            const theta = lakeRandom() * Math.PI * 2;
+            const phi = (0.3 + lakeRandom() * 0.6);
+            const radius = coreSize * 1.012;
+            lake.position.set(
+                radius * Math.sin(phi) * Math.cos(theta),
+                radius * Math.cos(phi),
+                radius * Math.sin(phi) * Math.sin(theta)
+            );
+            lake.userData.baseOpacity = 0.25 + lakeRandom() * 0.15;
+            group.add(lake);
+            this.extras.push(lake);
+        }
         return group;
     }
-
     createSoftCloudLayer(radius, color, opacity, speed, name) {
         const mesh = new THREE.Mesh(
             new THREE.SphereGeometry(radius, 96, 64),
@@ -960,8 +1027,29 @@ class SolarSystemFocusRenderer {
                 item.rotation.y += deltaSeconds * item.userData.speed;
             }
             if (item.material && item.userData?.baseOpacity != null) {
-                item.material.opacity = item.userData.baseOpacity
-                    * (0.8 + Math.sin(time * 0.7 + index) * 0.2);
+                const phase = item.userData.phase ?? index;
+                // Io volcanic spots & plumes: independent pulsing with dramatic cadence
+                if (item.name.startsWith('io-volcanic-')) {
+                    item.material.opacity = item.userData.baseOpacity
+                        * (0.55 + 0.45 * Math.sin(time * 1.6 + phase * 1.3));
+                    // Hotspots also pulse in scale for a more dramatic flicker
+                    if (item.name.includes('hotspot') && item.scale) {
+                        const pulse = 0.7 + 0.3 * Math.sin(time * 2.1 + phase * 1.7);
+                        item.scale.set(item.userData.baseScale * pulse, item.userData.baseScale * pulse, 1);
+                    }
+                } else if (item.name.startsWith('titan-')) {
+                    // Titan haze & polar caps: slow, stately atmospheric breathing
+                    const slowPhase = item.userData.phase ?? (index * 0.7);
+                    item.material.opacity = item.userData.baseOpacity
+                        * (0.82 + 0.18 * Math.sin(time * 0.25 + slowPhase));
+                } else if (item.name.startsWith('europa-linea')) {
+                    // Europa lineae: very subtle visibility shift
+                    item.material.opacity = item.userData.baseOpacity
+                        * (0.85 + 0.15 * Math.sin(time * 0.4 + index * 1.1));
+                } else {
+                    item.material.opacity = item.userData.baseOpacity
+                        * (0.8 + Math.sin(time * 0.7 + index) * 0.2);
+                }
             }
             if (item.name === 'jupiter-great-red-spot' && item.userData?.baseScale) {
                 const pulse = 0.92 + Math.sin(time * 0.9) * 0.08;

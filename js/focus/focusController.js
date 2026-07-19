@@ -81,13 +81,15 @@ globalThis.FocusController = class FocusController {
             this.host.bloomPass.strength = 0.68;
             this.host.bloomPass.radius = 0.4;
             this.host.bloomPass.threshold = 0.4;
-            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 210);
+            // White dwarf: closer than red giant to emphasize compact brilliance
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 170);
         } else if (entry.effectType === 'red-giant') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.3;
             this.host.bloomPass.radius = 0.62;
             this.host.bloomPass.threshold = 0.5;
-            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 300);
+            // Red giant: further back to show its bloated atmosphere
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 340);
         } else if (entry.effectType === 'sun') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.36;
@@ -116,15 +118,23 @@ globalThis.FocusController = class FocusController {
                 new THREE.Vector3(0, (profile?.cameraDistance || 110) * 0.18, profile?.cameraDistance || 110),
                 new THREE.Vector3(0, 0, 0)
             );
+        } else if (entry.effectType === 'supernova') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.35;
+            this.host.bloomPass.radius = 0.5;
+            this.host.bloomPass.threshold = 0.45;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 380);
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
 
+        this._updateFocusTimeHint();
         this._syncHost();
     }
 
     clear() {
         if (!this.focusGroup && !this.focusRenderer && !this.focusSpecialRenderer) {
+            this._forceCleanup();
             this._syncHost();
             return;
         }
@@ -144,6 +154,12 @@ globalThis.FocusController = class FocusController {
         }
         this.focusGroup = null;
         this.focusedCatalogEntry = null;
+        this._forceCleanup();
+        this._syncHost();
+    }
+
+    /** Ensure no state leaks regardless of partial clear() calls. */
+    _forceCleanup() {
         this.host.restoreTimeScale?.();
         this.host.applyRendererQuality(false);
         this.host.useBloom = false;
@@ -156,9 +172,13 @@ globalThis.FocusController = class FocusController {
         if (this.host.milkyWay) this.host.milkyWay.visible = this.host.enhancedEffects;
         const closeExpanded = document.getElementById('btn-close-expanded');
         if (closeExpanded) closeExpanded.textContent = '返回星图';
-        this.host.controls.minDistance = 18;
-        this.host.controls.maxDistance = this.host.getModeConfig().maxDistance;
-        this._syncHost();
+        if (this.host.controls) {
+            this.host.controls.minDistance = 18;
+            this.host.controls.maxDistance = this.host.getModeConfig().maxDistance;
+        }
+        // Hide time scale hint
+        const hint = document.getElementById('focus-time-hint');
+        if (hint) hint.classList.add('hidden');
     }
 
     update(deltaSeconds, time) {
@@ -194,6 +214,7 @@ globalThis.FocusController = class FocusController {
                 0.4
             );
         }
+        this._updateFocusTimeHint();
     }
 
     onResize(width, height) {
@@ -204,6 +225,20 @@ globalThis.FocusController = class FocusController {
         if (!this.focusRenderer) return false;
         this.focusRenderer.update(camera, blackHoleConfig, time, aspect);
         return true;
+    }
+
+    _updateFocusTimeHint() {
+        const hint = document.getElementById('focus-time-hint');
+        if (!hint) return;
+        if (this.focusedCatalogEntry && this.host.timeScale > 0) {
+            hint.textContent = '当前 1 天 = ' + this.host.timeScale.toLocaleString() + ' 秒';
+            hint.classList.remove('hidden');
+        } else if (this.focusedCatalogEntry && this.host.timeScale === 0) {
+            hint.textContent = '暂停';
+            hint.classList.remove('hidden');
+        } else {
+            hint.classList.add('hidden');
+        }
     }
 
     _syncHost() {
