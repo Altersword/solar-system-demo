@@ -63,7 +63,7 @@ globalThis.FocusController = class FocusController {
         if (entry.effectType === 'black-hole') {
             this.host.controls.maxDistance = 58;
             this.host.flyCameraToPos(
-                new THREE.Vector3(30, 25, 30),
+                new THREE.Vector3(38, 12, 42),
                 new THREE.Vector3(0, 0, 0)
             );
         } else if (entry.effectType === 'pulsar') {

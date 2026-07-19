@@ -29,141 +29,243 @@ class BlackHoleRenderer {
             'void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}'
         ].join('\n');
 
-        // Visual-first geodesic disk: warm Interstellar palette, photon ring,
-        // Doppler beaming, soft EH, denser volume samples, mild step jitter.
-        const bhFrag = [
-            'precision highp float;',
-            'varying vec2 vUv;',
-            'uniform vec3  uCameraPos,uCamForward,uCamRight,uCamUp;',
-            'uniform float uAspect,uTime,uDoppler,uLuminance,uTemperature,uLensing,uTurbulence;',
-            '',
-            'float h2f(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
-            'float sn(vec2 p){',
-            '  vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);',
-            '  return mix(mix(h2f(i),h2f(i+vec2(1,0)),u.x),mix(h2f(i+vec2(0,1)),h2f(i+vec2(1,1)),u.x),u.y);',
-            '}',
-            'float fbm(vec2 p){',
-            '  float a=.5,v=0.;',
-            '  for(int i=0;i<4;i++){v+=a*sn(p);p=p*2.03+vec2(17.1,9.7);a*=.52;}',
-            '  return v;',
-            '}',
-            'vec3 diskHeat(float inner,float shift){',
-            // ember → orange → gold → warm white → slight blue-white (temp driven)
-            '  vec3 ember=vec3(.12,.008,.001);',
-            '  vec3 deepRed=vec3(.55,.04,.005);',
-            '  vec3 orange=vec3(1.,.28,.03);',
-            '  vec3 gold=vec3(1.,.78,.28);',
-            '  vec3 warmWhite=vec3(1.,.96,.82);',
-            '  vec3 blueWhite=vec3(.82,.92,1.);',
-            '  float tHot=clamp((uTemperature-6500.)/9000.,0.,1.);',
-            '  vec3 hot=mix(warmWhite,blueWhite,tHot*.55);',
-            '  vec3 c=mix(ember,deepRed,smoothstep(0.,.22,inner));',
-            '  c=mix(c,orange,smoothstep(.12,.48,inner));',
-            '  c=mix(c,gold,smoothstep(.38,.72,inner));',
-            '  c=mix(c,hot,smoothstep(.62,1.,inner));',
-            // Doppler color shift: approach cooler/brighter, recede redder
-            '  c=mix(c,c*vec3(1.08,.95,.78),clamp(-shift*.35,0.,.45));',
-            '  c=mix(c,c*vec3(.78,.9,1.2),clamp(shift*.4,0.,.4));',
-            '  return c;',
-            '}',
-            'vec3 starField(vec3 d){',
-            '  vec2 uv=vec2(atan(d.y,d.x)/6.2831853+.5,asin(clamp(d.z,-1.,1.))/3.1415926+.5);',
-            '  vec2 grid=uv*vec2(920.,460.);',
-            '  vec2 cell=floor(grid),f=fract(grid)-.5;',
-            '  float seed=h2f(cell);',
-            '  float core=1.-smoothstep(.012,.07,length(f));',
-            '  float star=smoothstep(.994,.9998,seed)*core*(.25+1.6*pow(seed,14.));',
-            '  vec3 tint=mix(vec3(.55,.7,1.),vec3(1.,.75,.5),h2f(cell+17.));',
-            '  return tint*star*.55;',
-            '}',
-            '',
-            'void main(){',
-            '  vec2 sc=(vUv-.5)*vec2(uAspect,1.);',
-            '  vec3 dir=normalize(uCamForward+uCamRight*sc.x*1.62+uCamUp*sc.y*1.62);',
-            '  float camR=length(uCameraPos);',
-            '  float stepBase=clamp(camR/150.,.08,.32);',
-            // per-pixel jitter breaks concentric ring aliasing
-            '  float jitter=h2f(vUv*vec2(1919.3,733.1)+uTime*.01);',
-            '  float stepLength=stepBase*(.88+jitter*.24);',
-            '  vec3 pos=uCameraPos+dir*stepLength*jitter*.35;',
-            '  vec3 vel=dir*stepLength;',
-            '  float h2=dot(cross(pos,vel),cross(pos,vel));',
-            // geometric units: RS=2, photon sphere ~3, ISCO~6
-            '  const float RS=2.,DI=5.2,DO=24.,DH=.72;',
-            '  float minR=999.,diskAlpha=0.;',
-            '  int fellIn=0;',
-            '  vec3 diskColor=vec3(0.);',
-            '  for(int i=0;i<180;i++){',
-            '    float r=length(pos);',
-            '    minR=min(minR,r);',
-            '    if(r<RS*.98){fellIn=1;break;}',
-            '    if(r>85.&&i>12)break;',
-            '    float r2=dot(pos,pos);',
-            '    float r5=max(pow(r2,2.5),.0001);',
-            // Schwarzschild-like acceleration scaled by lensing uniform
-            '    vel+=-1.5*h2*pos/r5*uLensing;',
-            '    // mild adaptive step: finer near BH',
-            '    float adapt=mix(.55,1.15,smoothstep(RS*1.2,18.,r));',
-            '    pos+=vel*adapt;',
-            '    float rxy=length(pos.xy);',
-            '    float az=abs(pos.z);',
-            '    if(az<DH*2.6&&rxy>DI*.92&&rxy<DO){',
-            '      float radial=clamp((rxy-DI)/(DO-DI),0.,1.);',
-            '      float radialWindow=smoothstep(DI*.95,DI+1.1,rxy)*smoothstep(DO,DO-4.,rxy);',
-            '      float thickness=DH*(.55+radial*.95);',
-            '      float vertical=exp(-pow(az/max(thickness,.02),2.)*2.8);',
-            '      float angle=atan(pos.y,pos.x);',
-            '      // multi-scale flow / filaments / knots',
-            '      float flow=fbm(vec2(angle*2.4-uTime*(.55+radial*.18),radial*7.5+uTime*.06));',
-            // Long filaments follow orbital shear instead of reading as round noise blobs.
-            '      float shear=angle*11.-radial*52.-uTime*(1.15+radial*.55);',
-            '      float filament=.5+.5*sin(shear+flow*3.5);',
-            '      float filamentFine=.5+.5*sin(shear*2.3+radial*17.+flow*2.);',
-            '      float spiral=.5+.5*sin(angle*2.-radial*14.-uTime*.35);',
-            '      float knots=h2f(floor(vec2(angle*8.+uTime*.07,radial*28.-uTime*.11)));',
-            '      float turb=clamp(uTurbulence,0.,1.5);',
-            '      float structure=mix(.78,.38+flow*.34+filament*.22+filamentFine*.1+spiral*.12+knots*.12,turb);',
-            '      float density=radialWindow*vertical*structure;',
-            '      // far-side contribution slightly boosted for lensed upper/lower arcs',
-            '      float behind=smoothstep(.15,.85,dot(normalize(pos),normalize(uCameraPos)));',
-            '      density*=mix(1.18,1.,behind);',
-            '      if(density>.0015){',
-            '        vec3 tangent=normalize(vec3(-pos.y,pos.x,0.));',
-            '        vec3 toObserver=normalize(uCameraPos-pos);',
-            '        float beta=clamp(sqrt(1./max(rxy-RS,.4)),.06,.72);',
-            '        float gamma=inversesqrt(max(1.-beta*beta,.04));',
-            '        float los=dot(tangent,toObserver);',
-            '        float doppler=1./max(gamma*(1.-beta*los),.16);',
-            '        float beaming=mix(1.,pow(clamp(doppler,.4,2.6),3.2),clamp(uDoppler,0.,1.2));',
-            '        float grav=pow(max(1.-RS/max(rxy,RS+.02),.06),.55);',
-            '        float inner=pow(1.-radial,.62);',
-            '        vec3 emission=diskHeat(inner,los*uDoppler)*density*beaming*grav;',
-            '        emission*=uLuminance*(.5+inner*1.15);',
-            '        float sampleAlpha=(1.-exp(-density*stepLength*adapt*2.8))*(.45+inner*.4);',
-            '        diskColor+=(1.-diskAlpha)*emission*sampleAlpha;',
-            '        diskAlpha+=(1.-diskAlpha)*sampleAlpha;',
-            '        if(diskAlpha>.985)break;',
-            '      }',
-            '    }',
-            '  }',
-            '  // soft event-horizon mask',
-            '  float ehSoft=smoothstep(RS*1.08,RS*.92,minR);',
-            '  vec3 background=starField(normalize(vel))*(1.-ehSoft*.98);',
-            '  if(fellIn==1) background=vec3(0.);',
-            '  vec3 col=background*(1.-diskAlpha)+diskColor;',
-            // photon ring near r=3
-            '  float photon=exp(-pow((minR-3.)/.13,2.))*smoothstep(RS*1.02,RS*1.18,minR);',
-            '  col+=vec3(1.,.9,.62)*photon*1.15*(.55+diskAlpha*.45);',
-            // soft lens glow halo outside photon sphere
-            '  float lensGlow=exp(-pow((minR-3.6)/.7,2.))*smoothstep(RS*1.08,RS*1.4,minR);',
-            '  col+=vec3(.55,.22,.04)*lensGlow*.14;',
-            // subtle EH rim light
-            '  float rim=exp(-pow((minR-RS*1.05)/.22,2.))*(1.-ehSoft);',
-            '  col+=vec3(1.,.55,.18)*rim*.12;',
-            '  col=max(col,vec3(0.));',
-            '  gl_FragColor=vec4(col,1.);',
-            '}'
-        ].join('\n');
+        // Hybrid geodesic renderer: adaptive Schwarzschild-like bending plus
+        // explicit thin-disk crossings. The surface crossings keep the primary disk crisp,
+        // while the volume samples preserve turbulent thickness and naturally create the
+        // upper/lower secondary images when a ray loops around the shadow.
+        const bhFrag = `
+precision highp float;
+varying vec2 vUv;
+uniform vec3 uCameraPos, uCamForward, uCamRight, uCamUp;
+uniform float uAspect, uTime, uDoppler, uLuminance, uTemperature, uLensing, uTurbulence;
+
+#define PI 3.141592653589793
+const float RS = 2.0;
+const float DISK_INNER = 5.15;
+const float DISK_OUTER = 24.0;
+
+float hash21(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+float noise2(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(
+        mix(hash21(i), hash21(i + vec2(1.0, 0.0)), u.x),
+        mix(hash21(i + vec2(0.0, 1.0)), hash21(i + vec2(1.0, 1.0)), u.x),
+        u.y
+    );
+}
+
+float fbm(vec2 p) {
+    float value = 0.0;
+    float amplitude = 0.52;
+    mat2 rotation = mat2(0.80, -0.60, 0.60, 0.80);
+    for (int octave = 0; octave < 5; octave++) {
+        value += amplitude * noise2(p);
+        p = rotation * p * 2.03 + vec2(13.7, 7.9);
+        amplitude *= 0.5;
+    }
+    return value;
+}
+
+vec3 kelvinToRgb(float kelvin) {
+    float temperature = clamp(kelvin, 1000.0, 40000.0) / 100.0;
+    float red;
+    float green;
+    float blue;
+
+    if (temperature <= 66.0) {
+        red = 1.0;
+        green = clamp((99.4708025861 * log(max(temperature, 1.0)) - 161.1195681661) / 255.0, 0.0, 1.0);
+    } else {
+        red = clamp((329.698727446 * pow(temperature - 60.0, -0.1332047592)) / 255.0, 0.0, 1.0);
+        green = clamp((288.1221695283 * pow(temperature - 60.0, -0.0755148492)) / 255.0, 0.0, 1.0);
+    }
+
+    if (temperature >= 66.0) {
+        blue = 1.0;
+    } else if (temperature <= 19.0) {
+        blue = 0.0;
+    } else {
+        blue = clamp((138.5177312231 * log(temperature - 10.0) - 305.0447927307) / 255.0, 0.0, 1.0);
+    }
+
+    return max(vec3(red, green, blue), vec3(0.0));
+}
+
+float temperatureProfile(float radius) {
+    float ratio = clamp(DISK_INNER / max(radius, DISK_INNER + 0.001), 0.0, 0.9999);
+    float standardDisk = pow(ratio, 0.75) * pow(max(1.0 - sqrt(ratio), 0.0001), 0.25);
+    return pow(clamp(standardDisk / 0.488, 0.0, 1.0), 1.32);
+}
+
+vec4 diskRadiance(vec3 position, vec3 travelDirection, float pathLength, float surfaceBoost) {
+    float radius = length(position.xy);
+    if (radius <= DISK_INNER || radius >= DISK_OUTER) return vec4(0.0);
+
+    float radial = (radius - DISK_INNER) / (DISK_OUTER - DISK_INNER);
+    float radialWindow = smoothstep(DISK_INNER, DISK_INNER + 0.75, radius)
+        * (1.0 - smoothstep(DISK_OUTER - 4.2, DISK_OUTER, radius));
+
+    float angularVelocity = pow(DISK_INNER / radius, 1.5);
+    float angle = atan(position.y, position.x);
+    float phase = angle - uTime * (0.34 + 0.72 * angularVelocity);
+    float shearCoordinate = phase * 3.4 - radial * 14.0;
+    float coarseFlow = fbm(vec2(shearCoordinate, radial * 9.0 + uTime * 0.035));
+    float fineFlow = fbm(vec2(phase * 8.0 - radial * 34.0, radial * 24.0 - uTime * 0.08));
+    float filament = pow(0.5 + 0.5 * sin(phase * 17.0 - radial * 78.0 + coarseFlow * 4.5), 1.7);
+    float narrowFilament = pow(0.5 + 0.5 * sin(phase * 31.0 - radial * 132.0 + fineFlow * 3.0), 2.2);
+    float turbulence = clamp(uTurbulence, 0.0, 1.4);
+    float structure = mix(0.82, 0.30 + coarseFlow * 0.42 + fineFlow * 0.16 + filament * 0.25 + narrowFilament * 0.12, turbulence);
+
+    float warp = sin(phase * 2.0 - radial * 9.0) * (0.018 + radial * 0.045);
+    // Keep the primary disk optically thin; the lensed copies should read as bands,
+    // not as a second opaque torus below the shadow.
+    float thickness = 0.062 + radial * 0.155 + coarseFlow * 0.028;
+    float vertical = exp(-pow(abs(position.z - warp) / max(thickness, 0.035), 2.0) * 3.8);
+    float density = radialWindow * vertical * structure * surfaceBoost;
+    if (density < 0.001) return vec4(0.0);
+
+    vec3 tangent = normalize(vec3(-position.y, position.x, 0.0));
+    vec3 toObserver = normalize(uCameraPos - position);
+    float lineOfSight = dot(tangent, toObserver);
+    float beta = clamp(sqrt(RS / max(2.0 * (radius - RS), 0.2)), 0.04, 0.68);
+    float gamma = inversesqrt(max(1.0 - beta * beta, 0.05));
+    float doppler = 1.0 / max(gamma * (1.0 - beta * lineOfSight), 0.18);
+    float gravitationalShift = sqrt(max(1.0 - RS / radius, 0.035));
+    float totalShift = clamp(doppler * gravitationalShift, 0.42, 1.72);
+    float dopplerMix = clamp(uDoppler, 0.0, 1.15);
+
+    float heat = temperatureProfile(radius);
+    float emittedTemperature = mix(1250.0, uTemperature, heat);
+    float observedTemperature = emittedTemperature * mix(1.0, totalShift, dopplerMix);
+    vec3 color = kelvinToRgb(observedTemperature);
+    vec3 spectralTint = mix(
+        vec3(1.30, 0.58, 0.11),
+        vec3(0.62, 0.88, 1.24),
+        smoothstep(0.025, 0.60, heat)
+    );
+    color *= mix(vec3(1.0), spectralTint, 0.68);
+    vec3 kinematicTint = mix(
+        vec3(1.28, 0.48, 0.10),
+        vec3(0.60, 0.90, 1.30),
+        clamp(lineOfSight * 0.5 + 0.5, 0.0, 1.0)
+    );
+    color *= mix(vec3(1.0), kinematicTint, clamp(uDoppler * 0.72, 0.0, 0.82));
+
+    // Keep spectral colour and energy separate so one side can remain blue-white
+    // while the receding flow stays amber instead of both clipping to flat white.
+    float beaming = mix(1.0, pow(totalShift, 2.35), dopplerMix);
+    float thermalPower = 0.34 + heat * 1.30;
+    float outerEmber = mix(0.60, 1.0, heat);
+    color *= beaming * thermalPower * outerEmber * uLuminance * 0.92;
+
+    float opacity = 1.0 - exp(-density * pathLength * (1.55 + surfaceBoost * 0.48));
+    opacity *= mix(0.10, 0.62, pow(heat, 0.72));
+    return vec4(color, clamp(opacity, 0.0, 0.66));
+}
+
+vec3 starField(vec3 direction) {
+    vec2 uv = vec2(
+        atan(direction.y, direction.x) / (2.0 * PI) + 0.5,
+        asin(clamp(direction.z, -1.0, 1.0)) / PI + 0.5
+    );
+    vec2 grid = uv * vec2(1180.0, 590.0);
+    vec2 cell = floor(grid);
+    vec2 local = fract(grid) - 0.5;
+    float seed = hash21(cell);
+    float starCore = 1.0 - smoothstep(0.025, 0.12, length(local));
+    float star = smoothstep(0.9965, 0.9998, seed) * starCore * (0.25 + 1.9 * pow(seed, 18.0));
+    vec3 tint = mix(vec3(0.58, 0.72, 1.0), vec3(1.0, 0.78, 0.54), hash21(cell + 17.0));
+
+    float galacticLatitude = abs(uv.y - 0.46 + sin(uv.x * 10.0) * 0.018);
+    float dustBand = exp(-galacticLatitude * galacticLatitude * 420.0);
+    float dustNoise = fbm(uv * vec2(18.0, 44.0));
+    vec3 haze = vec3(0.055, 0.040, 0.032) * dustBand * dustNoise * 0.010;
+    return tint * star * 0.72 + haze;
+}
+
+void main() {
+    vec2 screen = (vUv - 0.5) * vec2(uAspect, 1.0);
+    vec3 rayDirection = normalize(
+        uCamForward + uCamRight * screen.x * 1.78 + uCamUp * screen.y * 1.78
+    );
+
+    float stableJitter = hash21(gl_FragCoord.xy);
+    vec3 position = uCameraPos + rayDirection * (0.015 + stableJitter * 0.055);
+    float minimumRadius = 1.0e5;
+    float diskAlpha = 0.0;
+    vec3 diskColor = vec3(0.0);
+    float orbitAmount = 0.0;
+    int captured = 0;
+
+    for (int stepIndex = 0; stepIndex < 240; stepIndex++) {
+        float radius = length(position);
+        minimumRadius = min(minimumRadius, radius);
+
+        if (radius < RS * 0.985) {
+            captured = 1;
+            break;
+        }
+        if (radius > 96.0 && dot(position, rayDirection) > 0.0 && stepIndex > 18) break;
+
+        float stepLength = clamp(radius * 0.025, 0.035, 0.28);
+        if (abs(position.z) < 1.05 && length(position.xy) < DISK_OUTER + 1.0) stepLength *= 0.52;
+
+        vec3 previousPosition = position;
+        vec3 towardCenter = -position / max(radius, 0.0001);
+        vec3 perpendicularPull = towardCenter - rayDirection * dot(towardCenter, rayDirection);
+        float bending = 1.58 * RS * stepLength / max(radius * radius, 0.08);
+        bending *= uLensing * (1.0 + 0.42 * RS / max(radius, RS));
+        rayDirection = normalize(rayDirection + perpendicularPull * bending);
+        position += rayDirection * stepLength;
+        orbitAmount += bending;
+
+        bool crossedDisk = previousPosition.z * position.z <= 0.0;
+        if (crossedDisk) {
+            float denominator = previousPosition.z - position.z;
+            float crossingT = abs(denominator) > 0.00001 ? previousPosition.z / denominator : 0.5;
+            vec3 crossing = mix(previousPosition, position, clamp(crossingT, 0.0, 1.0));
+            // A crossing represents a finite optical column, rather than one
+            // ray-march slice, which keeps both lensed disk images continuous.
+            vec4 surfaceSample = diskRadiance(crossing, rayDirection, max(stepLength * 2.5, 0.48), 1.35);
+            float lensedImageBoost = 1.0 + 3.4 * smoothstep(0.28, 1.05, orbitAmount);
+            diskColor += (1.0 - diskAlpha * 0.24) * surfaceSample.rgb * surfaceSample.a * lensedImageBoost;
+            diskAlpha += (1.0 - diskAlpha) * surfaceSample.a * 0.24;
+        } else if (abs(position.z) < 0.82 && length(position.xy) < DISK_OUTER) {
+            vec4 volumeSample = diskRadiance(position, rayDirection, stepLength, 0.50);
+            float volumeLensingBoost = 0.72 + 3.2 * smoothstep(0.20, 0.82, orbitAmount);
+            diskColor += (1.0 - diskAlpha * 0.18) * volumeSample.rgb * volumeSample.a * volumeLensingBoost;
+            diskAlpha += (1.0 - diskAlpha) * volumeSample.a * 0.08;
+        }
+
+        if (diskAlpha > 0.92) break;
+    }
+
+    float shadow = 1.0 - smoothstep(RS * 0.98, RS * 1.24, minimumRadius);
+    if (captured == 1) shadow = 1.0;
+
+    vec3 background = starField(normalize(rayDirection));
+    background *= 1.0 - shadow;
+
+    vec3 color = background * (1.0 - diskAlpha) + diskColor;
+
+    float photonRing = exp(-pow((minimumRadius - 3.0) / 0.105, 2.0));
+    photonRing *= smoothstep(RS * 1.12, RS * 1.34, minimumRadius);
+    float ringVisibility = 0.12 + diskAlpha * 0.36 + min(orbitAmount * 0.035, 0.12);
+    color += vec3(0.92, 0.82, 0.66) * photonRing * ringVisibility * 0.38;
+
+    float horizonRim = exp(-pow((minimumRadius - RS * 1.10) / 0.17, 2.0));
+    color += vec3(0.66, 0.27, 0.07) * horizonRim * (1.0 - shadow) * 0.028;
+
+    color = max(color, vec3(0.0));
+    gl_FragColor = vec4(color, 1.0);
+}`;
 
         const brightFrag = [
             'precision mediump float;',
@@ -173,9 +275,11 @@ class BlackHoleRenderer {
             'void main(){',
             '  vec3 c=texture2D(tDiffuse,vUv).rgb;',
             '  float lum=dot(c,vec3(0.2126,0.7152,0.0722));',
-            '  float b=max(0.,lum-uThreshold);',
+            '  float knee=max(uThreshold*.55,0.001);',
+            '  float soft=clamp((lum-uThreshold+knee)/(2.*knee),0.,1.);',
+            '  float b=max(lum-uThreshold,0.)+soft*soft*knee*.55;',
             '  // keep warm cast in bloom extract',
-            '  gl_FragColor=vec4(c*b/max(lum,0.001)*vec3(1.05,1.,.92),1.);',
+            '  gl_FragColor=vec4(c*b/max(lum,0.001)*vec3(1.02,1.,.97),1.);',
             '}'
         ].join('\n');
 
@@ -209,19 +313,19 @@ class BlackHoleRenderer {
             '  vec3 scene=texture2D(tScene,vUv).rgb;',
             '  vec3 bloom=texture2D(tBloom,vUv).rgb;',
             // horizontal streak for cinematic light tail (WebGL1-safe, no textureSize)
-            '  vec2 hx=vec2(uTexel.x*2.2,0.);',
-            '  vec3 streak=bloom*0.42;',
-            '  streak+=texture2D(tBloom,vUv-hx*2.).rgb*0.18;',
-            '  streak+=texture2D(tBloom,vUv+hx*2.).rgb*0.18;',
-            '  streak+=texture2D(tBloom,vUv-hx*5.).rgb*0.11;',
-            '  streak+=texture2D(tBloom,vUv+hx*5.).rgb*0.11;',
-            '  vec3 c=(scene+bloom*uBloomStr+streak*uBloomStr*.38)*uExposure;',
+            '  vec2 hx=vec2(uTexel.x*1.7,0.);',
+            '  vec3 streak=bloom*0.10;',
+            '  streak+=texture2D(tBloom,vUv-hx*2.).rgb*0.045;',
+            '  streak+=texture2D(tBloom,vUv+hx*2.).rgb*0.045;',
+            '  streak+=texture2D(tBloom,vUv-hx*5.).rgb*0.018;',
+            '  streak+=texture2D(tBloom,vUv+hx*5.).rgb*0.018;',
+            '  vec3 c=(scene+bloom*uBloomStr+streak*uBloomStr*.08)*uExposure;',
             '  if(uBypass<0.5){',
             '    c=clamp((c*(2.51*c+.03))/(c*(2.43*c+.59)+.14),0.,1.);',
             '    c=pow(c,vec3(1./2.2));',
             '  }',
             '  float vignette=1.-smoothstep(.42,.92,length(vUv-.5));',
-            '  c*=mix(.78,1.,vignette);',
+            '  c*=mix(.84,1.,vignette);',
             '  gl_FragColor=vec4(clamp(c,0.,1.),1.);',
             '}'
         ].join('\n');
@@ -234,7 +338,7 @@ class BlackHoleRenderer {
             uAspect:      { value: 1.7778 },
             uTime:        { value: 0 },
             uDoppler:     { value: config.dopplerIntensity ?? 0.85 },
-            uLuminance:   { value: 1.05 },
+            uLuminance:   { value: 0.78 },
             uTemperature: { value: config.diskTemperature ?? 9200.0 },
             uLensing:     { value: config.lensingStrength ?? 1.12 },
             uTurbulence:  { value: config.diskTurbulence ?? 1.15 }
@@ -273,7 +377,7 @@ class BlackHoleRenderer {
         this._rtBloomB = new THREE.WebGLRenderTarget(W >> 1, H >> 1, rtOpts);
 
         this._brightMat = new THREE.ShaderMaterial({
-            uniforms: { tDiffuse: { value: null }, uThreshold: { value: 0.28 } },
+            uniforms: { tDiffuse: { value: null }, uThreshold: { value: 0.42 } },
             vertexShader: passVert,
             fragmentShader: brightFrag,
             depthTest: false,
@@ -289,8 +393,8 @@ class BlackHoleRenderer {
         this._compUniforms = {
             tScene:    { value: null },
             tBloom:    { value: null },
-            uBloomStr: { value: config.bloomStrength ?? 1.35 },
-            uExposure: { value: config.exposureCompensation ?? 1.08 },
+            uBloomStr: { value: config.bloomStrength ?? 1.16 },
+            uExposure: { value: config.exposureCompensation ?? 1.03 },
             uBypass:   { value: 0.0 },
             uTexel:    { value: new THREE.Vector2(1 / Math.max(W >> 1, 1), 1 / Math.max(H >> 1, 1)) }
         };
@@ -358,8 +462,8 @@ class BlackHoleRenderer {
             if (config.logLuminance !== undefined) {
                 this._U.uLuminance.value = THREE.MathUtils.clamp(
                     Math.pow(10, config.logLuminance - 6.83),
-                    0.7,
-                    2.8
+                    0.55,
+                    1.8
                 );
             }
             if (config.renderScale !== undefined) {
@@ -423,12 +527,12 @@ class BlackHoleRenderer {
 
         // second wider blur for soft glow
         this._blurMat.uniforms.tDiffuse.value = this._rtBloomA.texture;
-        this._blurMat.uniforms.uDir.value.set(2.4 / this._rtBloomA.width, 0.0);
+        this._blurMat.uniforms.uDir.value.set(1.85 / this._rtBloomA.width, 0.0);
         R.setRenderTarget(this._rtBloomB);
         R.render(this._ppScene, qc);
 
         this._blurMat.uniforms.tDiffuse.value = this._rtBloomB.texture;
-        this._blurMat.uniforms.uDir.value.set(0.0, 2.4 / this._rtBloomA.height);
+        this._blurMat.uniforms.uDir.value.set(0.0, 1.85 / this._rtBloomA.height);
         R.setRenderTarget(this._rtBloomA);
         R.render(this._ppScene, qc);
 
