@@ -1009,7 +1009,7 @@ class SolarSystemFocusRenderer {
         if (this.coma?.material?.uniforms) {
             this.coma.material.uniforms.opacity.value =
                 this.coma.userData.baseOpacity * (0.8 + Math.sin(time * 0.9) * 0.2);
-            this.coma.scale.setScalar(1 + Math.sin(time * 0.7) * 0.05);
+            this.coma.scale.setScalar((this.coma.userData.baseScale || 1) * (1 + Math.sin(time * 0.7) * 0.05));
         }
         [this.tail, this.ionTail].forEach((tail, index) => {
             if (!tail) return;

@@ -210,7 +210,7 @@ class SunRenderer {
         if (this.corona?.material?.uniforms) {
             this.corona.material.uniforms.opacity.value =
                 this.corona.userData.baseOpacity * (0.8 + Math.sin(time * 0.33) * 0.2);
-            this.corona.scale.setScalar(1 + Math.sin(time * 0.28) * 0.03);
+            this.corona.scale.setScalar(this.corona.userData.baseScale * (1 + Math.sin(time * 0.28) * 0.03));
         }
         if (this.outerCorona?.material?.uniforms) {
             this.outerCorona.material.uniforms.opacity.value =

@@ -7082,33 +7082,64 @@ const ATLAS_EXPANSION_TO_1000_BATCHES = Array.from({ length: 25 }, (_, batchInde
     ...ATLAS_EXPANSION_TO_1000_COSMIC_NEIGHBORHOOD.slice(batchIndex * 5, batchIndex * 5 + 5)
 ]);
 
+// Bulk feature descriptions share seven prototype getters instead of allocating
+// 49,500 long strings or 49,500 closure-backed getter functions at startup.
+const BULK_FEATURE_PROTOTYPES = Object.freeze({
+    to1000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 1000 \u9879\u76ee\u5f55\u8ba1\u5212\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to2000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 2000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to5000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 5000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to10000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 10000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to20000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 20000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to30000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 30000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    }),
+    to50000: Object.freeze({
+        get feature() { return `${this.name}\uff08${this.nameEn}\uff09\u4e3a${this.type}\uff0c\u5f52\u5165 50000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ${this.bulkBatchNumber} \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002`; }
+    })
+});
+
+function createBulkCatalogEntry(data, featurePrototype, batchNumber) {
+    Object.defineProperty(data, 'bulkBatchNumber', { value: batchNumber });
+    return Object.setPrototypeOf(data, featurePrototype);
+}
+
 const ATLAS_EXPANSION_TO_1000_PROFILES = {
     neighborhood: {
         color: 0xff765c,
         size: 7,
         temperature: '近邻红矮星、恒星活动与行星宿主系统',
-        related: { title: '太阳邻域', detail: 'LHS 高自行恒星序列，用于细化太阳附近低质量恒星的覆盖。' },
+        related: Object.freeze([Object.freeze({ title: '太阳邻域', detail: 'LHS 高自行恒星序列，用于细化太阳附近低质量恒星的覆盖。' })]),
         coordinate: { lStart: 29, lStep: 73, latitudes: [-75, -56, -39, -24, -10, 4, 18, 33, 48, 64, 76] }
     },
     'milky-way': {
         color: 0xc794ff,
         size: 20,
         temperature: '星际介质、电离氢区与恒星形成',
-        related: { title: '银河地标', detail: 'Sharpless 电离氢区序列，补充银河盘面中的星云与恒星形成区。' },
+        related: Object.freeze([Object.freeze({ title: '银河地标', detail: 'Sharpless 电离氢区序列，补充银河盘面中的星云与恒星形成区。' })]),
         coordinate: { lStart: 7, lStep: 37, latitudes: [-9, -6, -4, -2, -1, 0, 1, 2, 4, 6, 9] }
     },
     'local-group': {
         color: 0x8ecbff,
         size: 15,
         temperature: '球状星团恒星族群与本星系群结构',
-        related: { title: '本星系群成员', detail: 'M31 球状星团编号序列，用于呈现仙女座星系的伴生恒星系统。' },
+        related: Object.freeze([Object.freeze({ title: '本星系群成员', detail: 'M31 球状星团编号序列，用于呈现仙女座星系的伴生恒星系统。' })]),
         coordinate: { lStart: 117, lStep: 43, latitudes: [-62, -46, -31, -18, -7, 4, 15, 28, 42, 58, 70] }
     },
     'cosmic-neighborhood': {
         color: 0xffc27d,
         size: 22,
         temperature: '星系盘、棒结构、尘埃与恒星形成',
-        related: { title: '近邻宇宙', detail: 'NGC 星系序列，补充近邻宇宙中的不同盘星系与星系环境。' },
+        related: Object.freeze([Object.freeze({ title: '近邻宇宙', detail: 'NGC 星系序列，补充近邻宇宙中的不同盘星系与星系环境。' })]),
         coordinate: { lStart: 163, lStep: 59, latitudes: [-73, -57, -43, -30, -18, -6, 7, 19, 32, 46, 60, 74] }
     }
 };
@@ -7126,18 +7157,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_1000_BATCHES.flat().map((entry, ind
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 1;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 1000 项目录计划的第 ${batchNumber} 个均衡扩容批次。`,
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to1000, batchNumber);
 }));
 
 
@@ -7222,18 +7252,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_2000_BATCHES.flat().map((entry, ind
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 26;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 2000 项目录压力测试的第 ${batchNumber} 个均衡扩容批次。`,
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to2000, batchNumber);
 }));
 
 
@@ -7308,19 +7337,19 @@ const ATLAS_EXPANSION_TO_5000_BATCHES = Array.from({ length: 150 }, (_, batchInd
 const ATLAS_EXPANSION_TO_5000_PROFILES = {
     neighborhood: {
         ...ATLAS_EXPANSION_TO_1000_PROFILES.neighborhood,
-        related: { title: '太阳邻域', detail: 'LHS 近邻恒星编号序列，用于进行五千项目录下的轻量星点压力测试。' }
+        related: Object.freeze([Object.freeze({ title: '太阳邻域', detail: 'LHS 近邻恒星编号序列，用于进行五千项目录下的轻量星点压力测试。' })])
     },
     'milky-way': {
         ...ATLAS_EXPANSION_TO_1000_PROFILES['milky-way'],
-        related: { title: '银河地标', detail: 'WISE 电离氢区候选序列，用于扩展银河盘面星云与恒星形成区域的索引覆盖。' }
+        related: Object.freeze([Object.freeze({ title: '银河地标', detail: 'WISE 电离氢区候选序列，用于扩展银河盘面星云与恒星形成区域的索引覆盖。' })])
     },
     'local-group': {
         ...ATLAS_EXPANSION_TO_1000_PROFILES['local-group'],
-        related: { title: '本星系群成员', detail: 'M31 候选星团索引序列，用于在远距离层保留可搜索的星团样本。' }
+        related: Object.freeze([Object.freeze({ title: '本星系群成员', detail: 'M31 候选星团索引序列，用于在远距离层保留可搜索的星团样本。' })])
     },
     'cosmic-neighborhood': {
         ...ATLAS_EXPANSION_TO_1000_PROFILES['cosmic-neighborhood'],
-        related: { title: '近邻宇宙', detail: 'UGC 星系编号序列，用于补充不同盘星系与星系环境的批量索引。' }
+        related: Object.freeze([Object.freeze({ title: '近邻宇宙', detail: 'UGC 星系编号序列，用于补充不同盘星系与星系环境的批量索引。' })])
     }
 };
 
@@ -7337,18 +7366,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_5000_BATCHES.flat().map((entry, ind
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 76;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: `${entry.name}（${entry.nameEn}）为${entry.type}，归入 5000 项目录压力测试的第 ${batchNumber} 个均衡扩容批次。`,
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to5000, batchNumber);
 }));
 
 
@@ -7420,19 +7448,19 @@ const ATLAS_EXPANSION_TO_10000_BATCHES = Array.from({ length: 250 }, (_, batchIn
 const ATLAS_EXPANSION_TO_10000_PROFILES = {
     neighborhood: {
         ...ATLAS_EXPANSION_TO_5000_PROFILES.neighborhood,
-        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u4e07\u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u4e07\u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' })])
     },
     'milky-way': {
         ...ATLAS_EXPANSION_TO_5000_PROFILES['milky-way'],
-        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u7ec6\u5316\u94f6\u6cb3\u76d8\u9762\u661f\u4e91\u4e0e\u6052\u661f\u5f62\u6210\u533a\u57df\u7684\u7d22\u5f15\u8986\u76d6\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u7ec6\u5316\u94f6\u6cb3\u76d8\u9762\u661f\u4e91\u4e0e\u6052\u661f\u5f62\u6210\u533a\u57df\u7684\u7d22\u5f15\u8986\u76d6\u3002' })])
     },
     'local-group': {
         ...ATLAS_EXPANSION_TO_5000_PROFILES['local-group'],
-        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u5ef6\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u5728\u8fdc\u8ddd\u79bb\u5c42\u4fdd\u7559\u53ef\u641c\u7d22\u7684\u661f\u56e2\u6837\u672c\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u5ef6\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u5728\u8fdc\u8ddd\u79bb\u5c42\u4fdd\u7559\u53ef\u641c\u7d22\u7684\u661f\u56e2\u6837\u672c\u3002' })])
     },
     'cosmic-neighborhood': {
         ...ATLAS_EXPANSION_TO_5000_PROFILES['cosmic-neighborhood'],
-        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8865\u5145\u4e0d\u540c\u76d8\u661f\u7cfb\u4e0e\u661f\u7cfb\u73af\u5883\u7684\u6279\u91cf\u7d22\u5f15\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8865\u5145\u4e0d\u540c\u76d8\u661f\u7cfb\u4e0e\u661f\u7cfb\u73af\u5883\u7684\u6279\u91cf\u7d22\u5f15\u3002' })])
     }
 };
 
@@ -7449,18 +7477,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_10000_BATCHES.flat().map((entry, in
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 226;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 10000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to10000, batchNumber);
 }));
 
 const ATLAS_EXPANSION_TO_20000_NEIGHBORHOOD = Array.from({ length: 2500 }, (_, index) => {
@@ -7531,19 +7558,19 @@ const ATLAS_EXPANSION_TO_20000_BATCHES = Array.from({ length: 500 }, (_, batchIn
 const ATLAS_EXPANSION_TO_20000_PROFILES = {
     neighborhood: {
         ...ATLAS_EXPANSION_TO_10000_PROFILES.neighborhood,
-        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' })])
     },
     'milky-way': {
         ...ATLAS_EXPANSION_TO_10000_PROFILES['milky-way'],
-        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u5ef6\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' })])
     },
     'local-group': {
         ...ATLAS_EXPANSION_TO_10000_PROFILES['local-group'],
-        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u518d\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u518d\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' })])
     },
     'cosmic-neighborhood': {
         ...ATLAS_EXPANSION_TO_10000_PROFILES['cosmic-neighborhood'],
-        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u518d\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 20000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' })])
     }
 };
 
@@ -7560,18 +7587,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_20000_BATCHES.flat().map((entry, in
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 476;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 20000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to20000, batchNumber);
 }));
 
 
@@ -7643,19 +7669,19 @@ const ATLAS_EXPANSION_TO_30000_BATCHES = Array.from({ length: 500 }, (_, batchIn
 const ATLAS_EXPANSION_TO_30000_PROFILES = {
     neighborhood: {
         ...ATLAS_EXPANSION_TO_20000_PROFILES.neighborhood,
-        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' })])
     },
     'milky-way': {
         ...ATLAS_EXPANSION_TO_20000_PROFILES['milky-way'],
-        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u94f6\u6cb3\u76d8\u9762\u6279\u91cf\u7d22\u5f15\u3002' })])
     },
     'local-group': {
         ...ATLAS_EXPANSION_TO_20000_PROFILES['local-group'],
-        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u7b2c\u4e09\u8f6e\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u6837\u672c\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u7b2c\u4e09\u8f6e\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e2d\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u6837\u672c\u3002' })])
     },
     'cosmic-neighborhood': {
         ...ATLAS_EXPANSION_TO_20000_PROFILES['cosmic-neighborhood'],
-        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u7b2c\u4e09\u8f6e\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 30000 \u9879\u76ee\u5f55\u4e0b\u7684\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u538b\u529b\u6d4b\u8bd5\u3002' })])
     }
 };
 
@@ -7672,18 +7698,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_30000_BATCHES.flat().map((entry, in
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 976;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 30000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to30000, batchNumber);
 }));
 
 
@@ -7755,19 +7780,19 @@ const ATLAS_EXPANSION_TO_50000_BATCHES = Array.from({ length: 1000 }, (_, batchI
 const ATLAS_EXPANSION_TO_50000_PROFILES = {
     neighborhood: {
         ...ATLAS_EXPANSION_TO_30000_PROFILES.neighborhood,
-        related: { title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 50000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u592a\u9633\u90bb\u57df', detail: 'LHS \u8fd1\u90bb\u6052\u661f\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e 50000 \u9879\u76ee\u5f55\u7684\u8f7b\u91cf\u661f\u70b9\u538b\u529b\u6d4b\u8bd5\u3002' })])
     },
     'milky-way': {
         ...ATLAS_EXPANSION_TO_30000_PROFILES['milky-way'],
-        related: { title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u94f6\u6cb3\u76d8\u9762\u7684\u5927\u89c4\u6a21\u6279\u91cf\u7d22\u5f15\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u94f6\u6cb3\u5730\u6807', detail: 'WISE \u7535\u79bb\u6c22\u533a\u5019\u9009\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u94f6\u6cb3\u76d8\u9762\u7684\u5927\u89c4\u6a21\u6279\u91cf\u7d22\u5f15\u3002' })])
     },
     'local-group': {
         ...ATLAS_EXPANSION_TO_30000_PROFILES['local-group'],
-        related: { title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u4e94\u4e07\u7ea7\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u672c\u661f\u7cfb\u7fa4\u6210\u5458', detail: 'M31 \u5019\u9009\u661f\u56e2\u4e94\u4e07\u7ea7\u6269\u5c55\u7d22\u5f15\uff0c\u7528\u4e8e\u4fdd\u7559\u5747\u8861\u7684\u8fdc\u8ddd\u79bb\u661f\u56e2\u6837\u672c\u3002' })])
     },
     'cosmic-neighborhood': {
         ...ATLAS_EXPANSION_TO_30000_PROFILES['cosmic-neighborhood'],
-        related: { title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u7684\u5927\u89c4\u6a21\u538b\u529b\u6d4b\u8bd5\u3002' }
+        related: Object.freeze([Object.freeze({ title: '\u8fd1\u90bb\u5b87\u5b99', detail: 'UGC \u661f\u7cfb\u7f16\u53f7\u4e94\u4e07\u7ea7\u6269\u5c55\u5e8f\u5217\uff0c\u7528\u4e8e\u8f7b\u91cf\u661f\u7cfb\u70b9\u5c42\u7684\u5927\u89c4\u6a21\u538b\u529b\u6d4b\u8bd5\u3002' })])
     }
 };
 
@@ -7784,18 +7809,17 @@ CELESTIAL_CATALOG.push(...ATLAS_EXPANSION_TO_50000_BATCHES.flat().map((entry, in
     const coordinate = profile.coordinate;
     const batchNumber = Math.floor(index / 20) + 1476;
 
-    return {
+    return createBulkCatalogEntry({
         ...entry,
         color: profile.color,
         size: profile.size,
         renderTier: 'bulk',
         temperature: profile.temperature,
-        feature: entry.name + '\uff08' + entry.nameEn + '\uff09\u4e3a' + entry.type + '\uff0c\u5f52\u5165 50000 \u9879\u76ee\u5f55\u538b\u529b\u6d4b\u8bd5\u7684\u7b2c ' + batchNumber + ' \u4e2a\u5747\u8861\u6269\u5bb9\u6279\u6b21\u3002',
-        related: [{ ...profile.related }],
+        related: profile.related,
         dataQuality: 'synthetic',
         source: 'generated-stress-test',
         galactic: createBulkGalacticCoordinate(layerIndex, coordinate)
-    };
+    }, BULK_FEATURE_PROTOTYPES.to50000, batchNumber);
 }));
 
 if (typeof module !== 'undefined' && module.exports) {

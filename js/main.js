@@ -122,13 +122,19 @@ function initUIControls() {
         });
     });
 
+    function syncAtlasMapUI(mapId) {
+        const mapConfig = SIMULATION.atlasMaps[mapId];
+        if (!mapConfig) return;
+        atlasButtons.forEach((item) => item.classList.toggle('active', item.dataset.atlasMap === mapId));
+        atlasMapName.textContent = mapConfig.name;
+        atlasMapRange.textContent = mapConfig.rangeLabel;
+    }
+
     atlasButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const mapId = button.dataset.atlasMap;
             solarSystem?.setAtlasMap(mapId);
-            atlasButtons.forEach((item) => item.classList.toggle('active', item === button));
-            atlasMapName.textContent = SIMULATION.atlasMaps[mapId].name;
-            atlasMapRange.textContent = SIMULATION.atlasMaps[mapId].rangeLabel;
+            syncAtlasMapUI(mapId);
         });
     });
 
@@ -165,6 +171,7 @@ function initUIControls() {
             button.append(title, meta);
             button.addEventListener('click', () => {
                 if (!solarSystem.selectCatalogEntry(entry.id)) return;
+                syncAtlasMapUI(entry.atlasMap || solarSystem.selectedAtlasMap);
                 atlasSearchInput.value = entry.name;
                 atlasSearchResults.replaceChildren();
             });

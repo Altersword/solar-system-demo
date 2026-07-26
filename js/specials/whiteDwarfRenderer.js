@@ -75,7 +75,7 @@ class WhiteDwarfRenderer {
         if (this.innerGlow?.material?.uniforms) {
             this.innerGlow.material.uniforms.opacity.value =
                 this.innerGlow.userData.baseOpacity * (0.82 + pulse * 0.18);
-            this.innerGlow.scale.setScalar(0.95 + pulse * 0.07);
+            this.innerGlow.scale.setScalar(this.innerGlow.userData.baseScale * (0.95 + pulse * 0.07));
         }
         if (this.outerGlow?.material?.uniforms) {
             this.outerGlow.material.uniforms.opacity.value =

@@ -11,6 +11,9 @@ globalThis.StarAtlas = class StarAtlas {
         this.catalogObjects = new Map();
         this.catalogEntries = new Map();
         this.bulkLayerGroups = new Map();
+        this.curatedNebulaBatches = new Map();
+        this.pendingNebulaPoints = new Map();
+        this.batchViewportSize = new THREE.Vector2();
         this.selectedBulkDetailId = null;
         this.expandedSystemGroup = null;
         this.animatedAtlasObjects = [];
@@ -40,6 +43,8 @@ globalThis.StarAtlas = class StarAtlas {
             this.createCatalogObject(entry);
         });
 
+        this.flushNebulaPointBatches();
+
         bulkEntriesByMap.forEach((entries, mapId) => {
             this.createBulkCatalogLayer(mapId, entries);
         });
@@ -54,6 +59,8 @@ globalThis.StarAtlas = class StarAtlas {
         this.catalogObjects.clear();
         this.catalogEntries.clear();
         this.bulkLayerGroups.clear();
+        this.curatedNebulaBatches.clear();
+        this.pendingNebulaPoints.clear();
         this.selectedBulkDetailId = null;
         this.animatedAtlasObjects = [];
         this.syncHost();
@@ -84,6 +91,7 @@ globalThis.StarAtlas = class StarAtlas {
         this.showAtlas = !this.showAtlas;
         this.updateVisibility();
         if (!this.showAtlas) {
+            this.clearMaterializedBulkEntry();
             this.clearExpandedSystem();
             this.host.hideInfoPanel();
         }
@@ -106,7 +114,8 @@ globalThis.StarAtlas = class StarAtlas {
             if (!item.group.visible) return;
             const pulse = 1 + Math.sin(time * 1.3 + item.phase) * 0.055;
             const effectPulse = item.effectType === 'red-giant' ? 1 + Math.sin(time * 0.9 + item.phase) * 0.1 : pulse;
-            item.mesh.scale.setScalar(this.host.enhancedEffects ? effectPulse : 1);
+            const baseScale = item.mesh.userData?.baseScale || 1;
+            item.mesh.scale.setScalar(baseScale * (this.host.enhancedEffects ? effectPulse : 1));
             item.group.rotation.y += deltaSeconds * 0.035;
             item.group.rotation.x += deltaSeconds * 0.009;
             if (item.halo) {
@@ -195,6 +204,52 @@ globalThis.StarAtlas = class StarAtlas {
         this.bulkLayerGroups.set(mapId, group);
     }
 
+    rescalePositions() {
+        const position = new THREE.Vector3();
+
+        this.catalogObjects.forEach((record) => {
+            this.host.getCatalogPosition(record.entry, position);
+            record.group.position.copy(position);
+        });
+
+        this.bulkLayerGroups.forEach((group) => {
+            const points = group.children.find((child) => child.isPoints);
+            const entries = points?.userData.catalogEntries;
+            const positions = points?.geometry.getAttribute('position');
+            if (!entries || !positions) return;
+
+            entries.forEach((entry, index) => {
+                this.host.getCatalogPosition(entry, position);
+                positions.setXYZ(index, position.x, position.y, position.z);
+            });
+            positions.needsUpdate = true;
+            points.geometry.computeBoundingSphere();
+        });
+
+        this.curatedNebulaBatches.forEach((points) => {
+            const records = points.userData.nebulaRecords;
+            const positions = points.geometry.getAttribute('position');
+            records.forEach((record, index) => {
+                this.host.getCatalogPosition(record.entry, position).add(record.offset);
+                positions.setXYZ(index, position.x, position.y, position.z);
+            });
+            positions.needsUpdate = true;
+            points.geometry.computeBoundingSphere();
+        });
+
+        this.atlasGroup.children.forEach((child) => {
+            const shellEntry = child.userData.distanceShellEntry;
+            if (!shellEntry) return;
+            const nextRadius = this.host.scaleCatalogDistance(shellEntry);
+            const previousRadius = child.userData.distanceShellRadius || nextRadius;
+            child.scale.multiplyScalar(nextRadius / previousRadius);
+            child.userData.distanceShellRadius = nextRadius;
+        });
+
+        this.clearExpandedSystem();
+        this.updateVisibility();
+    }
+
     getCatalogEntry(id) {
         return this.catalogEntries.get(id) || null;
     }
@@ -209,8 +264,26 @@ globalThis.StarAtlas = class StarAtlas {
 
         this.clearMaterializedBulkEntry();
         const record = this.createCatalogObject(entry, { bulkDetail: true });
+        this.setBulkPointVisible(entry, false);
         this.selectedBulkDetailId = id;
         return record;
+    }
+
+    setBulkPointVisible(entry, visible) {
+        const group = this.bulkLayerGroups.get(entry.atlasMap);
+        const points = group?.children.find((child) => child.isPoints);
+        const entries = points?.userData.catalogEntries;
+        if (!entries) return;
+        const index = entries.indexOf(entry);
+        if (index < 0) return;
+        const colors = points.geometry.getAttribute('color');
+        if (visible) {
+            const color = new THREE.Color(entry.color);
+            colors.setXYZ(index, color.r, color.g, color.b);
+        } else {
+            colors.setXYZ(index, 0, 0, 0);
+        }
+        colors.needsUpdate = true;
     }
 
     clearMaterializedBulkEntry() {
@@ -219,12 +292,21 @@ globalThis.StarAtlas = class StarAtlas {
 
         const record = this.catalogObjects.get(id);
         if (record?.bulkDetail) {
+            const removedUniforms = new Set();
+            record.group.traverse((child) => {
+                const uniforms = child.material?.uniforms;
+                if (uniforms?.viewVector) removedUniforms.add(uniforms);
+            });
+            if (removedUniforms.size) {
+                this.host.glowUniforms = this.host.glowUniforms.filter((uniforms) => !removedUniforms.has(uniforms));
+            }
             this.host.pickables = this.host.pickables.filter((object) => object !== record.mesh);
             this.animatedAtlasObjects = this.animatedAtlasObjects.filter((item) => item.mesh !== record.mesh);
             this.host.removeLabelsForBody(id);
             this.host.disposeObject3D(record.group);
             this.atlasGroup.remove(record.group);
             this.catalogObjects.delete(id);
+            this.setBulkPointVisible(record.entry, true);
         }
         this.selectedBulkDetailId = null;
         this.syncHost();
@@ -238,17 +320,19 @@ globalThis.StarAtlas = class StarAtlas {
         group.name = entry.id;
         group.userData.atlasMap = entry.atlasMap || 'neighborhood';
 
-        const geometry = new THREE.SphereGeometry(radius, 36, 24);
+        const geometry = this.host.getSharedSphereGeometry(36, 24);
         const material = new THREE.MeshBasicMaterial({
             color: entry.color,
             transparent: true,
             opacity: 0.96
         });
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.userData = { bodyId: entry.id, data: entry, objectKind: 'catalog' };
+        mesh.scale.setScalar(radius);
+        mesh.userData = { bodyId: entry.id, data: entry, objectKind: 'catalog', baseScale: radius };
         group.add(mesh);
 
-        const glow = this.host.createGlowMesh(radius * 3.4, entry.color, 0.28);
+        // Glow is a child of the scaled mesh, so its size is relative.
+        const glow = this.host.createGlowMesh(3.4, entry.color, 0.28);
         glow.name = `${entry.id}-glow`;
         mesh.add(glow);
 
@@ -279,10 +363,11 @@ globalThis.StarAtlas = class StarAtlas {
 
         const coreRadius = Math.max(6, entry.size * 0.3);
         const core = new THREE.Mesh(
-            new THREE.SphereGeometry(coreRadius, 28, 18),
+            this.host.getSharedSphereGeometry(28, 18),
             new THREE.MeshBasicMaterial({ color: entry.color, transparent: true, opacity: 0.7 })
         );
-        core.userData = { bodyId: entry.id, data: entry, objectKind: 'catalog' };
+        core.scale.setScalar(coreRadius);
+        core.userData = { bodyId: entry.id, data: entry, objectKind: 'catalog', baseScale: coreRadius };
         group.add(core);
 
         const cloudCount = entry.category === 'galaxy-group' || entry.category === 'galaxy-cluster' || entry.category === 'supercluster'
@@ -296,9 +381,21 @@ globalThis.StarAtlas = class StarAtlas {
                         : 7;
         const random = this.host.seededRandom(entry.id);
         for (let i = 0; i < cloudCount; i += 1) {
-            const sprite = this.host.createNebulaSprite(entry.color, entry.size * (3.8 + random() * 2.8), 0.13 + random() * 0.13);
-            sprite.position.set((random() - 0.5) * entry.size * 4, (random() - 0.5) * entry.size * 2.4, (random() - 0.5) * entry.size * 4);
-            group.add(sprite);
+            const size = entry.size * (3.8 + random() * 2.8);
+            const opacity = 0.13 + random() * 0.13;
+            const offset = new THREE.Vector3(
+                (random() - 0.5) * entry.size * 4,
+                (random() - 0.5) * entry.size * 2.4,
+                (random() - 0.5) * entry.size * 4
+            );
+
+            if (bulkDetail) {
+                const sprite = this.host.createNebulaSprite(entry.color, size, opacity);
+                sprite.position.copy(offset);
+                group.add(sprite);
+            } else {
+                this.queueNebulaPoint(entry, offset, size, opacity);
+            }
         }
 
         if (entry.effectType) {
@@ -324,22 +421,115 @@ globalThis.StarAtlas = class StarAtlas {
         return this.catalogObjects.get(entry.id);
     }
 
+    queueNebulaPoint(entry, offset, size, opacity) {
+        const mapId = entry.atlasMap || 'milky-way';
+        const records = this.pendingNebulaPoints.get(mapId) || [];
+        records.push({ entry, offset, size, opacity });
+        this.pendingNebulaPoints.set(mapId, records);
+    }
+
+    flushNebulaPointBatches() {
+        this.pendingNebulaPoints.forEach((records, mapId) => {
+            if (!records.length) return;
+
+            const positions = new Float32Array(records.length * 3);
+            const colors = new Float32Array(records.length * 3);
+            const sizes = new Float32Array(records.length);
+            const opacities = new Float32Array(records.length);
+            const color = new THREE.Color();
+            const position = new THREE.Vector3();
+
+            records.forEach((record, index) => {
+                position.copy(this.host.getCatalogPosition(record.entry)).add(record.offset);
+                positions.set([position.x, position.y, position.z], index * 3);
+                color.setHex(record.entry.color);
+                colors.set([color.r, color.g, color.b], index * 3);
+                sizes[index] = record.size;
+                opacities[index] = record.opacity;
+            });
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            geometry.setAttribute('opacity', new THREE.BufferAttribute(opacities, 1));
+            geometry.computeBoundingSphere();
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    pointTexture: { value: this.host.createRadialTexture(0xffffff) },
+                    viewportHeight: { value: Math.max(1, window.innerHeight * (window.devicePixelRatio || 1)) }
+                },
+                vertexShader: `
+                    attribute float size;
+                    attribute float opacity;
+                    varying vec3 vColor;
+                    varying float vOpacity;
+                    uniform float viewportHeight;
+
+                    void main() {
+                        vColor = color;
+                        vOpacity = opacity;
+                        vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+                        float distanceToCamera = max(1.0, -viewPosition.z);
+                        gl_PointSize = clamp(size * viewportHeight * 0.5 * projectionMatrix[1][1] / distanceToCamera, 1.0, 512.0);
+                        gl_Position = projectionMatrix * viewPosition;
+                    }
+                `,
+                fragmentShader: `
+                    uniform sampler2D pointTexture;
+                    varying vec3 vColor;
+                    varying float vOpacity;
+
+                    void main() {
+                        vec4 textureColor = texture2D(pointTexture, gl_PointCoord);
+                        gl_FragColor = vec4(vColor, vOpacity) * textureColor;
+                    }
+                `,
+                vertexColors: true,
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            });
+
+            const points = new THREE.Points(geometry, material);
+            points.name = `${mapId}-curated-nebula-points`;
+            points.userData = {
+                atlasMap: mapId,
+                objectKind: 'curated-nebula-batch',
+                nebulaRecords: records
+            };
+            points.onBeforeRender = (renderer) => {
+                renderer.getDrawingBufferSize(this.batchViewportSize);
+                material.uniforms.viewportHeight.value = Math.max(1, this.batchViewportSize.y);
+            };
+
+            this.atlasGroup.add(points);
+            this.curatedNebulaBatches.set(mapId, points);
+        });
+        this.pendingNebulaPoints.clear();
+    }
+
     decorateSpecialObject(group, entry, core, random) {
+        // core is uniformly scaled to its radius, so child glow sizes must be
+        // expressed relative to that scale.
+        const coreScale = core.userData?.baseScale || 1;
+        const relative = (size) => size / coreScale;
         switch (entry.effectType) {
             case 'red-giant':
-                core.add(this.host.createGlowMesh(entry.size * 2.2, entry.color, 0.36));
+                core.add(this.host.createGlowMesh(relative(entry.size * 2.2), entry.color, 0.36));
                 group.add(this.host.createParticleShell(entry, 180, entry.size * 2.4, entry.size * 4.2, 0xff8a50, 0.28));
                 break;
             case 'red-dwarf':
-                core.add(this.host.createGlowMesh(entry.size * 1.8, entry.color, 0.24));
+                core.add(this.host.createGlowMesh(relative(entry.size * 1.8), entry.color, 0.24));
                 group.add(this.host.createFlareSparks(entry, random));
                 break;
             case 'white-dwarf':
-                core.add(this.host.createGlowMesh(entry.size * 2.0, 0xbfe7ff, 0.42));
+                core.add(this.host.createGlowMesh(relative(entry.size * 2.0), 0xbfe7ff, 0.42));
                 group.add(this.host.createCompactHaloRing(entry, 0xbfe7ff, 1.8));
                 break;
             case 'pulsar':
-                core.add(this.host.createGlowMesh(entry.size * 1.7, 0x8fd8ff, 0.32));
+                core.add(this.host.createGlowMesh(relative(entry.size * 1.7), 0x8fd8ff, 0.32));
                 group.add(this.createPulsarBeams(entry));
                 break;
             case 'black-hole':
@@ -502,6 +692,8 @@ globalThis.StarAtlas = class StarAtlas {
                 const shell = new THREE.Mesh(geometry, material);
                 shell.name = `${atlasMap}-${shellDef.ly}ly-shell`;
                 shell.userData.atlasMap = atlasMap;
+                shell.userData.distanceShellEntry = mockEntry;
+                shell.userData.distanceShellRadius = radius;
                 this.atlasGroup.add(shell);
             });
         });

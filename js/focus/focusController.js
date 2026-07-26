@@ -8,6 +8,7 @@ globalThis.FocusController = class FocusController {
         this.host = host;
         this.focusGroup = null;
         this.focusedCatalogEntry = null;
+        this.focusedType = null;
         this.focusRenderer = null;
         this.focusSpecialRenderer = null;
     }
@@ -18,7 +19,8 @@ globalThis.FocusController = class FocusController {
 
     focusSelected() {
         const data = this.host.selectedObject?.userData?.data;
-        if (!data?.effectType) return;
+        if (!data) return;
+        if (!globalThis.SpecialBodyFactory.getFocusType(data)) return;
         this.show(data);
     }
 
@@ -26,6 +28,7 @@ globalThis.FocusController = class FocusController {
         this.host.clearExpandedSystem();
         this.clear();
         this.focusedCatalogEntry = entry;
+        this.focusedType = globalThis.SpecialBodyFactory.getFocusType(entry);
         this._syncHost();
 
         const group = new THREE.Group();
@@ -46,7 +49,8 @@ globalThis.FocusController = class FocusController {
 
         this.host.scene.add(group);
         this.focusGroup = group;
-        this.host.applyFocusTimeScale?.(entry.effectType);
+        const focusType = this.focusedType;
+        this.host.applyFocusTimeScale?.(focusType);
         this.host.applyRendererQuality(false);
         this.host.atlasGroup.visible = false;
         this.host.orbitGroups.visible = false;
@@ -60,13 +64,13 @@ globalThis.FocusController = class FocusController {
         document.getElementById('btn-close-expanded').textContent = '返回星图';
         this.host.controls.minDistance = 5;
 
-        if (entry.effectType === 'black-hole') {
+        if (focusType === 'black-hole') {
             this.host.controls.maxDistance = 58;
             this.host.flyCameraToPos(
                 new THREE.Vector3(38, 12, 42),
                 new THREE.Vector3(0, 0, 0)
             );
-        } else if (entry.effectType === 'pulsar') {
+        } else if (focusType === 'pulsar') {
             this.host.controls.maxDistance = 280;
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.72;
@@ -76,21 +80,21 @@ globalThis.FocusController = class FocusController {
                 new THREE.Vector3(92, 54, 112),
                 new THREE.Vector3(0, 0, 0)
             );
-        } else if (entry.effectType === 'white-dwarf') {
+        } else if (focusType === 'white-dwarf') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.68;
             this.host.bloomPass.radius = 0.4;
             this.host.bloomPass.threshold = 0.4;
             // White dwarf: closer than red giant to emphasize compact brilliance
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 170);
-        } else if (entry.effectType === 'red-giant') {
+        } else if (focusType === 'red-giant') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.3;
             this.host.bloomPass.radius = 0.62;
             this.host.bloomPass.threshold = 0.5;
             // Red giant: further back to show its bloated atmosphere
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 340);
-        } else if (entry.effectType === 'sun') {
+        } else if (focusType === 'sun') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.36;
             this.host.bloomPass.radius = 0.58;
@@ -107,7 +111,7 @@ globalThis.FocusController = class FocusController {
             'dwarf-planet',
             'moon',
             'comet'
-        ].includes(entry.effectType)) {
+        ].includes(focusType)) {
             const profile = this.focusSpecialRenderer?.profile;
             this.host.useBloom = true;
             this.host.bloomPass.strength = profile?.bloomStrength ?? 0.2;
@@ -118,12 +122,51 @@ globalThis.FocusController = class FocusController {
                 new THREE.Vector3(0, (profile?.cameraDistance || 110) * 0.18, profile?.cameraDistance || 110),
                 new THREE.Vector3(0, 0, 0)
             );
-        } else if (entry.effectType === 'supernova') {
+        } else if (focusType === 'supernova') {
             this.host.useBloom = true;
             this.host.bloomPass.strength = 0.35;
             this.host.bloomPass.radius = 0.5;
             this.host.bloomPass.threshold = 0.45;
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 380);
+        } else if (focusType === 'galaxy' || focusType === 'galaxy-cluster') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.26;
+            this.host.bloomPass.radius = 0.5;
+            this.host.bloomPass.threshold = 0.62;
+            this.host.controls.maxDistance = 640;
+            // slightly elevated view to read the disk / cluster layout
+            this.host.flyCameraToPos(
+                new THREE.Vector3(0, focusType === 'galaxy-cluster' ? 150 : 88, focusType === 'galaxy-cluster' ? 300 : 175),
+                new THREE.Vector3(0, 0, 0)
+            );
+        } else if (focusType === 'nebula') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.4;
+            this.host.bloomPass.radius = 0.62;
+            this.host.bloomPass.threshold = 0.38;
+            this.host.controls.maxDistance = 520;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 265);
+        } else if (focusType === 'planetary-nebula') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.5;
+            this.host.bloomPass.radius = 0.5;
+            this.host.bloomPass.threshold = 0.4;
+            this.host.controls.maxDistance = 420;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 185);
+        } else if (focusType === 'globular-cluster' || focusType === 'open-cluster') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.42;
+            this.host.bloomPass.radius = 0.48;
+            this.host.bloomPass.threshold = 0.4;
+            this.host.controls.maxDistance = 480;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), focusType === 'globular-cluster' ? 210 : 240);
+        } else if (focusType === 'generic-star' || focusType === 'red-dwarf') {
+            this.host.useBloom = true;
+            this.host.bloomPass.strength = 0.4;
+            this.host.bloomPass.radius = 0.5;
+            this.host.bloomPass.threshold = 0.46;
+            this.host.controls.maxDistance = 420;
+            this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 200);
         } else {
             this.host.flyCameraTo(new THREE.Vector3(0, 0, 0), 230);
         }
@@ -154,6 +197,7 @@ globalThis.FocusController = class FocusController {
         }
         this.focusGroup = null;
         this.focusedCatalogEntry = null;
+        this.focusedType = null;
         this._forceCleanup();
         this._syncHost();
     }
@@ -187,10 +231,10 @@ globalThis.FocusController = class FocusController {
         const focusTitle = this.focusGroup.children.find((child) => child.userData?.effectRole === 'focus-title');
         if (focusTitle) focusTitle.visible = !document.body.classList.contains('ui-hidden');
 
-        if (!['black-hole', 'pulsar', 'supernova', 'sun', 'planet-gas', 'planet-ice', 'comet'].includes(this.focusedCatalogEntry?.effectType)) {
+        const effectType = this.focusedType;
+        if (!['black-hole', 'pulsar', 'supernova', 'sun', 'planet-gas', 'planet-ice', 'comet', 'galaxy', 'galaxy-cluster', 'nebula', 'planetary-nebula', 'globular-cluster', 'open-cluster'].includes(effectType)) {
             this.focusGroup.rotation.y += deltaSeconds * 0.08;
         }
-        const effectType = this.focusedCatalogEntry?.effectType;
         if ([
             'pulsar',
             'supernova',
@@ -202,7 +246,15 @@ globalThis.FocusController = class FocusController {
             'planet-ice',
             'dwarf-planet',
             'moon',
-            'comet'
+            'comet',
+            'galaxy',
+            'galaxy-cluster',
+            'nebula',
+            'planetary-nebula',
+            'globular-cluster',
+            'open-cluster',
+            'generic-star',
+            'red-dwarf'
         ].includes(effectType)) {
             this.focusSpecialRenderer?.update?.(deltaSeconds, time, this.host.camera);
         } else {

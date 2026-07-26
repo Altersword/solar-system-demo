@@ -41,9 +41,15 @@ class SolarSystem {
         this.glowUniforms = [];
         this.animatedAtlasObjects = this.starAtlas.animatedAtlasObjects;
         this.radialTextureCache = new Map();
+        this.sphereGeometryCache = new Map();
         this.catalogSearchIndex = CELESTIAL_CATALOG.map((entry) => ({
             entry,
-            text: [entry.name, entry.nameEn, entry.type, entry.feature]
+            text: [
+                    entry.name,
+                    entry.nameEn,
+                    entry.type,
+                    entry.renderTier === 'bulk' ? null : entry.feature
+                ]
                 .filter(Boolean)
                 .join(' ')
                 .toLocaleLowerCase()
@@ -226,11 +232,11 @@ class SolarSystem {
         return mode.stellarBase + 900 + compressed * mode.deepSkyScale * 5.6;
     }
 
-    getCatalogPosition(entry) {
+    getCatalogPosition(entry, target = new THREE.Vector3()) {
         const l = THREE.MathUtils.degToRad(entry.galactic.lDeg);
         const b = THREE.MathUtils.degToRad(entry.galactic.bDeg);
         const radius = this.scaleCatalogDistance(entry);
-        return new THREE.Vector3(
+        return target.set(
             radius * Math.cos(b) * Math.cos(l),
             radius * Math.sin(b),
             radius * Math.cos(b) * Math.sin(l)
@@ -303,10 +309,11 @@ class SolarSystem {
         const materials = new Set();
         const textures = new Set();
         const sharedTextures = new Set(this.radialTextureCache.values());
+        const sharedGeometries = new Set(this.sphereGeometryCache.values());
 
         root.traverse((child) => {
             if (child.userData?.managedByFocusRenderer) return;
-            if (child.geometry?.dispose) geometries.add(child.geometry);
+            if (child.geometry?.dispose && !sharedGeometries.has(child.geometry)) geometries.add(child.geometry);
 
             const childMaterials = Array.isArray(child.material) ? child.material : [child.material];
             childMaterials.filter(Boolean).forEach((material) => {
@@ -502,6 +509,16 @@ class SolarSystem {
         return texture;
     }
 
+    getSharedSphereGeometry(widthSegments, heightSegments) {
+        const key = widthSegments + 'x' + heightSegments;
+        let geometry = this.sphereGeometryCache.get(key);
+        if (!geometry) {
+            geometry = new THREE.SphereGeometry(1, widthSegments, heightSegments);
+            this.sphereGeometryCache.set(key, geometry);
+        }
+        return geometry;
+    }
+
     createGlowMesh(radius, color, opacity) {
         const material = new THREE.ShaderMaterial({
             uniforms: {
@@ -533,7 +550,10 @@ class SolarSystem {
             depthWrite: false
         });
         this.glowUniforms.push(material.uniforms);
-        return new THREE.Mesh(new THREE.SphereGeometry(radius, 48, 32), material);
+        const mesh = new THREE.Mesh(this.getSharedSphereGeometry(48, 32), material);
+        mesh.scale.setScalar(radius);
+        mesh.userData.baseScale = radius;
+        return mesh;
     }
 
     createAtmosphere(data, radius) {
@@ -693,8 +713,8 @@ class SolarSystem {
         this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
         this.raycaster.setFromCamera(this.mouse, this.camera);
 
-        const hits = this.raycaster.intersectObjects(this.pickables, false)
-            .filter((hit) => this.isObjectVisible(hit.object));
+        const visiblePickables = this.pickables.filter((object) => this.isObjectVisible(object));
+        const hits = this.raycaster.intersectObjects(visiblePickables, false);
         if (!hits.length) {
             if (this.focusGroup) return;
             this.hideInfoPanel();
@@ -719,7 +739,13 @@ class SolarSystem {
         label.textContent = text;
         label.dataset.body = id;
         document.body.appendChild(label);
-        const measuredWidth = Math.min(170, Math.max(70, label.offsetWidth || 96));
+        // Estimate width from text content instead of reading offsetWidth,
+        // which forces a synchronous reflow per label (~500x on rebuild).
+        let estimated = 12;
+        for (const char of text) {
+            estimated += char.charCodeAt(0) > 0x2e7f ? 13 : 7.5;
+        }
+        const measuredWidth = Math.min(170, Math.max(70, Math.round(estimated)));
         this.labels.push({ element: label, object, kind, width: measuredWidth });
     }
 
@@ -1053,8 +1079,7 @@ class SolarSystem {
             this.starAtlas.clearExpandedSystem();
             expandedButton.classList.add('hidden');
         }
-        focusButton.classList.toggle('hidden', !data.effectType);
-
+        focusButton.classList.toggle('hidden', !globalThis.SpecialBodyFactory.getFocusType(data));
         document.getElementById('planet-name').textContent = data.name;
         document.getElementById('label-diameter').textContent = '英文名';
         document.getElementById('label-mass').textContent = '光谱/类别';
@@ -1367,7 +1392,14 @@ class SolarSystem {
             'planet-terrestrial': 2,
             'dwarf-planet': 1,
             moon: 1,
-            comet: 12
+            comet: 12,
+            galaxy: 500,
+            'galaxy-cluster': 1000,
+            nebula: 200,
+            'planetary-nebula': 50,
+            'globular-cluster': 300,
+            'open-cluster': 100,
+            'generic-star': 5
         };
         this.timeScale = focusScales[effectType] ?? this.savedTimeScale ?? SIMULATION.defaultDaysPerSecond;
         this.syncTimeControls();
@@ -1403,10 +1435,18 @@ class SolarSystem {
 
     setDisplayMode(mode) {
         if (!SIMULATION.displayModes[mode] || mode === this.displayMode) return;
+
+        // Focus views own their own scene scale, so leave that isolated scene
+        // before applying the main solar-system and atlas scale change.
+        this.clearFocusView();
+        document.getElementById('btn-close-expanded')?.classList.add('hidden');
         this.displayMode = mode;
-        this.rebuildBodies();
+        this.solarBodies.rescale();
+        this.starAtlas.rescalePositions();
         this.controls.maxDistance = this.getModeConfig().maxDistance;
         this.resetCamera();
+        this.lastLabelUpdateMs = -Infinity;
+        this.updateLabels(true);
     }
 
     togglePause() {

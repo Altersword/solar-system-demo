@@ -83,7 +83,7 @@ globalThis.SolarBodies = class SolarBodies {
 
         this.sun = new THREE.Mesh(geometry, material);
         this.sun.name = 'sun';
-        this.sun.userData = { bodyId: 'sun', data: PLANET_DATA.sun, objectKind: 'solar-body' };
+        this.sun.userData = { bodyId: 'sun', data: PLANET_DATA.sun, objectKind: 'solar-body', radius: mode.sunRadius };
         this.host.scene.add(this.sun);
         this.host.pickables.push(this.sun);
 
@@ -135,10 +135,11 @@ globalThis.SolarBodies = class SolarBodies {
             mesh.add(coma);
         }
 
-        const moonDistanceScale = (km) => this.scaleMoonDistance(km, radius);
-        this.createMoons(data, moonSystem, moonDistanceScale);
+        const record = { data, bodyGroup, axialGroup, moonSystem, mesh, radius, moonDistanceScale: null };
+        record.moonDistanceScale = (km) => this.scaleMoonDistance(km, record.radius);
+        this.createMoons(data, moonSystem, record.moonDistanceScale);
 
-        this.planets.set(data.id, { data, bodyGroup, axialGroup, moonSystem, mesh, radius, moonDistanceScale });
+        this.planets.set(data.id, record);
         this.host.createLabel(data.name, mesh, data.id, data.type?.includes('小行星') || data.comet ? 'small-body' : 'planet');
     }
 
@@ -225,6 +226,70 @@ globalThis.SolarBodies = class SolarBodies {
         const line = new THREE.Line(geometry, material);
         line.visible = this.host.showOrbits;
         return line;
+    }
+
+    rescale() {
+        if (!this.sun || !this.planets.size) {
+            this.rebuild();
+            return;
+        }
+
+        const mode = this.host.getModeConfig();
+        const previousSunRadius = this.sun.userData.radius || mode.sunRadius;
+        this.sun.scale.multiplyScalar(mode.sunRadius / previousSunRadius);
+        this.sun.userData.radius = mode.sunRadius;
+
+        // Orbit curves and dust belts are cheap compared with rebuilding all
+        // textured bodies, labels, materials, and atlas markers.
+        this.host.clearGroup(this.orbitGroups);
+        this.createSolarDustBelts();
+
+        PLANET_ORDER.forEach((id) => {
+            const record = this.planets.get(id);
+            if (!record) return;
+
+            const nextRadius = this.scalePlanetRadius(record.data.radiusKm);
+            record.axialGroup.scale.multiplyScalar(nextRadius / record.radius);
+            record.radius = nextRadius;
+            record.mesh.userData.radius = nextRadius;
+
+            const orbitColor = record.data.comet
+                ? 0x88d9ff
+                : record.data.type?.includes('???')
+                    ? 0x5d6f92
+                    : 0x2b3c56;
+            const orbit = this.createOrbitLine(
+                record.data.orbit,
+                this.scaleOrbitDistanceForScene,
+                orbitColor,
+                record.data.comet ? 0.58 : 0.45
+            );
+            orbit.name = `${record.data.id}-orbit`;
+            this.orbitGroups.add(orbit);
+
+            [...record.moonSystem.children]
+                .filter((child) => child.isLine && child.name.endsWith('-orbit'))
+                .forEach((child) => {
+                    this.host.disposeObject3D(child);
+                    record.moonSystem.remove(child);
+                });
+
+            record.data.moons.forEach((moon) => {
+                const moonMesh = record.moonSystem.getObjectByName(moon.id);
+                if (!moonMesh) return;
+                const nextMoonRadius = this.scaleMoonRadius(moon.radiusKm);
+                const previousMoonRadius = moonMesh.userData.radius || nextMoonRadius;
+                moonMesh.scale.multiplyScalar(nextMoonRadius / previousMoonRadius);
+                moonMesh.userData.radius = nextMoonRadius;
+
+                const moonOrbit = this.createOrbitLine(moon.orbit, record.moonDistanceScale, 0x405066, 0.26, 128);
+                moonOrbit.name = `${moon.id}-orbit`;
+                record.moonSystem.add(moonOrbit);
+            });
+        });
+
+        this.updatePositions(this.host.elapsedDays, this.host.lastDeltaDays, true);
+        this.syncHost();
     }
 
     updatePositions(elapsedDays, lastDeltaDays, isPaused) {

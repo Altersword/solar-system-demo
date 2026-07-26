@@ -116,7 +116,7 @@ class RedGiantRenderer {
         if (this.atmosphere?.material) {
             this.atmosphere.material.uniforms.opacity.value =
                 this.atmosphere.userData.baseOpacity * (0.78 + Math.sin(time * 0.42) * 0.22);
-            this.atmosphere.scale.setScalar(1 + Math.sin(time * 0.32) * 0.04);
+            this.atmosphere.scale.setScalar(this.atmosphere.userData.baseScale * (1 + Math.sin(time * 0.32) * 0.04));
         }
         if (this.outerHalo?.material) {
             this.outerHalo.material.uniforms.opacity.value =
